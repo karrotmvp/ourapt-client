@@ -1,10 +1,14 @@
-import React from "react";
+import React from 'react';
 
-import { sendWebhookToSlack, getAccessToken } from "./PreopenActions";
+import {
+  sendWebhookToSlack,
+  getAccessToken,
+  takeReservation,
+} from './PreopenActions';
 
 // 당근마켓 미니
-import { mini } from "../Karrotmarket/KarrotmarketMini";
-import { setConstantValue } from "typescript";
+import { mini } from '../Karrotmarket/KarrotmarketMini';
+import { setConstantValue } from 'typescript';
 
 type PreopenAgreementFormProps = {
   displayAptName: string;
@@ -33,14 +37,18 @@ const PreopenAgreementForm: React.FC<PreopenAgreementFormProps> = ({
         if (result && result.code) {
           // test(result.code);
           const accessToken: string | any = await getAccessToken(result.code);
-          window.localStorage.setItem("ouraptAccessToken", accessToken);
+          await takeReservation(
+            urlSearchParams.get('region_id') ?? 'unknown',
+            accessToken
+          );
+          window.localStorage.setItem('ouraptAccessToken', accessToken);
           // const accessToken = await getAccessToken(result.code);
           console.log(
             `${window.localStorage.getItem(accessToken)} 받아왔어요!`
           );
           setState({
-            _t: "afterAgreement",
-            regionId: urlSearchParams.get("region_id"),
+            _t: 'afterAgreement',
+            regionId: urlSearchParams.get('region_id'),
           });
         }
       },
@@ -52,12 +60,12 @@ const PreopenAgreementForm: React.FC<PreopenAgreementFormProps> = ({
       <div className="PP-AF-display">
         <img
           className="PP-AF--logo-ourapt"
-          src={require("./assets/logo-ourapt.png").default}
+          src={require('./assets/logo-ourapt.png').default}
         />
         <br />
         <img
           className="PP-AF--logo-mvp"
-          src={require("./assets/logo-mvp.png").default}
+          src={require('./assets/logo-mvp.png').default}
         />
         <p className="PP-AF--displayQuestion">
           {displayAptName}
