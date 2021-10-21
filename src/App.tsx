@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
 
-function App() {
+// 당근마켓 미니앱, 캐럿프레임
+// import Mini from "@karrotmarket/mini";
+import { Navigator, Screen } from "@karrotframe/navigator";
+import "@karrotframe/navigator";
+import { mini } from "./Karrotmarket/KarrotmarketMini";
+
+// 페이지뷰
+import PreopenPage from "./preopen/PreopenPage";
+
+const App: React.FC = () => {
+  // const mini = new Mini();
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Navigator
+        theme="Cupertino"
+        onClose={() => {
+          mini.close();
+        }}
+      >
+        <Screen path="/">
+          {/* <PreopenPage displayAptInfo={"6a7eefda7865test"} mini={mini} /> */}
+          <PreopenPage />
+        </Screen>
+      </Navigator>
     </div>
   );
-}
+};
 
 export default App;

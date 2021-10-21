@@ -1,0 +1,198 @@
+@import url(//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css);
+
+* {
+  font-family: "Spoqa Han Sans Neo", "sans-serif";
+  box-sizing: border-box;
+}
+
+.PreopenPage {
+  text-align: center;
+  //   background-color: rebeccapurple;
+
+  width: 100%;
+  height: 100%;
+}
+
+.PreopenAgreementForm {
+  //   background-color: lightblue;
+
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.PP-AF--logo-ourapt {
+  width: 100px;
+  height: 20px;
+
+  //   background-color: lightcoral;
+  margin-top: 20px;
+  margin-bottom: 4px;
+}
+
+.PP-AF--logo-mvp {
+  width: 140px;
+  height: 16px;
+  //   background-color: coral;
+}
+
+.PP-AF--displayQuestion {
+  color: #000000;
+  font-size: 28px;
+  font-weight: 700px;
+  letter-spacing: -0.03em;
+}
+.PP-AF--displayInfo {
+  color: #555555;
+  font-size: 17px;
+  font-weight: 400px;
+  letter-spacing: -0.03em;
+}
+
+.PP-AF--displayImg {
+  width: 312px;
+  height: 200px;
+}
+
+.PP-AF-agreement {
+  width: 100%;
+}
+.PP-AF--agreementInfo {
+  margin: 0;
+  color: #333333;
+  font-size: 14px;
+  font-weight: 400px;
+  letter-spacing: -0.03em;
+}
+
+.PP-btn {
+  width: calc(100% - 32px);
+  height: 56px;
+  margin: 16px;
+  padding: 0;
+
+  color: #ffffff;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+
+  border: none;
+  border-radius: 8px;
+}
+
+.PP-btn--abled {
+  background-color: #bd1f36;
+}
+.PP-btn--disabled {
+  background-color: #cccccc;
+}
+
+.PreopenQuestionForm {
+  //   background-color: lightblue;
+
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  // justify-content: space-between;
+  align-items: center;
+}
+
+.PP-QF-display {
+  margin-top: 24px;
+}
+
+.PP-QF--displayMessage {
+  color: #000000;
+  font-size: 22px;
+  font-weight: 700px;
+  letter-spacing: -0.03em;
+}
+.PP-QF--displayInfo {
+  color: #555555;
+  font-size: 15px;
+  font-weight: 400px;
+  letter-spacing: -0.03em;
+}
+
+.PP-QF-submit {
+  height: 100%;
+  width: 100%;
+  margin-top: 82px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.PP-QF--submit-input {
+  //   background-color: chartreuse;
+  width: calc(100% - 48px);
+  height: 48px;
+  border: none;
+  border-bottom: 1px solid #bd1f36;
+}
+.PP-QF--submit-info {
+  color: #777777;
+  font-size: 14px;
+  font-weight: 400px;
+  letter-spacing: -0.03em;
+}
+.PP-QF--submit-info span {
+  font-weight: 700;
+}
+
+.PreopenQuestionModal {
+  display: none;
+}
+
+.PP-QF-modal--overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.08);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.PP-QF-modal--content {
+  width: 75%;
+  height: 200px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.PP-QF-modal--content h1 {
+  font-size: 18px;
+  padding-bottom: 24px;
+}
+
+.PP-QF-modal--content p {
+  font-size: 16px;
+}
+
+.PP-QF-modal--closeBtn {
+  width: 100%;
+  height: 44px;
+  margin-top: auto;
+
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  background-color: #bd1f36;
+
+  border: none;
+  border-radius: 8px;
+}
