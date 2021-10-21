@@ -20,6 +20,8 @@ const PreopenAgreementForm: React.FC<PreopenAgreementFormProps> = ({
   regionId,
   setState,
 }) => {
+  let urlSearchParams = new URLSearchParams(window.location.search);
+
   function submitAgreement() {
     sendWebhookToSlack(` :fire: ${displayAptName}에서 동의창을 열었어요!`);
     mini.startPreset({
@@ -36,7 +38,10 @@ const PreopenAgreementForm: React.FC<PreopenAgreementFormProps> = ({
           console.log(
             `${window.localStorage.getItem(accessToken)} 받아왔어요!`
           );
-          setState({ _t: "afterAgreement", regionId: regionId });
+          setState({
+            _t: "afterAgreement",
+            regionId: urlSearchParams.get("region_id"),
+          });
         }
       },
     });
