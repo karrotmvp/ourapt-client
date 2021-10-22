@@ -12,7 +12,6 @@ import {
 
 // 당근마켓 미니, 캐럿프레임
 import { ScreenHelmet } from "@karrotframe/navigator";
-import { mini } from "../Karrotmarket/KarrotmarketMini";
 
 // 폼 컴포넌트
 import PreopenAgreementForm from "./PreopenAgreementForm";
@@ -98,7 +97,7 @@ const PreopenPage: React.FC = () => {
     );
     // alert(regionId);
     // if (checkIsAgreed()) {
-    if (!checkIsAgreed()) {
+    if (checkIsAgreed()) {
       const code = urlSearchParams.get("code");
       console.log(`코드를 발급하려고 하는데요, ${code}`);
       const accessToken = (await getAccessToken(code)) ?? "";
