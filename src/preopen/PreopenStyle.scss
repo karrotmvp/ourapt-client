@@ -54,6 +54,7 @@
 }
 
 .PP-AF--displayImg {
+  margin-top: 56px;
   width: 312px;
   height: 200px;
 }
@@ -126,7 +127,7 @@
   margin-top: 82px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .PP-QF--submit-input {
@@ -135,6 +136,10 @@
   height: 48px;
   border: none;
   border-bottom: 1px solid #bd1f36;
+
+  font-size: 16px;
+  font-weight: normal;
+  color: #000000;
 }
 .PP-QF--submit-info {
   color: #777777;
@@ -144,6 +149,10 @@
 }
 .PP-QF--submit-info span {
   font-weight: 700;
+}
+
+.PP-QF--questionBtn {
+  margin-top: 40px;
 }
 
 .PreopenQuestionModal {

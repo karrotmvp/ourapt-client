@@ -98,7 +98,7 @@ const PreopenPage: React.FC = () => {
     );
     // alert(regionId);
     // if (checkIsAgreed()) {
-    if (checkIsAgreed()) {
+    if (!checkIsAgreed()) {
       const code = urlSearchParams.get("code");
       console.log(`코드를 발급하려고 하는데요, ${code}`);
       const accessToken = (await getAccessToken(code)) ?? "";

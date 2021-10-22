@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { mini } from '../Karrotmarket/KarrotmarketMini';
+import React, { useState } from "react";
+import { mini } from "../Karrotmarket/KarrotmarketMini";
 
 // interface PreopenQuestionFormProps extends HTMLAttributes<HTMLDivElement> {
 //   a?: string;
@@ -19,7 +19,7 @@ const PreopenQuestionForm: React.FC<PreopenQuestionFormProps> = ({
   regionId,
 }) => {
   const [form, setForm] = useState({
-    question: '',
+    question: "",
   });
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -55,15 +55,15 @@ const PreopenQuestionForm: React.FC<PreopenQuestionFormProps> = ({
   //   });
   // }
   function handleSubmitBtn() {
-    console.log('되나요?');
+    console.log("되나요?");
     // alert(regionId);
     const requestHeaders: HeadersInit = new Headers();
     const Authorization: string | any =
-      window.localStorage.getItem('ouraptAccessToken');
-    requestHeaders.set('Content-Type', 'application/json');
-    requestHeaders.set('Authorization', Authorization);
+      window.localStorage.getItem("ouraptAccessToken");
+    requestHeaders.set("Content-Type", "application/json");
+    requestHeaders.set("Authorization", Authorization);
     fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/article/question`, {
-      method: 'POST',
+      method: "POST",
       headers: requestHeaders,
       body: JSON.stringify({
         mainText: form.question,
@@ -72,7 +72,7 @@ const PreopenQuestionForm: React.FC<PreopenQuestionFormProps> = ({
     })
       .then((response) => {
         if (response.ok) {
-          console.log('제출 완료!');
+          console.log("제출 완료!");
           openConfirmationModal();
         }
       })
@@ -80,23 +80,23 @@ const PreopenQuestionForm: React.FC<PreopenQuestionFormProps> = ({
         console.log(error.devMessage);
       });
     setForm({
-      question: '',
+      question: "",
     });
   }
 
   const modal: HTMLElement | null = document.getElementById(
-    'PreopenQuestionModal'
+    "PreopenQuestionModal"
   );
 
   function openConfirmationModal() {
     if (!!modal) {
-      modal.style.display = 'block';
+      modal.style.display = "block";
     }
   }
 
   function closeConfirmationModal() {
     if (!!modal) {
-      modal.style.display = 'none';
+      modal.style.display = "none";
     }
     mini.close();
   }
@@ -104,7 +104,7 @@ const PreopenQuestionForm: React.FC<PreopenQuestionFormProps> = ({
   return (
     <div className="PreopenQuestionForm">
       <div className="PP-QF-display">
-        <p className="PP-QF--displayMessage" style={{ fontWeight: 'bold' }}>
+        <p className="PP-QF--displayMessage" style={{ fontWeight: "bold" }}>
           알림 신청을 끝냈어요!
         </p>
         <p className="PP-QF--displayInfo">
@@ -118,7 +118,7 @@ const PreopenQuestionForm: React.FC<PreopenQuestionFormProps> = ({
         <form className="PP-QF--submit-form">
           <input className="PP-QF--submit-input" onChange={onChange}></input>
           <p className="PP-QF--submit-info">
-            <span>예시</span>
+            <span>예시 </span>
             우리 강아지와 산책해요! 상가 세탁소 현금만 받나요?
           </p>
         </form>
@@ -133,7 +133,9 @@ const PreopenQuestionForm: React.FC<PreopenQuestionFormProps> = ({
       <div className="PreopenQuestionModal" id="PreopenQuestionModal">
         <div className="PP-QF-modal--overlay">
           <div className="PP-QF-modal--content">
-            <h1 className="PP-QF-modal--title">한마디 남기기 완료</h1>
+            <h1 className="PP-QF-modal--title" style={{ fontWeight: "bold" }}>
+              한마디 남기기 완료{" "}
+            </h1>
             <p>확인을 누르면 메인으로 이동해요</p>
             <button
               className="PP-QF-modal--closeBtn"
