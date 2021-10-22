@@ -104,7 +104,9 @@ const PreopenQuestionForm: React.FC<PreopenQuestionFormProps> = ({
   return (
     <div className="PreopenQuestionForm">
       <div className="PP-QF-display">
-        <p className="PP-QF--displayMessage">알림 신청을 끝냈어요!</p>
+        <p className="PP-QF--displayMessage" style={{ fontWeight: 'bold' }}>
+          알림 신청을 끝냈어요!
+        </p>
         <p className="PP-QF--displayInfo">
           아파트 이웃들이 모이면 알림을 보내드릴게요
           <br />
