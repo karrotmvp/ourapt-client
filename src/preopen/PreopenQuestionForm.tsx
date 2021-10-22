@@ -110,24 +110,28 @@ const PreopenQuestionForm: React.FC<PreopenQuestionFormProps> = ({
         <p className="PP-QF--displayInfo">
           아파트 이웃들이 모이면 알림을 보내드릴게요
           <br />
-          오픈 기다리며 이웃들에게 가볍게 한마디 남겨보세요
+          오픈 기다리며 이웃들에게 궁금한 것 남겨보세요
         </p>
       </div>
       <div className="PP-QF-submit">
         {/* <form className="PP-QF--submit-form" onSubmit={handleSubmit}> */}
         <form className="PP-QF--submit-form">
-          <input className="PP-QF--submit-input" onChange={onChange}></input>
-          <p className="PP-QF--submit-info">
+          <input
+            className="PP-QF--submit-input"
+            placeholder="예시) 근처에 영어 학원 어디가 좋아요?"
+            onChange={onChange}
+          ></input>
+          {/* <p className="PP-QF--submit-info">
             <span>예시 </span>
             우리 강아지와 산책해요! 상가 세탁소 현금만 받나요?
-          </p>
+          </p> */}
         </form>
         <button
           className="PP-QF--questionBtn PP-btn PP-btn--abled"
           type="submit"
           onClick={handleSubmitBtn}
         >
-          가볍게 남겨볼게요
+          한번 질문 남겨볼게요
         </button>
       </div>
       <div className="PreopenQuestionModal" id="PreopenQuestionModal">

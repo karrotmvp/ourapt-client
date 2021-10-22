@@ -115,7 +115,7 @@
   letter-spacing: -0.03em;
 }
 .PP-QF--displayInfo {
-  color: #555555;
+  color: #000000;
   font-size: 15px;
   font-weight: 400px;
   letter-spacing: -0.03em;
@@ -124,7 +124,7 @@
 .PP-QF-submit {
   height: 100%;
   width: 100%;
-  margin-top: 82px;
+  margin-top: 32px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -135,12 +135,20 @@
   width: calc(100% - 48px);
   height: 48px;
   border: none;
+  border-radius: 0;
   border-bottom: 1px solid #bd1f36;
 
   font-size: 16px;
   font-weight: normal;
   color: #000000;
 }
+
+.PP-QF--submit-input::placeholder {
+  font-size: 16px;
+  font-weight: normal;
+  color: #aaaaaa;
+}
+
 .PP-QF--submit-info {
   color: #777777;
   font-size: 14px;
