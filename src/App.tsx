@@ -4,14 +4,17 @@ import React from "react";
 // import Mini from "@karrotmarket/mini";
 import { Navigator, Screen } from "@karrotframe/navigator";
 import "@karrotframe/navigator";
-import { mini } from "./Karrotmarket/KarrotmarketMini";
+import { mini } from "./_Karrotmarket/KarrotmarketMini";
 
 // 페이지뷰
-import PreopenPage from "./preopen/PreopenPage";
+import PreopenPage from "./_PREOPEN/PreopenPage";
+import TempPage from "./pages/TempPage";
+
+// 부분 페이지뷰를 더 잘 말하는 이름들이 궁금합니다...
+import Modal from "./components/OverlayPopup/Modal";
+import HalfView from "./components/OverlayPopup/HalfView";
 
 const App: React.FC = () => {
-  // const mini = new Mini();
-
   return (
     <div className="App">
       <Navigator
@@ -20,11 +23,15 @@ const App: React.FC = () => {
           mini.close();
         }}
       >
-        <Screen path="/">
-          {/* <PreopenPage displayAptInfo={"6a7eefda7865test"} mini={mini} /> */}
+        {/* <Screen path="/">
           <PreopenPage />
+        </Screen> */}
+        <Screen path="/temp">
+          <TempPage />
         </Screen>
       </Navigator>
+      <Modal />
+      <HalfView />
     </div>
   );
 };

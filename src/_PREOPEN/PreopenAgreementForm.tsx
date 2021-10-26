@@ -7,7 +7,7 @@ import {
 } from "./PreopenActions";
 
 // 당근마켓 미니
-import { mini } from "../Karrotmarket/KarrotmarketMini";
+import { mini } from "../_Karrotmarket/KarrotmarketMini";
 import { setConstantValue } from "typescript";
 
 type PreopenAgreementFormProps = {

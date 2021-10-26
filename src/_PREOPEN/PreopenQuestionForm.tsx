@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { mini } from "../Karrotmarket/KarrotmarketMini";
+import { mini } from "../_Karrotmarket/KarrotmarketMini";
 
 // interface PreopenQuestionFormProps extends HTMLAttributes<HTMLDivElement> {
 //   a?: string;
