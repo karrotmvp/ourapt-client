@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.5.0",
+    "@emotion/styled": "^11.3.0",
     "@karrotframe/navigator": "^0.17.3",
     "@karrotmarket/mini": "^0.12.0",
     "@openapitools/openapi-generator-cli": "^2.4.12",
