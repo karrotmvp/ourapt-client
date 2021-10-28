@@ -5,7 +5,7 @@ import { ScreenHelmet, useNavigator, useParams } from "@karrotframe/navigator";
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
-import TopFeedInFeed from "../TopFeed/TopFeedInFeed";
+import TopFeedInFeed from "../AdminSurvey/AdminSurveyInFeed";
 import QuestionInFeed from "../Question/QuestionInFeed";
 // import { useHistory } from "react-router";
 
@@ -71,26 +71,28 @@ const PageFeed: React.FC = () => {
     <div className="Page">
       <ScreenHelmet />
       {tempChannelId}를 이용해 받아온 {tempChannelData.displayName}의 피드예요.
-      <TopFeedArea>
-        <div>알려주세요!</div>
-        {tempChannelData.topFeed.map((topFeed) => {
-          return <TopFeedInFeed topFeed={topFeed} />;
-        })}
-      </TopFeedArea>
-      <ArticleArea>
-        <div>커뮤니티</div>
-        {tempChannelData.article.map((article) => {
-          return (
-            <ArticleWrapper>
-              <QuestionInFeed question={article.question} />
-              {article.commentsNum}개의 댓글
-              <button onClick={() => goArticleDetail(article.id)}>
-                상세보기
-              </button>
-            </ArticleWrapper>
-          );
-        })}
-      </ArticleArea>
+      <div>
+        <TopFeedArea>
+          <div>알려주세요!</div>
+          {tempChannelData.topFeed.map((topFeed) => {
+            return <TopFeedInFeed topFeed={topFeed} />;
+          })}
+        </TopFeedArea>
+        <ArticleArea>
+          <div>커뮤니티</div>
+          {tempChannelData.article.map((article) => {
+            return (
+              <ArticleWrapper>
+                <QuestionInFeed question={article.question} />
+                {article.commentsNum}개의 댓글
+                <button onClick={() => goArticleDetail(article.id)}>
+                  상세보기
+                </button>
+              </ArticleWrapper>
+            );
+          })}
+        </ArticleArea>
+      </div>
       <button
         className="floatingButton btn--active"
         onClick={onFloatingBtnClick}

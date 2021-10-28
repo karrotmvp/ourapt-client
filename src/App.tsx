@@ -10,10 +10,10 @@ import { mini } from "./_Karrotmarket/KarrotmarketMini";
 import PreopenPage from "./_PREOPEN/PreopenPage";
 import PageLanding from "./_components/_pages/PageLanding";
 import PageFeed from "./_components/_pages/PageFeed";
-import PageTopFeedDetail from "./_components/_pages/topFeed/PageTopFeedDetail";
-import PageArticleDetail from "./_components/_pages/article/PageArticleDetail";
-import PageArticleUpdate from "./_components/_pages/article/PageArticleUpdate";
-import PageArticleCreate from "./_components/_pages/article/PageArticleCreate";
+import PageTopFeedDetail from "./_components/_pages/adminSurvey/PageAdminSurveyOpenedDetail";
+import PageQuestionDetail from "./_components/_pages/article/PageQuestionDetail";
+import PageQuestionUpdate from "./_components/_pages/article/PageQuestionUpdate";
+import PageQuestionCreate from "./_components/_pages/article/PageQuestionCreate";
 // import { Route, Switch, useHistory } from "react-router";
 
 const App: React.FC = () => {
@@ -38,13 +38,13 @@ const App: React.FC = () => {
           <PageTopFeedDetail />
         </Screen>
         <Screen path="/article/create">
-          <PageArticleCreate />
+          <PageQuestionCreate />
         </Screen>
         <Screen path="/article/:articleId">
-          <PageArticleDetail />
+          <PageQuestionDetail />
         </Screen>
         <Screen path="/article/:articleId/update">
-          <PageArticleUpdate articleId={"article123"} />
+          <PageQuestionUpdate />
         </Screen>
       </Navigator>
     </div>
