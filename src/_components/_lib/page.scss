@@ -1,11 +1,8 @@
 // 모든 페이지의 가장 바깥 wrapper. 기본 규격
 .Page {
   width: 100%;
-
-  // height를 어떻게 생각해야 할까?
-  height: 100%;
-
-  padding: 50px;
+  // height는 자식 요소들의 크기에 따라 늘어날 수 있도록, min-height만 지정해두겠습니다.
+  min-height: 100vh;
 
   display: flex;
   flex-direction: column;

@@ -26,7 +26,7 @@ const CommentInDetail: React.FC<CommentInDetailProps> = ({ comment }) => {
   return (
     <div>
       <div className="AuthorCard">
-        <UserAsAuthor user={comment.author} />
+        {/* <UserAsAuthor user={comment.author} /> */}
         <div className="AuthorCard-TimeStamp">작성: {comment.createdAt}</div>
       </div>
 

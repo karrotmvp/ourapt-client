@@ -1,6 +1,8 @@
+import "./index.scss";
+import "./dayjs";
+
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 

@@ -1,4 +1,5 @@
 import React from "react";
+import { User } from "../../../_types/ouraptTypes";
 
 import { ScreenHelmet, useParams } from "@karrotframe/navigator";
 
@@ -21,10 +22,15 @@ const PageArticleDetail: React.FC = () => {
 
   const tempArticleData = {
     id: "article1",
-    author: {
-      id: "authorOfArticle1",
-      nickname: "글작성자",
-      avatarSrc: "./../..",
+    user: {
+      profile: {
+        userId: "bb",
+        nickname: "닉네임2",
+        profileImgUrl: "./../...",
+      },
+      pushAgreedAt: new Date("1995-12-17T03:24:00"),
+      createdAt: new Date("1995-12-29T03:24:00"),
+      updatedAt: new Date("1995-12-29T03:24:00"),
     },
     question: {
       content: "우리아파트 벽 색깔 맘에 드나요?",
@@ -33,30 +39,45 @@ const PageArticleDetail: React.FC = () => {
     comments: [
       {
         id: "comment1",
-        author: {
-          id: "authorOfComment1",
-          nickname: "댓글작성자1",
-          avatarSrc: "./../..",
+        user: {
+          profile: {
+            userId: "bb",
+            nickname: "닉네임2",
+            profileImgUrl: "./../...",
+          },
+          pushAgreedAt: new Date("1995-12-17T03:24:00"),
+          createdAt: new Date("1995-12-29T03:24:00"),
+          updatedAt: new Date("1995-12-29T03:24:00"),
         },
         content: "좋아요 예뻐요",
         createdAt: "Sun May 11, 2021",
       },
       {
         id: "comment2",
-        author: {
-          id: "authorOfComment2",
-          nickname: "댓글작성자2",
-          avatarSrc: "./../..",
+        user: {
+          profile: {
+            userId: "bb",
+            nickname: "닉네임2",
+            profileImgUrl: "./../...",
+          },
+          pushAgreedAt: new Date("1995-12-17T03:24:00"),
+          createdAt: new Date("1995-12-29T03:24:00"),
+          updatedAt: new Date("1995-12-29T03:24:00"),
         },
         content: "별로예요",
         createdAt: "Sun May 11, 2021",
       },
       {
         id: "comment3",
-        author: {
-          id: "authorOfComment3",
-          nickname: "댓글작성자3",
-          avatarSrc: "./../..",
+        user: {
+          profile: {
+            userId: "bb",
+            nickname: "닉네임2",
+            profileImgUrl: "./../...",
+          },
+          pushAgreedAt: new Date("1995-12-17T03:24:00"),
+          createdAt: new Date("1995-12-29T03:24:00"),
+          updatedAt: new Date("1995-12-29T03:24:00"),
         },
         content: "다른이야기해요",
         createdAt: "Sun May 11, 2021",
@@ -76,18 +97,18 @@ const PageArticleDetail: React.FC = () => {
       그렇다면 form도 card도 프롭스를 넘겨주는 컴포넌트로 선언하지 말고 ---- 왜냐면 그래야 유연해지니까. 
       그런 컴포짓들은 그냥 클래스로만 선언하도록 하자! ---- 내가 세운 원칙!
       그런데 디자인 프리미티브도 프롭스를 가지지 않고, 클래스로만 선언되도록 해야 할까?  */}
-      <div className="AuthorCard">
-        <UserAsAuthor user={tempArticleData.author} />
+      {/* <div className="AuthorCard">
+        <UserAsAuthor user={tempArticleData.user} />
         <div className="AuthorCard-TimeStamp">
           작성: {tempArticleData.createdAt}
         </div>
-      </div>
+      </div> */}
       <QuestionInDetail question={tempArticleData.question} />
-      <CommentInDetailWrapper>
+      {/* <CommentInDetailWrapper>
         {tempArticleData.comments.map((comment) => {
           return <CommentInDetail comment={comment} />;
         })}
-      </CommentInDetailWrapper>
+      </CommentInDetailWrapper> */}
       <div className="CommentSubmitForm"></div>
       <div>{articleId} 페이지</div>
     </div>

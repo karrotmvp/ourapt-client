@@ -12,9 +12,31 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* 전역에서 자간은 일괄 -3으로 설정하기 */
+  letter-spacing: -0.03em;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+/* 전역에서 User Agent Style-Sheet 없애기 */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+
+p {
+  line-height: 1em;
+}
+
+.temp {
+  color: la;
 }
