@@ -17,10 +17,6 @@ import { ScreenHelmet } from "@karrotframe/navigator";
 import PreopenAgreementForm from "./PreopenAgreementForm";
 import PreopenQuestionForm from "./PreopenQuestionForm";
 
-// 환경변수
-import * as dotenv from "dotenv";
-dotenv.config();
-
 // 스펙을 반영한 상태 선언: 토니가 가르쳐 준 방식대로! 두 가지로 선언해 보았어요.
 type State = {
   // _t: "beforeAgreement" | "afterAgreement";
@@ -179,3 +175,9 @@ const PreopenPage: React.FC = () => {
 };
 
 export default PreopenPage;
+
+// SASS
+// Ruby on Rails에서 사용됨
+// Sass Compiler -> Ruby 기반
+// Sass Compiler -> C++ 포팅 -> Libsass -> NPM -> node-sass
+// Sass 버전이 업데이트 -> Ruby를 버림 -> Dart -> JavaScript 컴파일 가능 -> sass

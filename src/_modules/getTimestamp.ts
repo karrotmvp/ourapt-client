@@ -7,7 +7,7 @@ export default function getTimestamp(createdAt: Date, updatedAt: Date) {
 
   // 수정 여부
   const isEdited = Boolean(createdAt !== updatedAt);
-  return `${editedMomentFromNow} ${isEdited ? "수정" : "작성"}됨`;
+  return `${editedMomentFromNow} ${isEdited ? "수정" : "작성"}`;
 }
 
 // dayjs 커스터마이징 확인하기
@@ -57,7 +57,7 @@ const testTimes: Array<{ expectation: string; date: Object }> = [
   },
 ];
 
-testTimes.map((testTime, idx) => {
-  // console.log(testTime.date);
-  testTimestamp(testTime.date);
-});
+// testTimes.map((testTime, idx) => {
+//   // console.log(testTime.date);
+//   testTimestamp(testTime.date);
+// });

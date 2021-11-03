@@ -12,9 +12,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  /* 전역에서 자간은 일괄 -3으로 설정하기 */
-  letter-spacing: -0.03em;
 }
 
 code {
@@ -37,6 +34,8 @@ p {
   line-height: 1em;
 }
 
-.temp {
-  color: la;
+/* 전역에서 자간은 일괄 -3으로, 단어 단위로 개행 설정하기 */
+* {
+  letter-spacing: -0.03em;
+  /* word-break: keep-all; */
 }

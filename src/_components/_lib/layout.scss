@@ -1,11 +1,39 @@
-.pd-16 {
+// 너비
+.width--100 {
+  width: 100%;
+}
+
+// 마진값
+.mg-top--10 {
+  margin-top: 10px;
+}
+
+.mg-right--8 {
+  margin-right: 8px;
+}
+
+.mg-bottom--12 {
+  margin-bottom: 12px;
+}
+
+.mg-bottom--16 {
+  margin-bottom: 16px;
+}
+
+.mg-bottom--64 {
+  margin-bottom: 64px;
+}
+
+// 패딩값
+
+.pd--16 {
   padding-top: 16px;
   padding-bottom: 16px;
   padding-right: 16px;
   padding-left: 16px;
 }
 
-.pd-24 {
+.pd--24 {
   padding-top: 24px;
   padding-bottom: 24px;
   padding-right: 24px;

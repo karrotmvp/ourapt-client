@@ -1,0 +1,25 @@
+.QuestionCreateUpdateForm {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  background-color: darkseagreen;
+}
+
+.QuestionCreateUpdateForm-input {
+  width: 100%;
+  height: 240px;
+
+  font-size: 17px;
+
+  border: none;
+}
+
+.QuestionCreateUpdateForm-input::placeholder {
+  color: #aaaaaa;
+  font-size: 17px;
+}
+.QuestionCreateUpdateForm-btn {
+}

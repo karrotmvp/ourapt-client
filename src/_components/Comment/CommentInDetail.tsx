@@ -1,37 +1,32 @@
 import React from "react";
+import { User } from "../../_types/ouraptTypes";
 
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import UserAsAuthor from "../User/UserAsAuthor";
 
-interface Comment {
+interface tempComment {
   id: string;
-  author: User;
+  user: User;
   content: string;
   // type should be string OR Date (undecided)
-  createdAt: string;
-}
-
-interface User {
-  id: string;
-  nickname: string;
-  avatarSrc: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 type CommentInDetailProps = {
-  comment: Comment;
+  comment: tempComment;
 };
 
 const CommentInDetail: React.FC<CommentInDetailProps> = ({ comment }) => {
   return (
-    <div>
-      <div className="AuthorCard">
-        {/* <UserAsAuthor user={comment.author} /> */}
-        <div className="AuthorCard-TimeStamp">작성: {comment.createdAt}</div>
-      </div>
-
-      <h4>{comment.content}</h4>
-      <p>{comment.createdAt}에 작성되었어요</p>
+    <div className="ArticleCard pd--16">
+      <UserAsAuthor
+        user={comment.user}
+        createdAt={comment.createdAt}
+        updatedAt={comment.updatedAt}
+      />
+      <p className="ArticleCard-Content mg-top--10">{comment.content}</p>
     </div>
   );
 };

@@ -1,31 +1,37 @@
 import React from "react";
+import { User } from "../../_types/ouraptTypes";
 
 import { useNavigator } from "@karrotframe/navigator";
 
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
+import UserAsAuthor from "../User/UserAsAuthor";
 
-interface Question {
-  title: string;
-}
+type tempQuestion = {
+  id: string;
+  user: User;
+  content: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 type QuestionInFeedProps = {
-  question: Question;
+  question: tempQuestion;
 };
 
 const ArticleInFeed: React.FC<QuestionInFeedProps> = ({ question }) => {
   return (
-    <QuestionInFeedWrapper>
-      <h4>{question.title}</h4>
-    </QuestionInFeedWrapper>
+    <div className="ArticleCard pd-16">
+      <UserAsAuthor
+        user={question.user}
+        createdAt={question.createdAt}
+        updatedAt={question.updatedAt}
+      />
+      <p className="ArticleCard-Content mg-top--10 mg-bottom--16">
+        {question.content}
+      </p>
+    </div>
   );
 };
 
 export default ArticleInFeed;
-
-const QuestionInFeedWrapper = styled.div`
-  width: 100%;
-  margin-bottom: 10px;
-
-  background-color: lightpink;
-`;

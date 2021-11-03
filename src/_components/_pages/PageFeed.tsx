@@ -5,7 +5,7 @@ import { ScreenHelmet, useNavigator, useParams } from "@karrotframe/navigator";
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
-import TopFeedInFeed from "../AdminSurvey/AdminSurveyInFeed";
+import QuestionPinnedInFeed from "../Question/QuestionPinnedInFeed";
 import QuestionInFeed from "../Question/QuestionInFeed";
 import UserAsAuthor from "../User/UserAsAuthor";
 // import { useHistory } from "react-router";
@@ -41,61 +41,96 @@ const PageFeed: React.FC = () => {
     ],
     article: [
       {
-        id: "article1",
-        user: {
-          profile: {
-            userId: "aa",
-            nickname: "닉네임1",
-            profileImgUrl: "./../...",
-          },
-          pushAgreedAt: new Date("1995-12-17T03:24:00"),
-          createdAt: new Date("2021-10-27T03:24:00"),
-          updatedAt: new Date("2021-10-27T03:24:00"),
-        },
         question: {
-          title: "우리 아파트 벽 색깔 맘에 드나요?",
+          id: "article1",
+          user: {
+            id: "우리아이디",
+            profile: {
+              id: "당근아이디",
+              nickname: "당근닉네임",
+              profileImageUrl: "../..../....",
+            },
+            isPushAgreed: true,
+            bannedAt: new Date("2021-10-27T03:24:00"),
+            createdAt: new Date("2021-10-27T03:24:00"),
+            updatedAt: new Date("2021-10-27T03:24:00"),
+            checkedIn: {
+              id: "아파트아이디",
+              name: "아파트 이름", // 아파트 이름
+              brandName: "브랜드 이름",
+              regionDepth1: {
+                id: "", // 리전 ID
+                name: "", // 리전 이름
+              }, // 아파트 속한 depth1 리전
+              regionDepth2: {
+                id: "", // 리전 ID
+                name: "", // 리전 이름
+              }, // 아파트 속한 depth1 리전
+              regionDepth3: {
+                id: "", // 리전 ID
+                name: "", // 리전 이름
+              }, // 아파트 속한 depth1 리전
+              regionDepth4: {
+                id: "", // 리전 ID
+                name: "", // 리전 이름
+              }, // 아파트 속한 depth1 리전
+              bannerImage: "../.../.../",
+              isActive: true, // 활성화 여부
+              createdAt: new Date("2021-10-27T03:24:00"),
+              updatedAt: new Date("2021-10-27T03:24:00"),
+            },
+          },
+          content: "우리 아파트 벽 색ㄱ깔 어흐흑",
           createdAt: new Date("2021-10-27T03:24:00"),
           updatedAt: new Date("2021-10-27T03:24:00"),
         },
         commentsNum: 10,
       },
       {
-        id: "article2",
-        user: {
-          profile: {
-            userId: "bb",
-            nickname: "닉네임2",
-            profileImgUrl: "./../...",
-          },
-          pushAgreedAt: new Date("1995-12-17T03:24:00"),
-          createdAt: new Date("1995-12-27T03:24:00"),
-          updatedAt: new Date("1995-12-28T03:24:00"),
-        },
         question: {
-          title: "좋은 미용실 선택해주세요",
-          createdAt: new Date("1995-12-27T03:24:00"),
-          updatedAt: new Date("1995-12-28T03:24:00"),
-        },
-        commentsNum: 3,
-      },
-      {
-        id: "article3",
-        user: {
-          profile: {
-            userId: "bb",
-            nickname: "닉네임2",
-            profileImgUrl: "./../...",
+          id: "article1",
+          user: {
+            id: "우리아이디",
+            profile: {
+              id: "당근아이디",
+              nickname: "당근닉네임",
+              profileImageUrl: "../..../....",
+            },
+            isPushAgreed: true,
+            bannedAt: new Date("2021-10-27T03:24:00"),
+            createdAt: new Date("2021-10-27T03:24:00"),
+            updatedAt: new Date("2021-10-27T03:24:00"),
+            checkedIn: {
+              id: "아파트아이디",
+              name: "아파트 이름", // 아파트 이름
+              brandName: "브랜드 이름",
+              regionDepth1: {
+                id: "", // 리전 ID
+                name: "", // 리전 이름
+              }, // 아파트 속한 depth1 리전
+              regionDepth2: {
+                id: "", // 리전 ID
+                name: "", // 리전 이름
+              }, // 아파트 속한 depth1 리전
+              regionDepth3: {
+                id: "", // 리전 ID
+                name: "", // 리전 이름
+              }, // 아파트 속한 depth1 리전
+              regionDepth4: {
+                id: "", // 리전 ID
+                name: "", // 리전 이름
+              }, // 아파트 속한 depth1 리전
+              bannerImage: "../.../.../",
+              isActive: true, // 활성화 여부
+              createdAt: new Date("2021-10-27T03:24:00"),
+              updatedAt: new Date("2021-10-27T03:24:00"),
+            },
           },
-          pushAgreedAt: new Date("1995-12-17T03:24:00"),
-          createdAt: new Date("1995-12-29T03:24:00"),
-          updatedAt: new Date("1995-12-29T03:24:00"),
+          content: "우리 아파트 벽 색ㄱ깔 어흐흑",
+          createdAt: new Date("2021-10-27T03:24:00"),
+          updatedAt: new Date("2021-10-27T03:24:00"),
         },
-        question: {
-          title: "이런 식으로 만들어 볼 거예요",
-          createdAt: new Date("1995-12-29T03:24:00"),
-          updatedAt: new Date("1995-12-29T03:24:00"),
-        },
-        commentsNum: 100,
+        commentsNum: 10,
       },
     ],
   };
@@ -109,48 +144,52 @@ const PageFeed: React.FC = () => {
     // history.push(`/article/${articleId}`);
   };
 
-  const onFloatingBtnClick = () => {
+  const onArticleCreateBtnClick = () => {
     push("article/create");
     // DELETE
     // history.push(`/article/create`);
   };
   return (
     <div className="Page">
-      <ScreenHelmet />
-      {tempChannelId}를 이용해 받아온 {tempChannelData.displayName}의 피드예요.
-      <TopFeedArea className="pd-16">
-        {tempChannelData.topFeed.map((topFeed) => {
-          return <TopFeedInFeed topFeed={topFeed} />;
-        })}
-      </TopFeedArea>
-      <ArticleArea>
-        <AreaTitle className="pd-16">커뮤니티</AreaTitle>
-        {tempChannelData.article.map((article) => {
-          return (
-            <ArticleWrapper
-              className="pd-16"
-              onClick={() => goArticleDetail(article.id)}
-            >
-              <UserAsAuthor
+      <div className="PageFeed-inner">
+        <ScreenHelmet />
+        <TopFeedArea className="pd--16">
+          {tempChannelData.topFeed.map((topFeed) => {
+            return <QuestionPinnedInFeed question={topFeed} />;
+          })}
+        </TopFeedArea>
+        <ArticleArea>
+          <AreaTitle className="pd--16">아파트 주민 라운지</AreaTitle>
+          {tempChannelData.article.map((article) => {
+            return (
+              <ArticleWrapper
+                className="pd--16"
+                onClick={() => goArticleDetail(article.question.id)}
+              >
+                {/* <UserAsAuthor
                 user={article.user}
                 createdAt={article.question.createdAt}
                 updatedAt={article.question.updatedAt}
-              />
-              <QuestionInFeed question={article.question} />
-              <div>
-                <div>댓</div>
-                {article.commentsNum}
-              </div>
-            </ArticleWrapper>
-          );
-        })}
-      </ArticleArea>
-      <button
-        className="floatingButton btn--active"
-        onClick={onFloatingBtnClick}
-      >
-        글쓰기
-      </button>
+              /> */}
+                <QuestionInFeed question={article.question} />
+                <CommentThumbnail>
+                  <div className="mg-right--8">댓</div>
+                  <div className="font-size--15 font-weight--400 font-color--11">
+                    {article.commentsNum}
+                  </div>
+                </CommentThumbnail>
+              </ArticleWrapper>
+            );
+          })}
+        </ArticleArea>
+      </div>
+      <div className="btn--floating">
+        <ArticleCreateBtn onClick={onArticleCreateBtnClick}>
+          <img
+            src={require("../../_assets/ArticleCreateBtnIcon.svg").default}
+          />
+        </ArticleCreateBtn>
+      </div>
     </div>
   );
 };
@@ -187,4 +226,29 @@ const ArticleWrapper = styled.div`
   flex-direction: column;
 
   background-color: lavender;
+`;
+
+const CommentThumbnail = styled.div`
+  background-color: violet;
+
+  margin-left: auto;
+
+  display: flex;
+  flex-direction: row;
+`;
+
+const ArticleCreateBtn = styled.div`
+  width: 64px;
+  height: 64px;
+
+  margin-right: 16px;
+  margin-left: auto;
+
+  background-color: #e95454;
+
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
