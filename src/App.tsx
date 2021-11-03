@@ -42,7 +42,7 @@ const App: React.FC = () => {
           <Screen path="/apartment/request">
             <PageApartmentRequsetForm />
           </Screen>
-          <Screen path="/feed/:channelId">
+          <Screen path="/feed/:apartmentId">
             <PageFeed />
           </Screen>
           <Screen path="/article/:articleId/pinned">

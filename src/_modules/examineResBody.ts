@@ -3,5 +3,5 @@ export default function examineResBody(resBody: any, context: string) {
     alert(`${context} 실패`);
     throw new Error(`${context} 실패`);
   }
-  return;
+  return resBody;
 }

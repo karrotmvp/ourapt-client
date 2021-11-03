@@ -12,8 +12,8 @@ import UserAsAuthor from "../User/UserAsAuthor";
 
 const PageFeed: React.FC = () => {
   // 먼저 파라미터를 기반으로 내가 어느 채널에 있는지 확인해요.
-  const params = useParams<{ channelId?: string }>();
-  const tempChannelId = params.channelId;
+  const params = useParams<{ apartmentId?: string }>();
+  const tempChannelId = params.apartmentId;
 
   // API call:
   // request ---- 갖고 있는 channelId를 서버로 보내줘요.

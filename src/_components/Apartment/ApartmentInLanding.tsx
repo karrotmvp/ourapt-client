@@ -16,8 +16,8 @@ const ApartmentInPageLanding: React.FC<ApartmentInPageLandingProps> = ({
 }) => {
   const { push, pop, replace } = useNavigator();
 
-  const goFeed = (channelId: string) => {
-    push(`/feed/${channelId}`);
+  const goFeed = (apartmentId: string) => {
+    push(`/feed/${apartmentId}`);
   };
 
   console.log(apartment.bannerImage);

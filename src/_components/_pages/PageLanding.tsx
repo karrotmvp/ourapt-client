@@ -29,6 +29,17 @@ import examineResBody from "../../_modules/examineResBody";
 
 import ApartmentInLanding from "../Apartment/ApartmentInLanding";
 
+// const configuration = new Configuration({
+//   accessToken: "",
+// });
+
+// const apartmentController = new ApartmentControllerApi(configuration);
+// const oauthController = new OAuthControllerApi(configuration);
+// const userController = new UserControllerApi(configuration);
+const apartmentController = new ApartmentControllerApi();
+const oauthController = new OAuthControllerApi();
+const userController = new UserControllerApi();
+
 const PageLanding: React.FC = () => {
   // API call:
   // request ---- 가지고 있는 regionId를 서버로 보내고, (regionId는 params로 받아올 예정)
@@ -50,70 +61,90 @@ const PageLanding: React.FC = () => {
   const state = useMyInfoState();
   const dispatch = useMyInfoDispatch();
   const setUser = (user: User) => dispatch({ _t: "SET_USER", user: user });
-  const setAccessToken = (accessToken: any) =>
+  const setAccessToken = (accessToken: string) =>
     dispatch({ _t: "SET_ACCESSTOKEN", accessToken: accessToken });
-
-  const apartmentController = new ApartmentControllerApi();
-  const oauthController = new OAuthControllerApi();
-  const userController = new UserControllerApi();
-  const configuration = new Configuration();
 
   async function showApartmentsFromRegionId() {
     let response;
     if (regionId !== "NO_REGION_ID") {
-      response = await apartmentController.getApartmentInRegionUsingGETRaw({
+      response = await apartmentController.getApartmentInRegionUsingGET({
         regionId: regionId,
       });
     } else if (true) {
-      response = await apartmentController.getApartmentInRegionUsingGETRaw({
+      response = await apartmentController.getApartmentInRegionUsingGET({
         // regionId: "b7ca1e49757c",
-        regionId: "1f0758ccde06",
+        regionId: "a87002cc41f1",
       });
     } else {
       alert("다시 접속해 주세요");
     }
-    const resBody = await examineResponse(response);
-    // examineResBody(resBody, "regionId로 apartment 받기");
-    setApartments(resBody.data.apartments);
+    const apartments = examineResBody(response, "regionId로 apartment 받기")
+      .data.apartments;
+    setApartments(apartments);
   }
 
   async function issueAccessTokenByCode() {
     let response;
-    response = await oauthController.karrotLoginUsingPOSTRaw({
+    response = await oauthController.karrotLoginUsingPOST({
       body: {
         authorizationCode: code,
       },
     });
-    const resBody = await examineResponse(response);
-    // examineResBody(resBody, "code로 AccessToken 발급받기");
-    return "Bearer " + resBody.data.accessToken;
+    const accessToken = examineResBody(response, "code로 AccessToken 발급받기")
+      .data.accessToken;
+    return "Bearer " + accessToken;
   }
 
-  async function getMyInfo() {
+  async function getMyInfo(accessToken: string) {
     let response;
-    response = await userController.getMyInfoUsingGETRaw();
-    const resBody = await examineResponse(response);
-    // examineResBody(resBody, "AccessToken으로 내 정보 받아오기");
-    return resBody.data;
+    // response = await userController.getMyInfoUsingGET({
+    //   headers: {
+    //     Authorization: accessToken,
+    //   },
+    // });
+    console.log(accessToken);
+    try {
+      await userController.getMyInfoUsingGET({
+        headers: {
+          Authorization: accessToken,
+        },
+      });
+    } catch (e) {
+      console.log(e);
+    }
+    // console.log(`여기 정보를 받아오나요? ${response}`);
+    // const myInfo = examineResBody(
+    //   response,
+    //   "AccessToken으로 내 정보 받아오기"
+    // ).data;
+    // return myInfo;
   }
 
   async function init() {
     // 웹뷰 테스트 하기 전까지는 임시로 코드를 먹여 놓을게요!
+    code = "nEcir4RXbUDEDtFvqZSJ";
     if (!code) {
       showApartmentsFromRegionId();
       console.log("여기서 분기가 걸리면 아래로 내려가지 못해요!");
     } else {
-      setAccessToken(issueAccessTokenByCode);
-      setUser(await getMyInfo());
-      console.log(
-        `여기는 페이지랜딩인데요, ${JSON.stringify(state.user.checkedIn)}`
-      );
-      // if ()
-      // if (userInfo.isCheckedIn) {
-      //   // 아파트 피드로 보내주기
-      // } else {
-      //   showApartmentsFromRegionId();
-      // }
+      const accessToken = await issueAccessTokenByCode();
+      setAccessToken(accessToken);
+      // 이거 왜 한번에 하면 안되는지 궁금
+      console.log(`그냥 ${accessToken}`);
+      console.log(`액세스토큰 받아오기 성공? ${state.accessToken}`);
+      const myInfo = await getMyInfo(state.accessToken);
+      console.log(`제가 마이인포를 잘받아왔을가요? ${myInfo}`);
+      // setUser(myInfo);
+      console.log(`콘텍스트 안에서 잘 받아졌나 확인해볼까요? ${state.user}`);
+
+      // 한번 더 분기해주겠습니다!
+      const isCheckedIn = state.user.checkedIn;
+      // 서버에서는 null로 보내주지만 여기에서 받을 때는 undefined로 변환될 수도 있어서 그냥 !로 잡아주었습니다.
+      if (!isCheckedIn) {
+        showApartmentsFromRegionId();
+      } else {
+        push(`/feed/${isCheckedIn.id}`);
+      }
     }
   }
 
