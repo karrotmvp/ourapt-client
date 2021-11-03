@@ -13,5 +13,7 @@ export function getCodeFromURLParams() {
   const code = urlSearchParams.get("code");
   if (code) {
     return code;
+  } else {
+    return "NOT_AGREED";
   }
 }

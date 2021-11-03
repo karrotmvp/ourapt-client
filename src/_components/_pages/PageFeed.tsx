@@ -10,7 +10,11 @@ import QuestionInFeed from "../Question/QuestionInFeed";
 import UserAsAuthor from "../User/UserAsAuthor";
 // import { useHistory } from "react-router";
 
-const PageFeed: React.FC = () => {
+type PageFeedProps = {
+  apartmentId: string;
+};
+
+const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
   // 먼저 파라미터를 기반으로 내가 어느 채널에 있는지 확인해요.
   const params = useParams<{ apartmentId?: string }>();
   const tempChannelId = params.apartmentId;

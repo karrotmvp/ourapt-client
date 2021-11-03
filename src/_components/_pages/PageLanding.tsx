@@ -6,10 +6,10 @@ import { ApartmentDto as Apartment } from "../../__generated__/ourapt";
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
-import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
-
 import { useMyInfoState, useMyInfoDispatch } from "../../_modules/setMyInfo";
 import { useApi } from "../../api";
+
+import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
 
 import {
   getRegionFromURLParams,
@@ -22,20 +22,16 @@ import examineResBody from "../../_modules/examineResBody";
 import ApartmentInLanding from "../Apartment/ApartmentInLanding";
 
 const PageLanding: React.FC = () => {
-  // API call:
-  // request ---- 가지고 있는 regionId를 서버로 보내고, (regionId는 params로 받아올 예정)
-  // response ---- 해당 region이 가지고 있는 channel 목록들을 받아옵니다.
-  const api = useApi();
-  const { push, pop, replace } = useNavigator();
-
   const [apartments, setApartments] = useState<Array<Apartment>>([]);
   const myInfo = useMyInfoState();
   const dispatch = useMyInfoDispatch();
 
+  const api = useApi();
+
+  const { push, pop, replace } = useNavigator();
   const goPageApartmentRequestForm = () => {
     push(`/apartment/request`);
   };
-  // const UserContext = React.createContext();
 
   // 이것들은 전체 앱이 만들어질 때 가져와서 콘텍스트로 갖고 있는 편이 안정적이다?
   const regionId = getRegionFromURLParams();
@@ -47,11 +43,11 @@ const PageLanding: React.FC = () => {
   async function showApartmentsFromRegionId() {
     let response;
     if (regionId !== "NO_REGION_ID") {
-      response = await apartmentController.getApartmentInRegionUsingGET({
+      response = await api.apartmentController.getApartmentInRegionUsingGET({
         regionId: regionId,
       });
     } else if (true) {
-      response = await apartmentController.getApartmentInRegionUsingGET({
+      response = await api.apartmentController.getApartmentInRegionUsingGET({
         // regionId: "b7ca1e49757c",
         regionId: "a87002cc41f1",
       });
@@ -63,9 +59,7 @@ const PageLanding: React.FC = () => {
     setApartments(apartments);
   }
 
-  async function issueAccessTokenByCode() {
-    let code = getCodeFromURLParams();
-
+  async function issueAccessTokenByCode(code: string) {
     if (process.env.REACT_APP_TEST === "MSW_버전") {
       code = "tempcode";
     }
@@ -83,68 +77,36 @@ const PageLanding: React.FC = () => {
 
   async function getMyInfo(accessToken: string) {
     let response;
-    // response = await userController.getMyInfoUsingGET({
-    //   headers: {
-    //     Authorization: accessToken,
-    //   },
-    // });
-    console.log(accessToken);
-    try {
-      await userController.getMyInfoUsingGET({
-        headers: {
-          Authorization: accessToken,
-        },
-      });
-    } catch (e) {
-      console.log(e);
-    }
-    // console.log(`여기 정보를 받아오나요? ${response}`);
-    // const myInfo = examineResBody(
-    //   response,
-    //   "AccessToken으로 내 정보 받아오기"
-    // ).data;
-    // return myInfo;
+    response = await api.userController.getMyInfoUsingGET({
+      headers: {
+        Authorization: accessToken,
+      },
+    });
+    console.log(`여기 정보를 받아오나요? ${response}`);
+    const myInfo = examineResBody(
+      response,
+      "AccessToken으로 내 정보 받아오기"
+    ).data;
+    return myInfo;
+  }
+
+  async function setMyInfo() {
+    const user = await getMyInfo(myInfo.accessToken);
+    setUser(user);
   }
 
   async function init() {
-    // 웹뷰 테스트 하기 전까지는 임시로 코드를 먹여 놓을게요!
-    code = "nEcir4RXbUDEDtFvqZSJ";
-    if (!code) {
-      showApartmentsFromRegionId();
-      console.log("여기서 분기가 걸리면 아래로 내려가지 못해요!");
-    } else {
-      const accessToken = await issueAccessTokenByCode();
-      setAccessToken(accessToken);
-      // 이거 왜 한번에 하면 안되는지 궁금
-      console.log(`그냥 ${accessToken}`);
-      console.log(`액세스토큰 받아오기 성공? ${myInfo.accessToken}`);
-      const myInfo = await getMyInfo(myInfo.accessToken);
-      console.log(`제가 마이인포를 잘받아왔을가요? ${myInfo}`);
-      // setUser(myInfo);
-      console.log(`콘텍스트 안에서 잘 받아졌나 확인해볼까요? ${myInfo.user}`);
-
-      // 한번 더 분기해주겠습니다!
-      const isCheckedIn = myInfo.user.checkedIn;
-      // 서버에서는 null로 보내주지만 여기에서 받을 때는 undefined로 변환될 수도 있어서 그냥 !로 잡아주었습니다.
-      if (!isCheckedIn) {
-        showApartmentsFromRegionId();
-      } else {
-        push(`/feed/${isCheckedIn.id}`);
-      }
-    }
+    showApartmentsFromRegionId();
   }
-
-  useEffect(() => {
-    if (myInfo.accessToken) {
-    }
-  }, [myInfo]);
 
   useEffect(() => {
     console.log("유즈이펙트가 돌아요!");
     init();
   }, []);
-  // console.log(window.sessionStorage.getItem("ouraptAccessToken"));
 
+  useEffect(() => {
+    setMyInfo();
+  }, [myInfo]);
   return (
     <div className="Page">
       <ScreenHelmet />

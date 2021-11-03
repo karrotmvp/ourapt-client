@@ -1,11 +1,18 @@
 import React from "react";
-import { MyInfoProvider } from "./_modules/setMyInfo";
+import {
+  MyInfoProvider,
+  useMyInfoDispatch,
+  useMyInfoState,
+} from "./_modules/setMyInfo";
 
 // 당근마켓 미니앱, 캐럿프레임
 // import Mini from "@karrotmarket/mini";
 import { Navigator, Screen } from "@karrotframe/navigator";
 import "@karrotframe/navigator";
 import { mini } from "./_Karrotmarket/KarrotmarketMini";
+
+// HOC
+import OnLanding from "./_hoc/onLanding";
 
 // 페이지뷰
 import PreopenPage from "./_PREOPEN/PreopenPage";
@@ -17,7 +24,6 @@ import PageQuestionDetail from "./_components/_pages/article/PageQuestionDetail"
 import PageQuestionUpdate from "./_components/_pages/article/PageQuestionUpdate";
 import PageQuestionCreate from "./_components/_pages/article/PageQuestionCreate";
 import { ApiProvider } from "./api";
-// import { Route, Switch, useHistory } from "react-router";
 
 if (process.env.REACT_APP_TEST === "MSW_버전") {
   const { worker } = require("./mocks/browser");
@@ -35,6 +41,9 @@ const App: React.FC = () => {
               mini.close();
             }}
           >
+            <Screen path="/">
+              <OnLanding />
+            </Screen>
             <Screen path="/preopen">
               <PreopenPage />
             </Screen>
@@ -45,7 +54,7 @@ const App: React.FC = () => {
               <PageApartmentRequsetForm />
             </Screen>
             <Screen path="/feed/:apartmentId">
-              <PageFeed />
+              <PageFeed apartmentId={""} />
             </Screen>
             <Screen path="/article/:articleId/pinned">
               <PageQuestionPinnedDetail />

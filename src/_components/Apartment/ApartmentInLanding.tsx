@@ -1,6 +1,6 @@
 import React from "react";
 // import { Apartment } from "../../_types/ouraptTypes";
-import { ApartmentDto as Apartment } from "../../api";
+import { ApartmentDto as Apartment } from "../../__generated__/ourapt";
 
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
