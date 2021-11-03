@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "react-scripts build",
-    "codegen": "openapi-generator-cli generate -i http://api-alpha.daangn-ourapt.com/v2/api-docs -g typescript-fetch -o ./src/api",
+    "codegen": "openapi-generator-cli generate -i http://api-alpha.daangn-ourapt.com/v2/api-docs -g typescript-fetch -o ./src/__generated__/ourapt",
     "eject": "react-scripts eject",
     "start": "react-scripts start",
     "test": "react-scripts test",

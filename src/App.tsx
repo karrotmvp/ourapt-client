@@ -16,6 +16,7 @@ import PageQuestionPinnedDetail from "./_components/_pages/article/PageQuestionP
 import PageQuestionDetail from "./_components/_pages/article/PageQuestionDetail";
 import PageQuestionUpdate from "./_components/_pages/article/PageQuestionUpdate";
 import PageQuestionCreate from "./_components/_pages/article/PageQuestionCreate";
+import { ApiProvider } from "./api";
 // import { Route, Switch, useHistory } from "react-router";
 
 if (process.env.REACT_APP_TEST === "MSW_버전") {
@@ -26,39 +27,41 @@ if (process.env.REACT_APP_TEST === "MSW_버전") {
 const App: React.FC = () => {
   return (
     <MyInfoProvider>
-      <div className="App">
-        <Navigator
-          theme="Cupertino"
-          onClose={() => {
-            mini.close();
-          }}
-        >
-          <Screen path="/preopen">
-            <PreopenPage />
-          </Screen>
-          <Screen path="/landing">
-            <PageLanding />
-          </Screen>
-          <Screen path="/apartment/request">
-            <PageApartmentRequsetForm />
-          </Screen>
-          <Screen path="/feed/:apartmentId">
-            <PageFeed />
-          </Screen>
-          <Screen path="/article/:articleId/pinned">
-            <PageQuestionPinnedDetail />
-          </Screen>
-          <Screen path="/article/create">
-            <PageQuestionCreate />
-          </Screen>
-          <Screen path="/article/:articleId">
-            <PageQuestionDetail />
-          </Screen>
-          <Screen path="/article/:articleId/update">
-            <PageQuestionUpdate />
-          </Screen>
-        </Navigator>
-      </div>
+      <ApiProvider>
+        <div className="App">
+          <Navigator
+            theme="Cupertino"
+            onClose={() => {
+              mini.close();
+            }}
+          >
+            <Screen path="/preopen">
+              <PreopenPage />
+            </Screen>
+            <Screen path="/landing">
+              <PageLanding />
+            </Screen>
+            <Screen path="/apartment/request">
+              <PageApartmentRequsetForm />
+            </Screen>
+            <Screen path="/feed/:apartmentId">
+              <PageFeed />
+            </Screen>
+            <Screen path="/article/:articleId/pinned">
+              <PageQuestionPinnedDetail />
+            </Screen>
+            <Screen path="/article/create">
+              <PageQuestionCreate />
+            </Screen>
+            <Screen path="/article/:articleId">
+              <PageQuestionDetail />
+            </Screen>
+            <Screen path="/article/:articleId/update">
+              <PageQuestionUpdate />
+            </Screen>
+          </Navigator>
+        </div>
+      </ApiProvider>
     </MyInfoProvider>
   );
 };

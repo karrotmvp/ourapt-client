@@ -1,18 +1,7 @@
-import React, {
-  useEffect,
-  useState,
-  useReducer,
-  createContext,
-  useContext,
-  Dispatch,
-} from "react";
+import React, { useEffect, useState } from "react";
 
-import { UserDto as User } from "../../api";
-import { ApartmentDto as Apartment } from "../../api";
-import { Class2Api as ApartmentControllerApi } from "../../api";
-import { Class3Api as OAuthControllerApi } from "../../api";
-import { Class6Api as UserControllerApi } from "../../api";
-import { Configuration } from "../../api";
+import { UserDto as User } from "../../__generated__/ourapt";
+import { ApartmentDto as Apartment } from "../../__generated__/ourapt";
 
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
@@ -20,46 +9,37 @@ import styled from "@emotion/styled";
 import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
 
 import { useMyInfoState, useMyInfoDispatch } from "../../_modules/setMyInfo";
+import { useApi } from "../../api";
+
 import {
   getRegionFromURLParams,
   getCodeFromURLParams,
 } from "../../_modules/getQueryFromURLParams";
+
 import examineResponse from "../../_modules/examineResponse";
 import examineResBody from "../../_modules/examineResBody";
 
 import ApartmentInLanding from "../Apartment/ApartmentInLanding";
 
-// const configuration = new Configuration({
-//   accessToken: "",
-// });
-
-// const apartmentController = new ApartmentControllerApi(configuration);
-// const oauthController = new OAuthControllerApi(configuration);
-// const userController = new UserControllerApi(configuration);
-const apartmentController = new ApartmentControllerApi();
-const oauthController = new OAuthControllerApi();
-const userController = new UserControllerApi();
-
 const PageLanding: React.FC = () => {
   // API call:
   // request ---- 가지고 있는 regionId를 서버로 보내고, (regionId는 params로 받아올 예정)
   // response ---- 해당 region이 가지고 있는 channel 목록들을 받아옵니다.
+  const api = useApi();
   const { push, pop, replace } = useNavigator();
+
+  const [apartments, setApartments] = useState<Array<Apartment>>([]);
+  const myInfo = useMyInfoState();
+  const dispatch = useMyInfoDispatch();
+
   const goPageApartmentRequestForm = () => {
     push(`/apartment/request`);
   };
   // const UserContext = React.createContext();
-  const [apartments, setApartments] = useState<Array<Apartment>>([]);
 
+  // 이것들은 전체 앱이 만들어질 때 가져와서 콘텍스트로 갖고 있는 편이 안정적이다?
   const regionId = getRegionFromURLParams();
-  let code = getCodeFromURLParams();
 
-  if (process.env.REACT_APP_TEST === "MSW_버전") {
-    code = "tempcode";
-  }
-
-  const state = useMyInfoState();
-  const dispatch = useMyInfoDispatch();
   const setUser = (user: User) => dispatch({ _t: "SET_USER", user: user });
   const setAccessToken = (accessToken: string) =>
     dispatch({ _t: "SET_ACCESSTOKEN", accessToken: accessToken });
@@ -84,14 +64,20 @@ const PageLanding: React.FC = () => {
   }
 
   async function issueAccessTokenByCode() {
-    let response;
-    response = await oauthController.karrotLoginUsingPOST({
+    let code = getCodeFromURLParams();
+
+    if (process.env.REACT_APP_TEST === "MSW_버전") {
+      code = "tempcode";
+    }
+
+    const response = await api.oauthController.karrotLoginUsingPOST({
       body: {
         authorizationCode: code,
       },
     });
     const accessToken = examineResBody(response, "code로 AccessToken 발급받기")
       .data.accessToken;
+
     return "Bearer " + accessToken;
   }
 
@@ -131,14 +117,14 @@ const PageLanding: React.FC = () => {
       setAccessToken(accessToken);
       // 이거 왜 한번에 하면 안되는지 궁금
       console.log(`그냥 ${accessToken}`);
-      console.log(`액세스토큰 받아오기 성공? ${state.accessToken}`);
-      const myInfo = await getMyInfo(state.accessToken);
+      console.log(`액세스토큰 받아오기 성공? ${myInfo.accessToken}`);
+      const myInfo = await getMyInfo(myInfo.accessToken);
       console.log(`제가 마이인포를 잘받아왔을가요? ${myInfo}`);
       // setUser(myInfo);
-      console.log(`콘텍스트 안에서 잘 받아졌나 확인해볼까요? ${state.user}`);
+      console.log(`콘텍스트 안에서 잘 받아졌나 확인해볼까요? ${myInfo.user}`);
 
       // 한번 더 분기해주겠습니다!
-      const isCheckedIn = state.user.checkedIn;
+      const isCheckedIn = myInfo.user.checkedIn;
       // 서버에서는 null로 보내주지만 여기에서 받을 때는 undefined로 변환될 수도 있어서 그냥 !로 잡아주었습니다.
       if (!isCheckedIn) {
         showApartmentsFromRegionId();
@@ -147,6 +133,11 @@ const PageLanding: React.FC = () => {
       }
     }
   }
+
+  useEffect(() => {
+    if (myInfo.accessToken) {
+    }
+  }, [myInfo]);
 
   useEffect(() => {
     console.log("유즈이펙트가 돌아요!");
