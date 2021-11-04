@@ -6,7 +6,7 @@ import React, {
   useContext,
   Dispatch,
 } from "react";
-import { UserDto as User, UserDtoFromJSON } from "../api";
+import { UserDto as User, UserDtoFromJSON } from "../__generated__/ourapt";
 
 type MyInfoState = {
   accessToken: any;

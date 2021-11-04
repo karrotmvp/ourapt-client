@@ -24,6 +24,8 @@ if (process.env.REACT_APP_TEST === "MSW_버전") {
   worker.start();
 }
 
+const Noop = () => null;
+
 const App: React.FC = () => {
   return (
     <MyInfoProvider>
@@ -35,6 +37,9 @@ const App: React.FC = () => {
               mini.close();
             }}
           >
+            <Screen path="/">
+              <Noop />
+            </Screen>
             <Screen path="/preopen">
               <PreopenPage />
             </Screen>

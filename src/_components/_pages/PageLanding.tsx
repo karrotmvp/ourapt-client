@@ -47,11 +47,11 @@ const PageLanding: React.FC = () => {
   async function showApartmentsFromRegionId() {
     let response;
     if (regionId !== "NO_REGION_ID") {
-      response = await apartmentController.getApartmentInRegionUsingGET({
+      response = await api.apartmentController.getApartmentInRegionUsingGET({
         regionId: regionId,
       });
     } else if (true) {
-      response = await apartmentController.getApartmentInRegionUsingGET({
+      response = await api.apartmentController.getApartmentInRegionUsingGET({
         // regionId: "b7ca1e49757c",
         regionId: "a87002cc41f1",
       });
@@ -90,7 +90,7 @@ const PageLanding: React.FC = () => {
     // });
     console.log(accessToken);
     try {
-      await userController.getMyInfoUsingGET({
+      await api.userController.getMyInfoUsingGET({
         headers: {
           Authorization: accessToken,
         },
@@ -108,7 +108,7 @@ const PageLanding: React.FC = () => {
 
   async function init() {
     // 웹뷰 테스트 하기 전까지는 임시로 코드를 먹여 놓을게요!
-    code = "nEcir4RXbUDEDtFvqZSJ";
+    const code = "nEcir4RXbUDEDtFvqZSJ";
     if (!code) {
       showApartmentsFromRegionId();
       console.log("여기서 분기가 걸리면 아래로 내려가지 못해요!");
@@ -117,8 +117,8 @@ const PageLanding: React.FC = () => {
       setAccessToken(accessToken);
       // 이거 왜 한번에 하면 안되는지 궁금
       console.log(`그냥 ${accessToken}`);
-      console.log(`액세스토큰 받아오기 성공? ${myInfo.accessToken}`);
-      const myInfo = await getMyInfo(myInfo.accessToken);
+      // console.log(`액세스토큰 받아오기 성공? ${myInfoState.accessToken}`);
+      // const myInfo = await getMyInfo(myInfo.accessToken);
       console.log(`제가 마이인포를 잘받아왔을가요? ${myInfo}`);
       // setUser(myInfo);
       console.log(`콘텍스트 안에서 잘 받아졌나 확인해볼까요? ${myInfo.user}`);
