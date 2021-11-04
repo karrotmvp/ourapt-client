@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { UserDto as User } from "../__generated__/ourapt";
 
 import { useApi } from "../api";
-import { useMyInfoState, useMyInfoDispatch } from "../_modules/setMyInfo";
+import { useMyInfoState, useMyInfoDispatch } from "../_providers/useMyInfo";
 import examineResBody from "../_modules/examineResBody";
 
 import PageLanding from "../_components/_pages/PageLanding";

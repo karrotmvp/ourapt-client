@@ -6,7 +6,7 @@ import { ApartmentDto as Apartment } from "../../__generated__/ourapt";
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
-import { useMyInfoState, useMyInfoDispatch } from "../../_modules/setMyInfo";
+import { useMyInfoState, useMyInfoDispatch } from "../../_providers/useMyInfo";
 import { useApi } from "../../api";
 
 import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
