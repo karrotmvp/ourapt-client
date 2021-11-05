@@ -1,19 +1,15 @@
 import React from "react";
 
+import { QuestionDto as Question } from "../../__generated__/ourapt";
+
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
-import iconArrowRight from "../../assets/iconArrowRight.svg";
 import { useNavigator } from "@karrotframe/navigator";
-
-interface tempQuestion {
-  id: string;
-  title: string;
-  participated: number;
-}
+import PageQuestionPinnedDetail from "../_pages/article/PageQuestionPinnedDetail";
 
 type QuestionPinnedInFeedProps = {
-  question: tempQuestion;
+  question: Question;
 };
 
 const QuestionPinnedInFeed: React.FC<QuestionPinnedInFeedProps> = ({
@@ -28,7 +24,7 @@ const QuestionPinnedInFeed: React.FC<QuestionPinnedInFeedProps> = ({
     <QuestionPinnedInFeedContainer className="pd--16">
       <QuestionPinnedInFeedWrapper>
         <QuestionIcon className="mg-right--8">Q</QuestionIcon>
-        <MainText>{question.title}</MainText>
+        <MainText>{question.mainText}</MainText>
       </QuestionPinnedInFeedWrapper>
       <QuestionPinnedInFeedBtn
         onClick={() => goArticlePinnedDetail(question.id)}

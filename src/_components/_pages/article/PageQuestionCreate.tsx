@@ -1,73 +1,85 @@
 import React, { useEffect, useReducer, useState } from "react";
 
+import { useViewer } from "../../../_providers/useViewer";
+import { useApi } from "../../../api";
+
 import { ScreenHelmet, useNavigator, useParams } from "@karrotframe/navigator";
-type PageQuestionCreateState =
+
+import examineResBody from "../../../_modules/examineResBody";
+
+type State =
   | {
-      _t: "init"; // "not-writing"
-      writing: false;
+      _t: "blank";
     }
   | {
-      _t: "writing"; // "not-writing",
+      _t: "typed";
       mainText: string;
-      writing: true;
     };
 
-type PageQuestionCreateAction = { type: "CHANGE_TEXT"; payload: string };
-// https://react.vlpt.us/basic/20-useReducer.html
-
-// initState
-const initState: PageQuestionCreateState = {
-  _t: "init",
-  writing: false,
+type Action = {
+  _t: "CHANGE_TEXT";
+  payload: string;
 };
 
-function handleChange(newText: string): PageQuestionCreateState {
-  if (newText.length === 0) {
-    return {
-      _t: "init",
-      writing: false,
-    };
-  }
-  return {
-    _t: "writing",
-    mainText: newText,
-    writing: true,
-  };
-}
-
-function reducer(
-  state: PageQuestionCreateState,
-  action: PageQuestionCreateAction
-): PageQuestionCreateState {
-  switch (action.type) {
-    case "CHANGE_TEXT":
-      return handleChange(action.payload);
+const reducer: React.Reducer<State, Action> = (prevState, action) => {
+  switch (action.payload) {
+    case "":
+      return {
+        _t: "blank",
+      };
     default:
-      return state;
+      return {
+        _t: "typed",
+        mainText: action.payload,
+      };
   }
-}
+};
 
 // reducer
 // type에 따라서 적당한 다음 상태를 연결해주는 친구
 
 const PageArticleCreate: React.FC = () => {
-  const [state, dispatch] = useReducer(reducer, initState);
+  const api = useApi();
+  const { regionId } = useViewer();
+  const [state, dispatch] = useReducer(reducer, { _t: "blank" });
 
   const { push } = useNavigator();
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    // server에 submit
-    // question detail 페이지로 돌아가기
+  const [submitBtnActiveState, setSubmitBtnActiveState] = useState({
+    disabled: true,
+    className: "btn--inactive",
+  });
 
-    // push(`/article/${questionId}`);
-  }
+  useEffect(() => {
+    if (state._t === "blank") {
+      setSubmitBtnActiveState({ disabled: true, className: "btn--inactive" });
+    } else {
+      setSubmitBtnActiveState({ disabled: false, className: "btn--active" });
+    }
+  }, [state]);
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     dispatch({
-      type: "CHANGE_TEXT",
+      _t: "CHANGE_TEXT",
       payload: e.target.value,
     });
+  }
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (state._t === "typed") {
+      const response = await api.questionController.writeNewQuestionUsingPOST({
+        questionContent: {
+          mainText: state.mainText,
+          regionId: regionId,
+        },
+      });
+      alert(response);
+      alert(JSON.stringify(response, null, 2));
+      if (response && response.status === "SUCCESS") {
+        // TODO: 연결해줄 것
+        // push(`/article/:${response}`)
+      }
+    }
   }
 
   return (
@@ -77,11 +89,16 @@ const PageArticleCreate: React.FC = () => {
       <form className="QuestionCreateUpdateForm pd--16" onSubmit={handleSubmit}>
         <textarea
           className="QuestionCreateUpdateForm-input mg-bottom--16"
-          // type="text"
           placeholder="아파트 생활, 맛집, 모임에 대해 글을 써보세요!"
-          // onChange={handleChange}
+          onChange={handleChange}
         />
-        <button className="QuestionCreateUpdateForm-btn btn-full btn--active">
+        <button
+          disabled={submitBtnActiveState.disabled}
+          className={
+            "QuestionCreateUpdateForm-btn btn-full " +
+            submitBtnActiveState.className
+          }
+        >
           게시글 올리기
         </button>
       </form>

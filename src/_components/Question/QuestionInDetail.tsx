@@ -1,5 +1,10 @@
 import React from "react";
-import { User, Apartment, Question } from "../../_types/ouraptTypes";
+import {
+  User,
+  Apartment,
+  Question,
+  KarrotProfile,
+} from "../../_types/ouraptTypes";
 
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
@@ -7,7 +12,7 @@ import UserAsAuthor from "../User/UserAsAuthor";
 
 type tempQuestion = {
   id: string;
-  user: User;
+  user: KarrotProfile;
   content: string;
   createdAt: Date;
   updatedAt: Date;
@@ -21,7 +26,7 @@ const QuestionInDetail: React.FC<QuestionInDetailProps> = ({ question }) => {
   return (
     <div className="ArticleCard pd--16">
       <UserAsAuthor
-        user={question.user}
+        writer={question.user}
         createdAt={question.createdAt}
         updatedAt={question.updatedAt}
       />

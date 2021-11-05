@@ -53,7 +53,7 @@ export const AccessTokenProvider: React.FC = (props) => {
   const manualCode: Boolean = true;
 
   if (manualCode) {
-    code = "J8KjhTwDueu_wlQ5s65D";
+    code = "u8m8ShBD27M1mihR6hKX";
     console.log(`코드는 매뉴얼로 입력해줄게요! ${code}`);
   }
 

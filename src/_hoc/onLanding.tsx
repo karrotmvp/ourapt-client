@@ -1,123 +1,51 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
-import { UserDto as User } from "../__generated__/ourapt";
+import { ApartmentDto as Apartment } from "../__generated__/ourapt";
 
 import { useApi } from "../api";
-import { useMyInfoState, useMyInfoDispatch } from "../_providers/useMyInfo";
-import examineResBody from "../_modules/examineResBody";
 
 import PageLanding from "../_components/_pages/PageLanding";
 import PageFeed from "../_components/_pages/PageFeed";
 
-import {
-  getCodeFromURLParams,
-  getRegionFromURLParams,
-} from "../_modules/getQueryFromURLParams";
-import { access } from "fs";
+import { getRegionFromURLParams } from "../_modules/getQueryFromURLParams";
+import { useViewer } from "../_providers/useViewer";
+import { useAccessToken } from "../_providers/useAccessToken";
 
-const OnLanding: React.FC = () => {
-  // export default function OnLanding() {
-  const regionId = getRegionFromURLParams(); // "NO_REGION_ID" 이거나 리즌아이디를 받아옴
-  const code = getCodeFromURLParams(); // "NOT_AGREED" 이거나 코드를 받아옴
-
-  const myInfoState = useMyInfoState();
-  const dispatch = useMyInfoDispatch();
-
-  const setRegionId = (regionId: string) =>
-    dispatch({ _t: "SET_REGIONID", regionId: regionId });
-  const setCode = (code: string) => dispatch({ _t: "SET_CODE", code: code });
-
-  useEffect(() => {
-    setRegionId(regionId);
-    setCode(code);
-  }, []);
+export default function OnLanding() {
+  // const OnLanding: React.FC = () => {
 
   const api = useApi();
 
-  const setAccessToken = (accessToken: string) =>
-    dispatch({ _t: "SET_ACCESSTOKEN", accessToken: accessToken });
-  const setUser = (user: User) => dispatch({ _t: "SET_USER", user: user });
+  const { accessToken } = useAccessToken();
+  const { viewer } = useViewer();
 
-  async function issueAccessTokenByCode(code: string) {
-    if (process.env.REACT_APP_TEST === "MSW_버전") {
-      code = "tempcode";
-    }
+  const [apartments, setApartments] = useState<Array<Apartment>>([]);
 
-    const response = await api.oauthController.karrotLoginUsingPOST({
-      body: {
-        authorizationCode: code,
-      },
-    });
-    const temp = response.data?.accessToken;
-    alert(`여기서 걸리려나? ${temp}`);
-    const accessToken = examineResBody(response, "code로 AccessToken 발급받기")
-      .data.accessToken;
+  useEffect(() => {
+    (async () => {
+      const regionId = getRegionFromURLParams();
 
-    return "Bearer " + accessToken;
-  }
+      const resp = await api.apartmentController.getAvailableApartmentsUsingGET(
+        {}
+      );
 
-  async function issueMyInfoByAccessToken(accessToken: string) {
-    const response = await api.userController.getMyInfoUsingGET({
-      headers: {
-        Authorization: accessToken,
-      },
-    });
-    console.log(`여기 정보를 받아오나요? ${response}`);
-    const myInfo = examineResBody(
-      response,
-      "AccessToken으로 내 정보 받아오기"
-    ).data;
-    return myInfo;
-  }
+      setApartments(resp.data?.apartments ?? []);
+    })();
+  }, []);
 
-  //   async function accessTokenHandler() {
-  //     let code = myInfoState.code;
-
-  //     // Test
-  //     code = "OKlTTj59nIeAlNdzILeE";
-
-  //     if (code !== "NOT_AGREED") {
-  //       const accessToken = await issueAccessTokenByCode(code);
-  //       alert(`받았다! ${accessToken}`);
-  //       setAccessToken(accessToken);
-  //     }
-  //   }
-
-  //   accessTokenHandler();
-
-  //   useEffect(() => {
-  //     if (myInfoState.accessToken && !myInfoState.user) {
-  //       (async function () {
-  //         const myInfo = await issueMyInfoByAccessToken(myInfoState.accessToken);
-  //         setUser(myInfo);
-  //       })();
-  //     }
-  //   }, [myInfoState]);
-
-  //   if (myInfoState.code === "NOT_AGREED") {
-  //     return () => {
-  //       <PageLanding />;
-  //     };
-  //   }
-  //   if (!myInfoState.user.checkedIn) {
-  //     return () => {
-  //       <PageLanding />;
-  //     };
-  //   } else {
-  //     const checkedInApartmentId = myInfoState.user.checkedIn.id;
-  //     return () => {
-  //       <PageFeed apartmentId={checkedInApartmentId} />;
-  //     };
-  //   }
-  if (myInfoState.code === "NOT_AGREED") {
-    return <PageLanding />;
-  }
-  if (!myInfoState.user.checkedIn) {
-    return <PageLanding />;
-  } else {
-    const checkedInApartmentId = myInfoState.user.checkedIn.id;
+  // 동의하지 않은 경우, 코드가 없기 때문에 액세스토큰도 없다.
+  if (viewer && viewer.checkedIn) {
+    const checkedInApartmentId = viewer.checkedIn.id;
     return <PageFeed apartmentId={checkedInApartmentId} />;
   }
-};
+  if (viewer && !viewer.checkedIn) {
+    return <PageLanding apartments={apartments} />;
+  }
+  if (!accessToken) {
+    return <PageLanding apartments={apartments} />;
+  }
+  // TODO: error Throwing Page 만들기
+  return <div>보이면 안 될 에러페이지 에러 쓰로잉 어떻게 할까요?</div>;
+}
 
-export default OnLanding;
+// export default OnLanding;

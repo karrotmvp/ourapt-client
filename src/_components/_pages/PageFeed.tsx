@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+
+import { QuestionDto as Question } from "../../__generated__/ourapt";
+import { useApi } from "../../api";
 
 import { ScreenHelmet, useNavigator, useParams } from "@karrotframe/navigator";
 
@@ -8,136 +11,51 @@ import styled from "@emotion/styled";
 import QuestionPinnedInFeed from "../Question/QuestionPinnedInFeed";
 import QuestionInFeed from "../Question/QuestionInFeed";
 import UserAsAuthor from "../User/UserAsAuthor";
-// import { useHistory } from "react-router";
+import examineResBody from "../../_modules/examineResBody";
 
 type PageFeedProps = {
   apartmentId: string;
 };
 
 const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
-  // 먼저 파라미터를 기반으로 내가 어느 채널에 있는지 확인해요.
-  const params = useParams<{ apartmentId?: string }>();
-  const tempChannelId = params.apartmentId;
+  const params =
+    useParams<{ apartmentId?: string }>().apartmentId || apartmentId;
 
-  // API call:
-  // request ---- 갖고 있는 channelId를 서버로 보내줘요.
-  // response ---- 해당 채널의 다양한 정보들을 받아와요. 어떻게 받아올지, 어떻게 쪼갤지는 제이콥과 함께 이야기해요.
+  const api = useApi();
 
-  const tempChannelData = {
-    id: tempChannelId,
-    displayName: "대표아파트",
-    topFeed: [
-      {
-        id: "topFeed1",
-        title: "우리아파트 맛집 알려주세요!",
-        participated: 1234,
-      },
-      // {
-      //   id: "topFeed1",
-      //   title: "우리아파트 참치김밥 맛집 알려주세요!",
-      //   participated: 1234,
-      // },
-      // {
-      //   id: "topFeed1",
-      //   title: "우리아파트 참치날치알 김밥 맛집 알려주세요!",
-      //   participated: 1234,
-      // },
-    ],
-    article: [
-      {
-        question: {
-          id: "article1",
-          user: {
-            id: "우리아이디",
-            profile: {
-              id: "당근아이디",
-              nickname: "당근닉네임",
-              profileImageUrl: "../..../....",
-            },
-            isPushAgreed: true,
-            bannedAt: new Date("2021-10-27T03:24:00"),
-            createdAt: new Date("2021-10-27T03:24:00"),
-            updatedAt: new Date("2021-10-27T03:24:00"),
-            checkedIn: {
-              id: "아파트아이디",
-              name: "아파트 이름", // 아파트 이름
-              brandName: "브랜드 이름",
-              regionDepth1: {
-                id: "", // 리전 ID
-                name: "", // 리전 이름
-              }, // 아파트 속한 depth1 리전
-              regionDepth2: {
-                id: "", // 리전 ID
-                name: "", // 리전 이름
-              }, // 아파트 속한 depth1 리전
-              regionDepth3: {
-                id: "", // 리전 ID
-                name: "", // 리전 이름
-              }, // 아파트 속한 depth1 리전
-              regionDepth4: {
-                id: "", // 리전 ID
-                name: "", // 리전 이름
-              }, // 아파트 속한 depth1 리전
-              bannerImage: "../.../.../",
-              isActive: true, // 활성화 여부
-              createdAt: new Date("2021-10-27T03:24:00"),
-              updatedAt: new Date("2021-10-27T03:24:00"),
-            },
-          },
-          content: "우리 아파트 벽 색ㄱ깔 어흐흑",
-          createdAt: new Date("2021-10-27T03:24:00"),
-          updatedAt: new Date("2021-10-27T03:24:00"),
-        },
-        commentsNum: 10,
-      },
-      {
-        question: {
-          id: "article1",
-          user: {
-            id: "우리아이디",
-            profile: {
-              id: "당근아이디",
-              nickname: "당근닉네임",
-              profileImageUrl: "../..../....",
-            },
-            isPushAgreed: true,
-            bannedAt: new Date("2021-10-27T03:24:00"),
-            createdAt: new Date("2021-10-27T03:24:00"),
-            updatedAt: new Date("2021-10-27T03:24:00"),
-            checkedIn: {
-              id: "아파트아이디",
-              name: "아파트 이름", // 아파트 이름
-              brandName: "브랜드 이름",
-              regionDepth1: {
-                id: "", // 리전 ID
-                name: "", // 리전 이름
-              }, // 아파트 속한 depth1 리전
-              regionDepth2: {
-                id: "", // 리전 ID
-                name: "", // 리전 이름
-              }, // 아파트 속한 depth1 리전
-              regionDepth3: {
-                id: "", // 리전 ID
-                name: "", // 리전 이름
-              }, // 아파트 속한 depth1 리전
-              regionDepth4: {
-                id: "", // 리전 ID
-                name: "", // 리전 이름
-              }, // 아파트 속한 depth1 리전
-              bannerImage: "../.../.../",
-              isActive: true, // 활성화 여부
-              createdAt: new Date("2021-10-27T03:24:00"),
-              updatedAt: new Date("2021-10-27T03:24:00"),
-            },
-          },
-          content: "우리 아파트 벽 색ㄱ깔 어흐흑",
-          createdAt: new Date("2021-10-27T03:24:00"),
-          updatedAt: new Date("2021-10-27T03:24:00"),
-        },
-        commentsNum: 10,
-      },
-    ],
-  };
+  const [pinnedQuestion, setPinnedQusetion] = useState<Question>();
+  const [questions, setQuestions] = useState<Array<Question>>([]);
+
+  async function getQuestionsByCursorPerPage(
+    params: string,
+    cursor: number,
+    perPage: number
+  ) {
+    const response = await api.questionController.getQuestionsUsingGET({
+      apartmentId: params,
+      cursor,
+      perPage,
+    });
+    const questions = examineResBody(response, "퀘스쳔 가져오기").data
+      .questions;
+    setQuestions(questions);
+  }
+
+  useEffect(() => {
+    console.log(params);
+    (async () => {
+      const response =
+        await api.questionController.getPinnedQuestionOfApartmentUsingGET({
+          apartmentId: params,
+        });
+      const pinnedQuestion = examineResBody(response, "핀드퀘스쳔 가져오기")
+        .data.question;
+      console.log(`핀드퀘스쳔 찍어볼게요 ${pinnedQuestion}`);
+      setPinnedQusetion(pinnedQuestion);
+    })();
+    // TODO: 페이지당 몇 개 확인하기
+    getQuestionsByCursorPerPage(params, Date.now(), 3);
+  }, []);
 
   const { push, pop, replace } = useNavigator();
   // DELETE
@@ -150,57 +68,79 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
 
   const onArticleCreateBtnClick = () => {
     push("article/create");
-    // DELETE
-    // history.push(`/article/create`);
   };
+
+  console.log(questions);
   return (
     <div className="Page">
       <div className="PageFeed-inner">
         <ScreenHelmet />
-        <TopFeedArea className="pd--16">
-          {tempChannelData.topFeed.map((topFeed) => {
-            return <QuestionPinnedInFeed question={topFeed} />;
-          })}
-        </TopFeedArea>
+        {pinnedQuestion && pinnedQuestion.id && (
+          <PinnedArea className="pd--16">
+            <QuestionPinnedInFeed question={pinnedQuestion} />;
+          </PinnedArea>
+        )}
         <ArticleArea>
           <AreaTitle className="pd--16">아파트 주민 라운지</AreaTitle>
-          {tempChannelData.article.map((article) => {
-            return (
-              <ArticleWrapper
-                className="pd--16"
-                onClick={() => goArticleDetail(article.question.id)}
+          {questions.length === 0 ? (
+            <div>
+              <ArticleVacantViewTitle>
+                우리아파트에 오신 것을 환영해요!
+              </ArticleVacantViewTitle>
+              <ArticleVacantViewInfo>
+                아파트 생활, 맛집, 모임에 대해 글을 써보세요.
+              </ArticleVacantViewInfo>
+              <button
+                className="btn-160 btn--active mg-top--48"
+                onClick={onArticleCreateBtnClick}
               >
-                {/* <UserAsAuthor
-                user={article.user}
-                createdAt={article.question.createdAt}
-                updatedAt={article.question.updatedAt}
-              /> */}
-                <QuestionInFeed question={article.question} />
-                <CommentThumbnail>
-                  <div className="mg-right--8">댓</div>
-                  <div className="font-size--15 font-weight--400 font-color--11">
-                    {article.commentsNum}
-                  </div>
-                </CommentThumbnail>
-              </ArticleWrapper>
-            );
-          })}
+                게시글 작성
+              </button>
+            </div>
+          ) : (
+            questions.map((question) => {
+              return (
+                <ArticleWrapper
+                  key={question.id}
+                  className="pd--16"
+                  onClick={() => goArticleDetail(question.id)}
+                >
+                  <QuestionInFeed question={question} />
+                  <CommentThumbnail>
+                    <img
+                      className="mg-right--6"
+                      src={
+                        require("../../_assets/CommentInFeedIcon.svg").default
+                      }
+                      alt="댓글 수"
+                    />
+                    <div className="font-size--15 font-weight--400 font-color--11">
+                      {/* {question.commentsNum} */}
+                      10
+                    </div>
+                  </CommentThumbnail>
+                </ArticleWrapper>
+              );
+            })
+          )}
         </ArticleArea>
       </div>
-      <div className="btn--floating">
-        <ArticleCreateBtn onClick={onArticleCreateBtnClick}>
-          <img
-            src={require("../../_assets/ArticleCreateBtnIcon.svg").default}
-          />
-        </ArticleCreateBtn>
-      </div>
+      {questions.length !== 0 && (
+        <div className="btn--floating">
+          <ArticleCreateBtnFloating onClick={onArticleCreateBtnClick}>
+            <img
+              src={require("../../_assets/ArticleCreateBtnIcon.svg").default}
+            />
+          </ArticleCreateBtnFloating>
+        </div>
+      )}
     </div>
   );
 };
 
 export default PageFeed;
 
-const TopFeedArea = styled.div`
+const PinnedArea = styled.div`
   // 이 width나 padding 들을 반복할 필요 없이 묶어놓은 게 유틸리티 css의 의의일까?
   width: 100%;
   margin-bottom: 12px;
@@ -241,7 +181,7 @@ const CommentThumbnail = styled.div`
   flex-direction: row;
 `;
 
-const ArticleCreateBtn = styled.div`
+const ArticleCreateBtnFloating = styled.div`
   width: 64px;
   height: 64px;
 
@@ -255,4 +195,21 @@ const ArticleCreateBtn = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const ArticleVacantViewTitle = styled.div`
+  margin-top: 80px;
+  margin-bottom: 4px;
+
+  color: #aaaaaa;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+`;
+
+const ArticleVacantViewInfo = styled.div`
+  color: #aaaaaa;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 24px;
 `;

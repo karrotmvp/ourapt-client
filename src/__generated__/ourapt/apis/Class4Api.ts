@@ -15,6 +15,9 @@
 
 import * as runtime from '../runtime';
 import {
+    CommonResponseBodyGetOneQuestionDto,
+    CommonResponseBodyGetOneQuestionDtoFromJSON,
+    CommonResponseBodyGetOneQuestionDtoToJSON,
     CommonResponseBodyGetQuestionsDto,
     CommonResponseBodyGetQuestionsDtoFromJSON,
     CommonResponseBodyGetQuestionsDtoToJSON,
@@ -25,6 +28,14 @@ import {
     WriteNewQuestionDtoFromJSON,
     WriteNewQuestionDtoToJSON,
 } from '../models';
+
+export interface GetPinnedQuestionOfApartmentUsingGETRequest {
+    apartmentId: string;
+}
+
+export interface GetQuestionByIdUsingGETRequest {
+    questionId: string;
+}
 
 export interface GetQuestionsUsingGETRequest {
     apartmentId: string;
@@ -40,6 +51,74 @@ export interface WriteNewQuestionUsingPOSTRequest {
  * 
  */
 export class Class4Api extends runtime.BaseAPI {
+
+    /**
+     * 사용자에게 보여질 pinned_question 랜덤 조회
+     */
+    async getPinnedQuestionOfApartmentUsingGETRaw(requestParameters: GetPinnedQuestionOfApartmentUsingGETRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyGetOneQuestionDto>> {
+        if (requestParameters.apartmentId === null || requestParameters.apartmentId === undefined) {
+            throw new runtime.RequiredError('apartmentId','Required parameter requestParameters.apartmentId was null or undefined when calling getPinnedQuestionOfApartmentUsingGET.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // KarrotAccessToken authentication
+        }
+
+        const response = await this.request({
+            path: `/api/v1/apartment/{apartmentId}/questions/pinned`.replace(`{${"apartmentId"}}`, encodeURIComponent(String(requestParameters.apartmentId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyGetOneQuestionDtoFromJSON(jsonValue));
+    }
+
+    /**
+     * 사용자에게 보여질 pinned_question 랜덤 조회
+     */
+    async getPinnedQuestionOfApartmentUsingGET(requestParameters: GetPinnedQuestionOfApartmentUsingGETRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyGetOneQuestionDto> {
+        const response = await this.getPinnedQuestionOfApartmentUsingGETRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * question_id 로 Question 조회
+     */
+    async getQuestionByIdUsingGETRaw(requestParameters: GetQuestionByIdUsingGETRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyGetOneQuestionDto>> {
+        if (requestParameters.questionId === null || requestParameters.questionId === undefined) {
+            throw new runtime.RequiredError('questionId','Required parameter requestParameters.questionId was null or undefined when calling getQuestionByIdUsingGET.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // KarrotAccessToken authentication
+        }
+
+        const response = await this.request({
+            path: `/api/v1/question/{questionId}`.replace(`{${"questionId"}}`, encodeURIComponent(String(requestParameters.questionId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyGetOneQuestionDtoFromJSON(jsonValue));
+    }
+
+    /**
+     * question_id 로 Question 조회
+     */
+    async getQuestionByIdUsingGET(requestParameters: GetQuestionByIdUsingGETRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyGetOneQuestionDto> {
+        const response = await this.getQuestionByIdUsingGETRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * 질문목록 Date 커서기반 페이징으로 조회
@@ -68,6 +147,10 @@ export class Class4Api extends runtime.BaseAPI {
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // KarrotAccessToken authentication
+        }
 
         const response = await this.request({
             path: `/api/v1/apartment/{apartmentId}/questions`.replace(`{${"apartmentId"}}`, encodeURIComponent(String(requestParameters.apartmentId))),

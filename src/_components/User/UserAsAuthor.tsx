@@ -5,12 +5,14 @@
 // 유저 컴포넌트가 따로 배리에이션이 없을거같으면 이거 그냥 UserCard로 명명해버리자!
 
 import React from "react";
-import { User } from "../../_types/ouraptTypes";
+
+import { KarrotProfile as Writer } from "../../__generated__/ourapt";
 
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
 import getTimestamp from "../../_modules/getTimestamp";
+import ArticleCreateBtnIcon from "../../_assets/ArticleCreateBtnIcon.svg";
 
 // 같은 엔티티를 가리키고 있는 인터페이스이므로,
 // 글로벌로 타입을 빼내어 선언하고 묶어놓은 다음에 매번 임포트해서 써볼 수는 없을까?
@@ -18,23 +20,39 @@ import getTimestamp from "../../_modules/getTimestamp";
 // 글로벌 타입 선언이 나을까? 매번 새로 선언하는게 나을까? 고민해보자 ---- 토니는 어떻게할까? 왜?
 
 type UserAsAuthorProps = {
-  user: User;
+  writer: Writer;
   createdAt: Date;
   updatedAt: Date;
 };
 
 const UserAsAuthor: React.FC<UserAsAuthorProps> = ({
-  user,
+  writer,
   createdAt,
   updatedAt,
 }) => {
+  const profileUrl = `${writer.profileImageUrl}`;
+  const UserAsAuthorProfileImage = styled.div`
+    width: 32px;
+    height: 32px;
+
+    margin-right: 12px;
+
+    border-radius: 50%;
+    /* background-color: lightgray; */
+    background-image: url("${writer.profileImageUrl}");
+  `;
+
   return (
     <UserAsAuthorContainer>
-      <UserAsAuthorProfileImage>
-        {user.profile.profileImageUrl}
-      </UserAsAuthorProfileImage>
+      {writer.profileImageUrl ? (
+        <UserAsAuthorProfileImage></UserAsAuthorProfileImage>
+      ) : (
+        <UserAsAuthorProfileImage>
+          <img src={require("../../_assets/defaultProfileImage.svg").default} />
+        </UserAsAuthorProfileImage>
+      )}
       <div>
-        <UserAsAuthorNickname>{user.profile.nickname}</UserAsAuthorNickname>
+        <UserAsAuthorNickname>{writer.nickname}</UserAsAuthorNickname>
         <UserAsAuthorTimestamp>
           {getTimestamp(createdAt, updatedAt)}
         </UserAsAuthorTimestamp>
@@ -53,16 +71,6 @@ const UserAsAuthorContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-`;
-
-const UserAsAuthorProfileImage = styled.div`
-  width: 32px;
-  height: 32px;
-
-  margin-right: 12px;
-
-  border-radius: 50%;
-  background-color: lightgray;
 `;
 
 const UserAsAuthorNickname = styled.div`

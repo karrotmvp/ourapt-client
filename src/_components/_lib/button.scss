@@ -12,6 +12,17 @@
   border-radius: 8px;
 }
 
+.btn-160 {
+  width: 160px;
+  height: 44px;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  border: none;
+  border-radius: 8px;
+}
+
 // 버튼 상태별
 .btn--active {
   color: $text-reverse-color;

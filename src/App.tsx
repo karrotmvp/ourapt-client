@@ -1,9 +1,4 @@
 import React from "react";
-import {
-  MyInfoProvider,
-  useMyInfoDispatch,
-  useMyInfoState,
-} from "./_providers/useMyInfo";
 
 // 당근마켓 미니앱, 캐럿프레임
 // import Mini from "@karrotmarket/mini";
@@ -32,29 +27,27 @@ if (process.env.REACT_APP_TEST === "MSW_버전") {
   worker.start();
 }
 
-// 프로바이더들 합치는 것도 고려해보자
+// TODO: 프로바이더들 합치는 것도 고려해보자
 
 const App: React.FC = () => {
   return (
     <AccessTokenProvider>
-      <ViewerProvider>
-        <ApiProvider>
+      <ApiProvider>
+        <ViewerProvider>
           <div className="App">
-            {/* <Navigator
+            <Navigator
               theme="Cupertino"
               onClose={() => {
                 mini.close();
               }}
             >
-              <Screen path="/">
-                <OnLanding />
-              </Screen>
+              <Screen path="/" component={OnLanding} />
               <Screen path="/preopen">
                 <PreopenPage />
               </Screen>
-              <Screen path="/landing">
-                <PageLanding />
-              </Screen>
+              {/* <Screen path="/landing">
+                <PageLanding apartments={[]} />
+              </Screen> */}
               <Screen path="/apartment/request">
                 <PageApartmentRequsetForm />
               </Screen>
@@ -73,10 +66,10 @@ const App: React.FC = () => {
               <Screen path="/article/:articleId/update">
                 <PageQuestionUpdate />
               </Screen>
-            </Navigator> */}
+            </Navigator>
           </div>
-        </ApiProvider>
-      </ViewerProvider>
+        </ViewerProvider>
+      </ApiProvider>
     </AccessTokenProvider>
   );
 };

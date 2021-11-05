@@ -486,12 +486,12 @@ const PageArticleDetail: React.FC = () => {
       </div> */}
 
         <ArticleArea>
-          <QuestionInDetail question={tempArticleData.question} />
+          {/* <QuestionInDetail question={tempArticleData.question} /> */}
         </ArticleArea>
         <CommentsArea>
-          {tempArticleData.comments.map((comment) => {
+          {/* {tempArticleData.comments.map((comment) => {
             return <CommentInDetail comment={comment} />;
-          })}
+          })} */}
         </CommentsArea>
       </div>
       <form className="CommentSubmitForm">

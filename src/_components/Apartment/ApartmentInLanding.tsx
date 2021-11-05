@@ -9,24 +9,19 @@ import { useNavigator } from "@karrotframe/navigator";
 
 type ApartmentInPageLandingProps = {
   apartment: Apartment;
+  onApartmentInLandingClick: (apartmentId: string) => void;
 };
 
 const ApartmentInPageLanding: React.FC<ApartmentInPageLandingProps> = ({
   apartment,
+  onApartmentInLandingClick,
 }) => {
-  const { push, pop, replace } = useNavigator();
-
-  const goFeed = (apartmentId: string) => {
-    push(`/feed/${apartmentId}`);
-  };
-
-  console.log(apartment.bannerImage);
   return (
     <ApartmentCard
       style={{
         backgroundImage: `url("${apartment.bannerImage}")`,
       }}
-      onClick={() => goFeed(apartment.id)}
+      onClick={() => onApartmentInLandingClick(apartment.id)}
     >
       {apartment.name}
     </ApartmentCard>

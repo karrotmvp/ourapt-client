@@ -15,14 +15,10 @@
 
 import * as runtime from '../runtime';
 import {
-    CommonResponseBodyGetApartmentInRegionDto,
-    CommonResponseBodyGetApartmentInRegionDtoFromJSON,
-    CommonResponseBodyGetApartmentInRegionDtoToJSON,
+    CommonResponseBodyGetAvailableApartmentsDto,
+    CommonResponseBodyGetAvailableApartmentsDtoFromJSON,
+    CommonResponseBodyGetAvailableApartmentsDtoToJSON,
 } from '../models';
-
-export interface GetApartmentInRegionUsingGETRequest {
-    regionId: string;
-}
 
 /**
  * 
@@ -32,16 +28,8 @@ export class Class2Api extends runtime.BaseAPI {
     /**
      * 해당 리전에 포함된 아파트들 가져오기
      */
-    async getApartmentInRegionUsingGETRaw(requestParameters: GetApartmentInRegionUsingGETRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyGetApartmentInRegionDto>> {
-        if (requestParameters.regionId === null || requestParameters.regionId === undefined) {
-            throw new runtime.RequiredError('regionId','Required parameter requestParameters.regionId was null or undefined when calling getApartmentInRegionUsingGET.');
-        }
-
+    async getAvailableApartmentsUsingGETRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyGetAvailableApartmentsDto>> {
         const queryParameters: any = {};
-
-        if (requestParameters.regionId !== undefined) {
-            queryParameters['regionId'] = requestParameters.regionId;
-        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -52,14 +40,14 @@ export class Class2Api extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyGetApartmentInRegionDtoFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyGetAvailableApartmentsDtoFromJSON(jsonValue));
     }
 
     /**
      * 해당 리전에 포함된 아파트들 가져오기
      */
-    async getApartmentInRegionUsingGET(requestParameters: GetApartmentInRegionUsingGETRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyGetApartmentInRegionDto> {
-        const response = await this.getApartmentInRegionUsingGETRaw(requestParameters, initOverrides);
+    async getAvailableApartmentsUsingGET(initOverrides?: RequestInit): Promise<CommonResponseBodyGetAvailableApartmentsDto> {
+        const response = await this.getAvailableApartmentsUsingGETRaw(initOverrides);
         return await response.value();
     }
 

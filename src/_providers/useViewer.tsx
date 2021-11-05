@@ -12,20 +12,22 @@ import React, {
 
 import {
   UserDto as User,
-  CommonResponseBodyUserDto,
+  CommonResponseBodyGetOneUserDto,
 } from "../__generated__/ourapt";
 
 import { useApi } from "../api";
 import { useAccessToken } from "./useAccessToken";
-import { access } from "fs";
 import examineResBody from "../_modules/examineResBody";
+import { getRegionFromURLParams } from "../_modules/getQueryFromURLParams";
 
 type State =
   | {
       _t: "pending"; // 액세스토큰이 있지만 아직 뷰어 정보를 받아오지 않는 경우
+      regionId: string;
     }
   | {
       _t: "ready"; // 액세스토큰이 null 인 경우 - viewer도 null / 액세스토큰이 있고 viewer를 받아온 경우
+      regionId: string;
       viewer: User | null;
     };
 
@@ -36,12 +38,14 @@ type Action = {
 
 const reducer: React.Reducer<State, Action> = (prevState, action) => {
   return {
+    ...prevState,
     _t: "ready",
     viewer: action.viewer,
   };
 };
 
 const ViewerContext = createContext<User | null>(null);
+const RegionIdContext = createContext<string>("");
 
 export const ViewerProvider: React.FC = (props) => {
   console.log(`안녕하세요! 저는 뷰어 프로바이더입니다. 제가 돌아볼게요. `);
@@ -49,32 +53,31 @@ export const ViewerProvider: React.FC = (props) => {
   const api = useApi();
   // 무한 렌더링이 일어날까? 아니야... useAT에서 이미 useMemo 했기 때문에 발생하지 않을 것이라고 짐작해보자...
   const { accessToken } = useAccessToken();
+  const regionId = getRegionFromURLParams();
 
   const [state, dispatch] = useReducer(
     reducer,
-    accessToken ? { _t: "pending" } : { _t: "ready", viewer: null }
+    accessToken
+      ? { _t: "pending", regionId: regionId }
+      : { _t: "ready", regionId: regionId, viewer: null }
   );
 
   console.log(`********** 유즈이펙트 돌아갑니다`);
   useEffect(() => {
     if (accessToken && state._t === "pending") {
       console.log(`@VProvider --- AT가 있고 && 펜딩이라 뷰어 불러올게요!`);
-      const issueViewerFromAccessToken = async function () {
-        const response = await api.userController.getMyInfoUsingGET({
-          headers: {
-            Authorization: accessToken,
-          },
-        });
+      const getViewerFromAccessToken = async function () {
+        const response = await api.userController.getMyInfoUsingGET();
         return response;
       };
       const distpatchIssuedViewer = async function (
-        issueViewerFunction: Promise<CommonResponseBodyUserDto>
+        getViewerFunction: Promise<CommonResponseBodyGetOneUserDto>
       ) {
-        const resBody = await issueViewerFunction;
+        const resBody = await getViewerFunction;
         const viewer = examineResBody(
           resBody,
           "useViewer에서 AT로 내 정보 가져오기"
-        ).data;
+        ).data.user;
 
         dispatch({
           _t: "SET_VIEWER",
@@ -84,7 +87,7 @@ export const ViewerProvider: React.FC = (props) => {
         console.log(`V 불러왔는데요 : ${viewer}`);
       };
 
-      distpatchIssuedViewer(issueViewerFromAccessToken());
+      distpatchIssuedViewer(getViewerFromAccessToken());
     } else {
       console.log(
         `@VProvider --- AT가 없거나 이미 V를 다 불러온 상태인가봐요.`
@@ -104,13 +107,16 @@ export const ViewerProvider: React.FC = (props) => {
 
   return (
     <ViewerContext.Provider value={state.viewer}>
-      {props.children}
+      <RegionIdContext.Provider value={state.regionId}>
+        {props.children}
+      </RegionIdContext.Provider>
     </ViewerContext.Provider>
   );
 };
 
 export function useViewer() {
   const viewer = useContext(ViewerContext);
+  const regionId = useContext(RegionIdContext);
 
-  return useMemo(() => ({ viewer }), [viewer]);
+  return useMemo(() => ({ viewer, regionId }), [viewer, regionId]);
 }

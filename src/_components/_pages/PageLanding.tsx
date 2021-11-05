@@ -1,126 +1,94 @@
 import React, { useEffect, useState } from "react";
 
-import { UserDto as User } from "../../__generated__/ourapt";
 import { ApartmentDto as Apartment } from "../../__generated__/ourapt";
 
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
-import { useMyInfoState, useMyInfoDispatch } from "../../_providers/useMyInfo";
+import { useAccessToken } from "../../_providers/useAccessToken";
 import { useApi } from "../../api";
 
+import { mini } from "../../_Karrotmarket/KarrotmarketMini";
 import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
 
-import {
-  getRegionFromURLParams,
-  getCodeFromURLParams,
-} from "../../_modules/getQueryFromURLParams";
-
-import examineResponse from "../../_modules/examineResponse";
-import examineResBody from "../../_modules/examineResBody";
-
 import ApartmentInLanding from "../Apartment/ApartmentInLanding";
+import { useViewer } from "../../_providers/useViewer";
+import examineResBody from "../../_modules/examineResBody";
+import { response } from "msw";
 
-const PageLanding: React.FC = () => {
-  const [apartments, setApartments] = useState<Array<Apartment>>([]);
-  const myInfo = useMyInfoState();
-  const dispatch = useMyInfoDispatch();
+type PageLandingProps = {
+  apartments: Array<Apartment>;
+};
 
+const PageLanding: React.FC<PageLandingProps> = ({ apartments }) => {
   const api = useApi();
+  const { accessToken, issueAccessTokenFromAuthorizationCode } =
+    useAccessToken();
+  const { viewer } = useViewer();
 
   const { push, pop, replace } = useNavigator();
   const goPageApartmentRequestForm = () => {
     push(`/apartment/request`);
   };
 
-  // 이것들은 전체 앱이 만들어질 때 가져와서 콘텍스트로 갖고 있는 편이 안정적이다?
-  const regionId = getRegionFromURLParams();
+  async function checkedInAndGoFeed(apartmentId: string) {
+    const response = await api.userController.changeMyCheckedInUsingPATCH({
+      newCheckedInInfo: {
+        newApartmentId: apartmentId,
+      },
+    });
+    if (response.status === "SUCCESS") push(`/feed/${apartmentId}`);
+  }
 
-  const setUser = (user: User) => dispatch({ _t: "SET_USER", user: user });
-  const setAccessToken = (accessToken: string) =>
-    dispatch({ _t: "SET_ACCESSTOKEN", accessToken: accessToken });
+  const submitAgreement = (apartmentId: string) => {
+    mini.startPreset({
+      preset: `${process.env.REACT_APP_PRESET_URL}`,
+      params: {
+        appId: `${process.env.REACT_APP_ID}`,
+      },
+      onSuccess: function (result) {
+        if (result && result.code) {
+          issueAccessTokenFromAuthorizationCode(result.code);
+        }
+        alert(`코드 리젠할게요! ${accessToken}`);
+        checkedInAndGoFeed(apartmentId);
+      },
+    });
+  };
 
-  async function showApartmentsFromRegionId() {
-    let response;
-    if (regionId !== "NO_REGION_ID") {
-      response = await api.apartmentController.getApartmentInRegionUsingGET({
-        regionId: regionId,
-      });
-    } else if (true) {
-      response = await api.apartmentController.getApartmentInRegionUsingGET({
-        // regionId: "b7ca1e49757c",
-        regionId: "a87002cc41f1",
-      });
+  function onApartmentInLandingClick(apartmentId: string) {
+    if (accessToken) {
+      return checkedInAndGoFeed(apartmentId);
     } else {
-      alert("다시 접속해 주세요");
+      return submitAgreement(apartmentId);
     }
-    const apartments = examineResBody(response, "regionId로 apartment 받기")
-      .data.apartments;
-    setApartments(apartments);
   }
-
-  async function issueAccessTokenByCode(code: string) {
-    if (process.env.REACT_APP_TEST === "MSW_버전") {
-      code = "tempcode";
-    }
-
-    const response = await api.oauthController.karrotLoginUsingPOST({
-      body: {
-        authorizationCode: code,
-      },
-    });
-    const accessToken = examineResBody(response, "code로 AccessToken 발급받기")
-      .data.accessToken;
-
-    return "Bearer " + accessToken;
-  }
-
-  async function getMyInfo(accessToken: string) {
-    let response;
-    response = await api.userController.getMyInfoUsingGET({
-      headers: {
-        Authorization: accessToken,
-      },
-    });
-    console.log(`여기 정보를 받아오나요? ${response}`);
-    const myInfo = examineResBody(
-      response,
-      "AccessToken으로 내 정보 받아오기"
-    ).data;
-    return myInfo;
-  }
-
-  async function setMyInfo() {
-    const user = await getMyInfo(myInfo.accessToken);
-    setUser(user);
-  }
-
-  async function init() {
-    showApartmentsFromRegionId();
-  }
-
-  useEffect(() => {
-    console.log("유즈이펙트가 돌아요!");
-    init();
-  }, []);
-
-  useEffect(() => {
-    setMyInfo();
-  }, [myInfo]);
   return (
     <div className="Page">
       <ScreenHelmet />
       {/* {regionId}에서 접속한 사람이 보는 랜딩페이지 */}
       <div className="Page pd--24">
         {apartments.length === 0 ? (
-          <div></div>
+          // TODO : Error Throwing 페이지 혹은 이미지 만들어서 넣어놓기
+          <div>
+            아파트먼트 리스트가 0인데 있을 수 없는 일입니다... 에러 쓰로잉
+            페이지로 넘겨줄 것
+          </div>
         ) : (
           <div className="width--100">
             <PageLandingTitle>
               현재 살고 계신 <br /> 아파트에 방문해 보세요!
             </PageLandingTitle>
             {apartments.map((apartment, idx) => {
-              return <ApartmentInLanding apartment={apartment} />;
+              return (
+                <ApartmentInLanding
+                  key={apartment.id}
+                  apartment={apartment}
+                  onApartmentInLandingClick={() => {
+                    onApartmentInLandingClick(apartment.id);
+                  }}
+                />
+              );
             })}
             <PageLandingAdditionalInfo
               className="font-color--key font-weight--700"

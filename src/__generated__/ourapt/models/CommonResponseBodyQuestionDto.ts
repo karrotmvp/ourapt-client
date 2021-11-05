@@ -14,49 +14,49 @@
 
 import { exists, mapValues } from '../runtime';
 import {
-    GetQuestionsDto,
-    GetQuestionsDtoFromJSON,
-    GetQuestionsDtoFromJSONTyped,
-    GetQuestionsDtoToJSON,
+    QuestionDto,
+    QuestionDtoFromJSON,
+    QuestionDtoFromJSONTyped,
+    QuestionDtoToJSON,
 } from './';
 
 /**
  * 
  * @export
- * @interface CommonResponseBodyGetQuestionsDto
+ * @interface CommonResponseBodyQuestionDto
  */
-export interface CommonResponseBodyGetQuestionsDto {
+export interface CommonResponseBodyQuestionDto {
     /**
      * 
-     * @type {GetQuestionsDto}
-     * @memberof CommonResponseBodyGetQuestionsDto
+     * @type {QuestionDto}
+     * @memberof CommonResponseBodyQuestionDto
      */
-    data?: GetQuestionsDto;
+    data?: QuestionDto;
     /**
      * 
      * @type {string}
-     * @memberof CommonResponseBodyGetQuestionsDto
+     * @memberof CommonResponseBodyQuestionDto
      */
     devMessage: string;
     /**
      * 
      * @type {string}
-     * @memberof CommonResponseBodyGetQuestionsDto
+     * @memberof CommonResponseBodyQuestionDto
      */
     displayMessage: string;
     /**
      * 
      * @type {string}
-     * @memberof CommonResponseBodyGetQuestionsDto
+     * @memberof CommonResponseBodyQuestionDto
      */
-    status: CommonResponseBodyGetQuestionsDtoStatusEnum;
+    status: CommonResponseBodyQuestionDtoStatusEnum;
 }
 
 /**
 * @export
 * @enum {string}
 */
-export enum CommonResponseBodyGetQuestionsDtoStatusEnum {
+export enum CommonResponseBodyQuestionDtoStatusEnum {
     BannedUser = 'BANNED_USER',
     DataNotFoundFromDb = 'DATA_NOT_FOUND_FROM_DB',
     InvalidInput = 'INVALID_INPUT',
@@ -69,24 +69,24 @@ export enum CommonResponseBodyGetQuestionsDtoStatusEnum {
     Success = 'SUCCESS'
 }
 
-export function CommonResponseBodyGetQuestionsDtoFromJSON(json: any): CommonResponseBodyGetQuestionsDto {
-    return CommonResponseBodyGetQuestionsDtoFromJSONTyped(json, false);
+export function CommonResponseBodyQuestionDtoFromJSON(json: any): CommonResponseBodyQuestionDto {
+    return CommonResponseBodyQuestionDtoFromJSONTyped(json, false);
 }
 
-export function CommonResponseBodyGetQuestionsDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): CommonResponseBodyGetQuestionsDto {
+export function CommonResponseBodyQuestionDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): CommonResponseBodyQuestionDto {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'data': !exists(json, 'data') ? undefined : GetQuestionsDtoFromJSON(json['data']),
+        'data': !exists(json, 'data') ? undefined : QuestionDtoFromJSON(json['data']),
         'devMessage': json['devMessage'],
         'displayMessage': json['displayMessage'],
         'status': json['status'],
     };
 }
 
-export function CommonResponseBodyGetQuestionsDtoToJSON(value?: CommonResponseBodyGetQuestionsDto | null): any {
+export function CommonResponseBodyQuestionDtoToJSON(value?: CommonResponseBodyQuestionDto | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -95,7 +95,7 @@ export function CommonResponseBodyGetQuestionsDtoToJSON(value?: CommonResponseBo
     }
     return {
         
-        'data': GetQuestionsDtoToJSON(value.data),
+        'data': QuestionDtoToJSON(value.data),
         'devMessage': value.devMessage,
         'displayMessage': value.displayMessage,
         'status': value.status,

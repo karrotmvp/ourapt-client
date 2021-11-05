@@ -57,6 +57,7 @@ export interface CommonResponseBodyKarrotAccessTokenDto {
 * @enum {string}
 */
 export enum CommonResponseBodyKarrotAccessTokenDtoStatusEnum {
+    BannedUser = 'BANNED_USER',
     DataNotFoundFromDb = 'DATA_NOT_FOUND_FROM_DB',
     InvalidInput = 'INVALID_INPUT',
     KarrotInvalidAccessToken = 'KARROT_INVALID_ACCESS_TOKEN',

@@ -14,49 +14,49 @@
 
 import { exists, mapValues } from '../runtime';
 import {
-    GetQuestionsDto,
-    GetQuestionsDtoFromJSON,
-    GetQuestionsDtoFromJSONTyped,
-    GetQuestionsDtoToJSON,
+    GetAvailableApartmentsDto,
+    GetAvailableApartmentsDtoFromJSON,
+    GetAvailableApartmentsDtoFromJSONTyped,
+    GetAvailableApartmentsDtoToJSON,
 } from './';
 
 /**
  * 
  * @export
- * @interface CommonResponseBodyGetQuestionsDto
+ * @interface CommonResponseBodyGetAvailableApartmentsDto
  */
-export interface CommonResponseBodyGetQuestionsDto {
+export interface CommonResponseBodyGetAvailableApartmentsDto {
     /**
      * 
-     * @type {GetQuestionsDto}
-     * @memberof CommonResponseBodyGetQuestionsDto
+     * @type {GetAvailableApartmentsDto}
+     * @memberof CommonResponseBodyGetAvailableApartmentsDto
      */
-    data?: GetQuestionsDto;
+    data?: GetAvailableApartmentsDto;
     /**
      * 
      * @type {string}
-     * @memberof CommonResponseBodyGetQuestionsDto
+     * @memberof CommonResponseBodyGetAvailableApartmentsDto
      */
     devMessage: string;
     /**
      * 
      * @type {string}
-     * @memberof CommonResponseBodyGetQuestionsDto
+     * @memberof CommonResponseBodyGetAvailableApartmentsDto
      */
     displayMessage: string;
     /**
      * 
      * @type {string}
-     * @memberof CommonResponseBodyGetQuestionsDto
+     * @memberof CommonResponseBodyGetAvailableApartmentsDto
      */
-    status: CommonResponseBodyGetQuestionsDtoStatusEnum;
+    status: CommonResponseBodyGetAvailableApartmentsDtoStatusEnum;
 }
 
 /**
 * @export
 * @enum {string}
 */
-export enum CommonResponseBodyGetQuestionsDtoStatusEnum {
+export enum CommonResponseBodyGetAvailableApartmentsDtoStatusEnum {
     BannedUser = 'BANNED_USER',
     DataNotFoundFromDb = 'DATA_NOT_FOUND_FROM_DB',
     InvalidInput = 'INVALID_INPUT',
@@ -69,24 +69,24 @@ export enum CommonResponseBodyGetQuestionsDtoStatusEnum {
     Success = 'SUCCESS'
 }
 
-export function CommonResponseBodyGetQuestionsDtoFromJSON(json: any): CommonResponseBodyGetQuestionsDto {
-    return CommonResponseBodyGetQuestionsDtoFromJSONTyped(json, false);
+export function CommonResponseBodyGetAvailableApartmentsDtoFromJSON(json: any): CommonResponseBodyGetAvailableApartmentsDto {
+    return CommonResponseBodyGetAvailableApartmentsDtoFromJSONTyped(json, false);
 }
 
-export function CommonResponseBodyGetQuestionsDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): CommonResponseBodyGetQuestionsDto {
+export function CommonResponseBodyGetAvailableApartmentsDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): CommonResponseBodyGetAvailableApartmentsDto {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'data': !exists(json, 'data') ? undefined : GetQuestionsDtoFromJSON(json['data']),
+        'data': !exists(json, 'data') ? undefined : GetAvailableApartmentsDtoFromJSON(json['data']),
         'devMessage': json['devMessage'],
         'displayMessage': json['displayMessage'],
         'status': json['status'],
     };
 }
 
-export function CommonResponseBodyGetQuestionsDtoToJSON(value?: CommonResponseBodyGetQuestionsDto | null): any {
+export function CommonResponseBodyGetAvailableApartmentsDtoToJSON(value?: CommonResponseBodyGetAvailableApartmentsDto | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -95,7 +95,7 @@ export function CommonResponseBodyGetQuestionsDtoToJSON(value?: CommonResponseBo
     }
     return {
         
-        'data': GetQuestionsDtoToJSON(value.data),
+        'data': GetAvailableApartmentsDtoToJSON(value.data),
         'devMessage': value.devMessage,
         'displayMessage': value.displayMessage,
         'status': value.status,

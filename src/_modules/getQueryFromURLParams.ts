@@ -2,6 +2,11 @@ let urlSearchParams = new URLSearchParams(window.location.search);
 
 export function getRegionFromURLParams() {
   const regionId = urlSearchParams.get("region_id");
+
+  if (process.env.REACT_APP_TEST === "MSW_버전") {
+    return "a87002cc41f1";
+  }
+
   if (regionId) {
     return regionId;
   } else {
