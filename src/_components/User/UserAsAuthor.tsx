@@ -30,7 +30,6 @@ const UserAsAuthor: React.FC<UserAsAuthorProps> = ({
   createdAt,
   updatedAt,
 }) => {
-  const profileUrl = `${writer.profileImageUrl}`;
   const UserAsAuthorProfileImage = styled.div`
     width: 32px;
     height: 32px;
