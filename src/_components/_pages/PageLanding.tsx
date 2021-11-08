@@ -11,6 +11,7 @@ import { mini } from "../../_Karrotmarket/KarrotmarketMini";
 import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
 
 import ApartmentInLanding from "../Apartment/ApartmentInLanding";
+import PageError from "./PageError";
 
 const PageLanding: React.FC = () => {
   const api = useApi();
@@ -81,7 +82,6 @@ const PageLanding: React.FC = () => {
 
   const groupedApt = groupingApartments(apartments || []);
   const isCheckedIn = (apartmentId: string) => {
-    console.log("무한히 렌더링되나요?");
     if (apartmentId === viewer?.checkedIn?.id) {
       return true;
     }
@@ -92,12 +92,9 @@ const PageLanding: React.FC = () => {
     <div className="Page">
       <ScreenHelmet />
       <div className="Page pd--24">
-        {!apartments || apartments.length === 0 ? (
-          // TODO : Error Throwing 페이지 혹은 이미지 만들어서 넣어놓기
-          <div>
-            아파트먼트 리스트가 0인데 있을 수 없는 일입니다... 에러 쓰로잉
-            페이지로 넘겨줄 것
-          </div>
+        {/* {!apartments || apartments.length === 0 ? ( */}
+        {true ? (
+          <PageError />
         ) : (
           <div className="width--100">
             <PageLandingTitle>
