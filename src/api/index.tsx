@@ -10,7 +10,6 @@ import { Class7Api as LogControlloerApi } from "../__generated__/ourapt";
 import { Class99Api as NoApartmentController } from "../__generated__/ourapt";
 
 import { useAccessToken } from "../_providers/useAccessToken";
-import { useViewer } from "../_providers/useViewer";
 
 // API를 만들어주는데,
 function makeApi({ accessToken }: { accessToken?: string | null }) {
