@@ -35,6 +35,7 @@ jobs:
           sudo npm install -g npm@latest
           npm --version
           npm install 
+          npm audit fix
           npm run build
         env:
           REACT_APP_ID: ${{ secrets.ALPHA_REACT_APP_ID }}
