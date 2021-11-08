@@ -60,7 +60,7 @@ const PageQuestionPinnedDetail: React.FC = () => {
         .question;
       setPinnedQuestion(pinnedQuestion);
     })();
-  }, []);
+  }, [articleId, api.questionController]);
 
   const [submitBtnActiveState, setSubmitBtnActiveState] = useState({
     disabled: true,

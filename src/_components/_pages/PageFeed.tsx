@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { QuestionDto as Question } from "../../__generated__/ourapt";
 import { useApi } from "../../api";
@@ -34,20 +34,35 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
     push("article/create");
   };
 
-  async function getQuestionsByCursorPerPage(
-    params: string,
-    cursor: number,
-    perPage: number
-  ) {
-    const response = await api.questionController.getQuestionsUsingGET({
-      apartmentId: params,
-      cursor,
-      perPage,
-    });
-    const questions = examineResBody(response, "퀘스쳔 가져오기").data
-      .questions;
-    setQuestions(questions);
-  }
+  const getQuestionsByCursorPerPage = useCallback(
+    (params: string, cursor: number, perPage: number) => {
+      (async () => {
+        const response = await api.questionController.getQuestionsUsingGET({
+          apartmentId: params,
+          cursor,
+          perPage,
+        });
+        const questions = examineResBody(response, "퀘스쳔 가져오기").data
+          .questions;
+        setQuestions(questions);
+      })();
+    },
+    [api.questionController]
+  );
+  // async function getQuestionsByCursorPerPage(
+  //   params: string,
+  //   cursor: number,
+  //   perPage: number
+  // ) {
+  //   const response = await api.questionController.getQuestionsUsingGET({
+  //     apartmentId: params,
+  //     cursor,
+  //     perPage,
+  //   });
+  //   const questions = examineResBody(response, "퀘스쳔 가져오기").data
+  //     .questions;
+  //   setQuestions(questions);
+  // }
 
   useEffect(() => {
     (async () => {
@@ -64,7 +79,12 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
     })();
     // TODO: 페이지당 몇 개 확인하기
     getQuestionsByCursorPerPage(params, Date.now(), 100);
-  }, []);
+  }, [
+    pinnedQuestion,
+    api.questionController,
+    getQuestionsByCursorPerPage,
+    params,
+  ]);
 
   return (
     <div className="Page">

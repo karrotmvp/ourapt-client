@@ -48,7 +48,7 @@ export const AccessTokenProvider: React.FC = (props) => {
   const manualCode: Boolean = true;
 
   if (manualCode) {
-    code = "oIYrnY_ZAKx4Q-urMdFu";
+    code = "oXM_Ug2p1fAbZoOErLbU";
   }
 
   const [state, dispatch] = useReducer(
@@ -79,7 +79,7 @@ export const AccessTokenProvider: React.FC = (props) => {
           "useAccessToken에서 code로 AT 발급받기"
         ).data.accessToken;
 
-        // console.log(accessToken);
+        console.log(accessToken);
 
         dispatch({
           _t: "SET_ACCESS_TOKEN",
@@ -89,7 +89,7 @@ export const AccessTokenProvider: React.FC = (props) => {
 
       dispatchIssuedAccessToken(issueAccessTokenFromAuthorizationCode());
     }
-  }, [code]);
+  }, [code, state, api.oauthController]);
 
   const issueAccessTokenFromAuthorizationCode = useCallback(
     async (code: string) => {
@@ -108,7 +108,7 @@ export const AccessTokenProvider: React.FC = (props) => {
         accessToken: "Bearer " + accessToken,
       });
     },
-    []
+    [api.oauthController]
   );
 
   if (state._t === "pending") {

@@ -10,7 +10,6 @@ import withLanding from "./_hoc/withLanding";
 import WithModal from "./_hoc/withModal";
 
 // 페이지뷰
-import PreopenPage from "./_PREOPEN/PreopenPage";
 import PageLanding from "./_components/_pages/PageLanding";
 import PageApartmentRequsetForm from "./_components/_pages/request/PageApartmentRequestForm";
 import PageFeed from "./_components/_pages/PageFeed";
@@ -45,9 +44,6 @@ const App: React.FC = () => {
                 }}
               >
                 <Screen path="/" component={withLanding} />
-                <Screen path="/preopen">
-                  <PreopenPage />
-                </Screen>
                 <Screen path="/landing">
                   <PageLanding />
                 </Screen>

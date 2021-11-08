@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect } from "react";
 
 import { QuestionDto as Question } from "../../../__generated__/ourapt";
 import { CommentDto as Comment } from "../../../__generated__/ourapt";
@@ -35,7 +35,7 @@ const PageArticleDetail: React.FC = () => {
         .data.question;
       setQuestion(question);
     })();
-  }, []);
+  }, [api.questionController, articleId]);
 
   useEffect(() => {
     (async () => {
@@ -50,7 +50,7 @@ const PageArticleDetail: React.FC = () => {
     // 초기화를 어디서 해줘야 할지 모르겠다. 초기화 하는 순간 다시 렌더링 되지 않나?
     // isCommentUpdate === true 인 경우에만 렌더링 되도록 할 수는 없나?
     setIsCommentUpdate(false);
-  }, [isCommentUpdate]);
+  }, [isCommentUpdate, api.commentController, articleId]);
 
   return (
     <div className="Page">

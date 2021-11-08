@@ -6,7 +6,7 @@ import { ReactComponent as PageErrorIcon } from "../../_assets/PageErrorIcon.svg
 
 const PageError: React.FC = () => {
   function onGoBackBtnClick() {
-    // history.back();
+    return;
   }
   return (
     <PageErrorContainer className="center">

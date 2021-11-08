@@ -26,15 +26,6 @@ const PageLanding: React.FC = () => {
 
   const [apartments, setApartments] = useState<Array<Apartment>>([]);
 
-  useEffect(() => {
-    (async () => {
-      const resp =
-        await api.apartmentController.getAvailableApartmentsUsingGET();
-
-      setApartments(resp.data?.apartments ?? []);
-    })();
-  }, []);
-
   async function checkedInAndGoFeed(apartmentId: string) {
     const response = await api.userController.changeMyCheckedInUsingPATCH({
       newCheckedInInfo: {
@@ -88,12 +79,21 @@ const PageLanding: React.FC = () => {
     return false;
   };
 
+  useEffect(() => {
+    (async () => {
+      const resp =
+        await api.apartmentController.getAvailableApartmentsUsingGET();
+
+      setApartments(resp.data?.apartments ?? []);
+    })();
+  }, [api.apartmentController]);
+
   return (
     <div className="Page">
       <ScreenHelmet />
       <div className="Page pd--24">
-        {/* {!apartments || apartments.length === 0 ? ( */}
-        {true ? (
+        {!apartments || apartments.length === 0 ? (
+          // {true ? (
           <PageError />
         ) : (
           <div className="width--100">
@@ -122,8 +122,6 @@ const PageLanding: React.FC = () => {
                 </BrandGroupContainer>
               );
             })}
-
-            {apartments.map((apartment, idx) => {})}
             <PageLandingAdditionalInfo
               className="font-color--key font-weight--700"
               onClick={() => goPageApartmentRequestForm()}
