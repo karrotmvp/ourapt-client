@@ -48,10 +48,11 @@ jobs:
           REACT_APP_ID: ${{ secrets.ALPHA_REACT_APP_ID }}
           REACT_APP_PRESET_URL: ${{ secrets.ALPHA_REACT_APP_ID }}
 
+      # Setup AWS
       - name: Setup AWS with credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-access-key-id: ${{ secrets.AWS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
