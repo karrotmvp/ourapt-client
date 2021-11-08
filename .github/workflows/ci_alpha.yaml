@@ -25,110 +25,51 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
+      - name: Setup Nodejs
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.11.1
+
       # Build React
       - name: Build React
         run: |
           echo "Env Checking..."
           echo "REACT_APP_ID=${REACT_APP_ID}"
-          echo "REACT_APP_BASE_URL=${REACT_APP_BASE_URL}"
           echo "REACT_APP_PRESET_URL=${REACT_APP_PRESET_URL}"
-          npm cache clean -f
-          sudo npm install -g n
-          sudo n 16.11.1
+          echo "NODE_VERSION is"
           node --version
-          sudo npm install -g npm@latest
+          echo "NPM_VERSION is"
           npm --version
           npm install 
-          echo "BUILDDDDD STARTTTTTT..."
+
+          echo "Build Starting..."
           npm run build
         env:
           REACT_APP_ID: ${{ secrets.ALPHA_REACT_APP_ID }}
-          REACT_APP_BASE_URL: ${{ secrets.ALPHA_REACT_APP_ID }}
           REACT_APP_PRESET_URL: ${{ secrets.ALPHA_REACT_APP_ID }}
 
-      - name: Upload to S3
-        uses: shallwefootball/s3-upload-action@master
+      # Setup AWS
+      - name: Setup AWS with credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws_key_id: ${{ secrets.AWS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_bucket: ${{ secrets.ALPHA_AWS_BUCKET }}
-          source_dir: 'build'
+          aws-access-key-id: ${{ secrets.AWS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      # Upload to S3
+      - name: Upload to S3
+        run: |
+          aws s3 cp \
+            --recursive \
+            --region ap-northeast-2 \
+            build s3://ourapt-client-alpha
 
       # Invalidate Cloudfront
       - name: Invalidate Cloudfront
         uses: chetan/invalidate-cloudfront-action@v2
         env:
-          DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
+          DISTRIBUTION: ${{ secrets.ALPHA_CLOUDFRONT_DISTRIBUTION }}
           PATHS: '/*'
           AWS_REGION: 'ap-northeast-2'
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-      # Build
-      # - name: Set up JDK 11
-      #   uses: actions/setup-java@v2
-      #   with:
-      #     java-version: '11'
-      #     distribution: 'adopt'
-      #     cache: gradle
-
-      # - name: Grant execute permission for gradlew
-      #   run: chmod +x ./common_api_server/gradlew
-
-      # - name: Clean for build with Gradle
-      #   run: |
-      #     cd ./common_api_server
-      #     ./gradlew clean
-
-      # - name: Build with Gradle
-      #   run: |
-      #     cd ./common_api_server
-      #     ./gradlew bootJar
-
-      # # Build and push docker image to ECR
-      # - name: Setup AWS with credentials
-      #   uses: aws-actions/configure-aws-credentials@v1
-      #   with:
-      #     aws-access-key-id: ${{ secrets.OURAPT_AWS_ACCESS_KEY_ID }}
-      #     aws-secret-access-key: ${{ secrets.OURAPT_AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: ap-northeast-2
-
-      # - name: Generate deployment package
-      #   run: |
-      #     cd ./common_api_server
-      #     mkdir ./deploy
-      #     cp ./build/libs/*.jar ./deploy
-
-      # - name: Deploy to EB
-      #   env:
-      #     SPRING_PROFILE_ACTIVE: alpha
-      #     RDB_HOST: ${{ secrets.RDB_HOST_ALPHA }}
-      #     RDB_USERNAME: ${{ secrets.RDB_USERNAME_ALPHA }}
-      #     RDB_PASSWORD: ${{ secrets.RDB_PASSWORD_ALPHA }}
-      #     KARROT_APP_ID: ${{ secrets.KARROT_APP_ID_ALPHA }}
-      #     KARROT_APP_SECRET: ${{ secrets.KARROT_APP_SECRET_ALPHA }}
-      #     KARROT_API_KEY: ${{ secrets.KARROT_API_KEY_ALPHA }}
-      #     KARROT_OPEN_API_BASE_URL: https://openapi.alpha.kr.karrotmarket.com
-      #     KARROT_O_API_BASE_URL: https://oapi.alpha.kr.karrotmarket.com
-      #   run: |
-      #     echo "Installing EB - CLI..."
-      #     cd ./common_api_server/deploy
-      #     python -m pip install --upgrade pip
-      #     pip install awsebcli --upgrade
-      #     eb --version
-      #     echo "Initializing EB..."
-      #     eb init --region ap-northeast-2 --platform "Corretto 11 running on 64bit Amazon Linux 2" ourapt-api
-      #     eb use ourapt-api-alpha
-      #     echo "Setting environment variables..."
-      #     eb setenv \
-      #       SPRING_PROFILE_ACTIVE=${{ env.SPRING_PROFILE_ACTIVE }} \
-      #       RDB_HOST=${{ env.RDB_HOST }} \
-      #       RDB_USERNAME=${{ env.RDB_USERNAME }} \
-      #       RDB_PASSWORD=${{ env.RDB_PASSWORD }} \
-      #       KARROT_APP_ID=${{ env.KARROT_APP_ID }} \
-      #       KARROT_APP_SECRET=${{ env.KARROT_APP_SECRET }} \
-      #       KARROT_API_KEY=${{ env.KARROT_API_KEY }} \
-      #       KARROT_OPEN_API_BASE_URL=${{ env.KARROT_OPEN_API_BASE_URL }} \
-      #       KARROT_O_API_BASE_URL=${{ env.KARROT_O_API_BASE_URL }}
-      #     echo "Start to deploy to EB..."
-      #     eb deploy
