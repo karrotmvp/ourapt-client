@@ -7,11 +7,13 @@ import { useViewer } from "../../../_providers/useViewer";
 
 import styled from "@emotion/styled";
 
-import { ScreenHelmet, useParams } from "@karrotframe/navigator";
+import { ScreenHelmet, useNavigator, useParams } from "@karrotframe/navigator";
 
 import QuestionInDetail from "../../Question/QuestionInDetail";
 import CommentInDetail from "../../Comment/CommentInDetail";
 import CommentInDetailSubmitForm from "../../Comment/CommentInDetailSubmitForm";
+
+import { ReactComponent as KebabIcon } from "../../../_assets/kebabIcon.svg";
 
 import examineResBody from "../../../_modules/examineResBody";
 
@@ -20,6 +22,8 @@ const PageArticleDetail: React.FC = () => {
   const articleId = params.articleId || "";
 
   const api = useApi();
+
+  const { push } = useNavigator();
 
   const [question, setQuestion] = useState<Question>();
   const [comments, setComments] = useState<Array<Comment>>([]);
@@ -59,7 +63,13 @@ const PageArticleDetail: React.FC = () => {
 
   const modifyBtn = () => {
     if (isMyArticle) {
-      return;
+      return (
+        <KebabIcon
+          onClick={(e) => {
+            push(`/article/${articleId}/update`);
+          }}
+        />
+      );
     }
     return;
   };

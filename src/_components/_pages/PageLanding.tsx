@@ -89,9 +89,12 @@ const PageLanding: React.FC = () => {
         await api.apartmentController.getAvailableApartmentsUsingGET();
 
       setApartments(resp.data?.apartments ?? []);
+      console.log(apartments);
       // setPatchCheckedIn(false);
     })();
   }, [api.apartmentController]);
+
+  console.log(apartments);
 
   return (
     <div className="Page">
