@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "react-scripts build",
-    "codegen": "openapi-generator-cli generate -i http://api-alpha.daangn-ourapt.com/v2/api-docs -g typescript-fetch -o ./src/__generated__/ourapt",
+    "codegen:alpha": "openapi-generator-cli generate -i http://api-alpha.daangn-ourapt.com/v2/api-docs -g typescript-fetch -o ./src/__generated__/ourapt",
     "eject": "react-scripts eject",
     "start": "react-scripts start",
     "test": "react-scripts test",
@@ -53,7 +53,7 @@
     "@types/react-dom": "^17.0.9",
     "dotenv-cli": "^4.0.0",
     "msw": "^0.35.0",
-    "react-scripts": "4.0.3",
+    "react-scripts": "^0.9.5",
     "typescript": "^4.4.4",
     "web-vitals": "^1.1.2"
   },

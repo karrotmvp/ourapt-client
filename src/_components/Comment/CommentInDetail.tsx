@@ -2,13 +2,11 @@ import React from "react";
 
 import { CommentDto as Comment } from "../../__generated__/ourapt";
 import { useViewer } from "../../_providers/useViewer";
-
-import { css } from "@emotion/react";
-import styled from "@emotion/styled";
+import { useModal } from "../../_providers/useModal";
 
 import UserAsAuthor from "../User/UserAsAuthor";
+
 import { ReactComponent as KebabIcon } from "../../_assets/kebabIcon.svg";
-import { useModal } from "../../_providers/useModal";
 
 type CommentInDetailProps = {
   comment: Comment;

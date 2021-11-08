@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 // 당근마켓 미니앱, 캐럿프레임
 // import Mini from "@karrotmarket/mini";

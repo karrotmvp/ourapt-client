@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useReducer } from "react";
 
-import { useApi } from "../../../api";
 import { QuestionDto as Question } from "../../../__generated__/ourapt";
 import { CommentDto as Comment } from "../../../__generated__/ourapt";
+import { useApi } from "../../../api";
 
-import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
-import { ScreenHelmet, useParams, useNavigator } from "@karrotframe/navigator";
+import { ScreenHelmet, useParams } from "@karrotframe/navigator";
 
 import QuestionInDetail from "../../Question/QuestionInDetail";
 import CommentInDetail from "../../Comment/CommentInDetail";
-import examineResBody from "../../../_modules/examineResBody";
 import CommentInDetailSubmitForm from "../../Comment/CommentInDetailSubmitForm";
+
+import examineResBody from "../../../_modules/examineResBody";
 
 const PageArticleDetail: React.FC = () => {
   const params = useParams<{ articleId?: string }>();

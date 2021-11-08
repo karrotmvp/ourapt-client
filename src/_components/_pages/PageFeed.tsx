@@ -3,14 +3,13 @@ import React, { useEffect, useState } from "react";
 import { QuestionDto as Question } from "../../__generated__/ourapt";
 import { useApi } from "../../api";
 
-import { ScreenHelmet, useNavigator, useParams } from "@karrotframe/navigator";
-
-import { css } from "@emotion/react";
 import styled from "@emotion/styled";
+
+import { ScreenHelmet, useNavigator, useParams } from "@karrotframe/navigator";
 
 import QuestionPinnedInFeed from "../Question/QuestionPinnedInFeed";
 import QuestionInFeed from "../Question/QuestionInFeed";
-import UserAsAuthor from "../User/UserAsAuthor";
+
 import examineResBody from "../../_modules/examineResBody";
 
 type PageFeedProps = {
@@ -25,6 +24,15 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
 
   const [pinnedQuestion, setPinnedQuestion] = useState<Question>();
   const [questions, setQuestions] = useState<Array<Question>>([]);
+
+  const { push } = useNavigator();
+  const goArticleDetail = (articleId: string) => {
+    push(`/article/${articleId}`);
+  };
+
+  const onArticleCreateBtnClick = () => {
+    push("article/create");
+  };
 
   async function getQuestionsByCursorPerPage(
     params: string,
@@ -57,15 +65,6 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
     // TODO: 페이지당 몇 개 확인하기
     getQuestionsByCursorPerPage(params, Date.now(), 100);
   }, []);
-
-  const { push, pop, replace } = useNavigator();
-  const goArticleDetail = (articleId: string) => {
-    push(`/article/${articleId}`);
-  };
-
-  const onArticleCreateBtnClick = () => {
-    push("article/create");
-  };
 
   return (
     <div className="Page">
@@ -132,6 +131,7 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
           <ArticleCreateBtnFloating onClick={onArticleCreateBtnClick}>
             <img
               src={require("../../_assets/ArticleCreateBtnIcon.svg").default}
+              alt="게시글 쓰기"
             />
           </ArticleCreateBtnFloating>
         </div>
@@ -143,7 +143,6 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
 export default PageFeed;
 
 const PinnedArea = styled.div`
-  // 이 width나 padding 들을 반복할 필요 없이 묶어놓은 게 유틸리티 css의 의의일까?
   width: 100%;
   margin-bottom: 12px;
   background-color: purple;

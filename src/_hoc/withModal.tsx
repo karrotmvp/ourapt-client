@@ -1,6 +1,3 @@
-// import React, { useEffect } from "react";
-
-import { type } from "os";
 import { useModal } from "../_providers/useModal";
 
 export default function WithModal() {

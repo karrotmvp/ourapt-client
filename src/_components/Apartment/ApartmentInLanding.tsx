@@ -1,17 +1,13 @@
 import React from "react";
-// import { Apartment } from "../../_types/ouraptTypes";
+
 import { ApartmentDto as Apartment } from "../../__generated__/ourapt";
 
-import { ReactComponent as 더샵 } from "../../_assets/1_1_a.svg";
-import { ReactComponent as 자이 } from "../../_assets/1_1_b.svg";
-import { ReactComponent as 푸르지오 } from "../../_assets/1_1_c.svg";
-
-import { ReactComponent as ApartmentInLandingCheckIcon } from "../../_assets/ApartmentInLandingCheckIcon.svg";
-
-import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
-import { useNavigator } from "@karrotframe/navigator";
+import { ReactComponent as TheSharp } from "../../_assets/1_1_a.svg";
+import { ReactComponent as Xi } from "../../_assets/1_1_b.svg";
+import { ReactComponent as Prugio } from "../../_assets/1_1_c.svg";
+import { ReactComponent as ApartmentInLandingCheckIcon } from "../../_assets/ApartmentInLandingCheckIcon.svg";
 
 type ApartmentInPageLandingProps = {
   apartment: Apartment;
@@ -29,11 +25,11 @@ const ApartmentInPageLanding: React.FC<ApartmentInPageLandingProps> = ({
     console.log(brandName);
     switch (brandName) {
       case "더샵":
-        return <더샵 />;
+        return <TheSharp />;
       case "자이":
-        return <자이 />;
+        return <Xi />;
       case "푸르지오":
-        return <푸르지오 />;
+        return <Prugio />;
     }
   }
   return (

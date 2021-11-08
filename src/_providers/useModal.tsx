@@ -1,10 +1,9 @@
-import { type } from "os";
 import React, {
   createContext,
-  useCallback,
   useContext,
-  useMemo,
   useReducer,
+  useCallback,
+  useMemo,
 } from "react";
 
 type Modal = MultiSelectModal | ConfirmationModal;

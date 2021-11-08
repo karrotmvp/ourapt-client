@@ -2,8 +2,6 @@ import React from "react";
 
 import { QuestionDto as Question } from "../../__generated__/ourapt";
 
-import { css } from "@emotion/react";
-import styled from "@emotion/styled";
 import UserAsAuthor from "../User/UserAsAuthor";
 
 type QuestionInDetailProps = {

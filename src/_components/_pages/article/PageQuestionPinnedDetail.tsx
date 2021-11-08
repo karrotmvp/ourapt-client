@@ -2,16 +2,13 @@ import React, { useState, useEffect, useReducer } from "react";
 
 import { QuestionDto as Question } from "../../../__generated__/ourapt";
 import { useApi } from "../../../api";
-
 import { useViewer } from "../../../_providers/useViewer";
+
+import styled from "@emotion/styled";
 
 import { ScreenHelmet, useNavigator, useParams } from "@karrotframe/navigator";
 
-import { css } from "@emotion/react";
-import styled from "@emotion/styled";
 import examineResBody from "../../../_modules/examineResBody";
-import { listenerCount } from "process";
-import { stat } from "fs";
 
 type State =
   | {

@@ -11,7 +11,6 @@ import { useApi } from "../api";
 import { CommonResponseBodyKarrotAccessTokenDto } from "../__generated__/ourapt";
 
 import examineResBody from "../_modules/examineResBody";
-import examineResponse from "../_modules/examineResponse";
 import { getCodeFromURLParams } from "../_modules/getQueryFromURLParams";
 
 type State =

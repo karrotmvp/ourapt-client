@@ -3,10 +3,8 @@ import React from "react";
 import { QuestionDto as Question } from "../../__generated__/ourapt";
 import { useViewer } from "../../_providers/useViewer";
 
-import { css } from "@emotion/react";
-import styled from "@emotion/styled";
-
 import UserAsAuthor from "../User/UserAsAuthor";
+
 import { ReactComponent as KebabIcon } from "../../_assets/kebabIcon.svg";
 
 type QuestionInFeedProps = {
@@ -18,7 +16,10 @@ const ArticleInFeed: React.FC<QuestionInFeedProps> = ({ question }) => {
   const articleBackgroundColor = isMyArticle ? "#f9f9f9" : "#ffffff";
 
   return (
-    <div className="ArticleCard ArticleCardInLi st pd-16">
+    <div
+      className="ArticleCard ArticleCardInLi pd-16"
+      style={{ backgroundColor: articleBackgroundColor }}
+    >
       <div className="ArticleCardInlist-Author">
         <UserAsAuthor
           writer={question.writer}

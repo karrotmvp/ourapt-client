@@ -1,15 +1,13 @@
 import { useApi } from "../api";
 
+import { useAccessToken } from "../_providers/useAccessToken";
+import { useViewer } from "../_providers/useViewer";
+
 import PageLanding from "../_components/_pages/PageLanding";
 import PageFeed from "../_components/_pages/PageFeed";
 
-import { useViewer } from "../_providers/useViewer";
-import { useAccessToken } from "../_providers/useAccessToken";
-
 export default function WithLanding() {
   // const OnLanding: React.FC = () => {
-
-  const api = useApi();
 
   const { accessToken } = useAccessToken();
   const { viewer } = useViewer();

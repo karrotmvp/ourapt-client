@@ -2,11 +2,9 @@ import React from "react";
 
 import { QuestionDto as Question } from "../../__generated__/ourapt";
 
-import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
 import { useNavigator } from "@karrotframe/navigator";
-import PageQuestionPinnedDetail from "../_pages/article/PageQuestionPinnedDetail";
 
 type QuestionPinnedInFeedProps = {
   question: Question;
@@ -30,7 +28,10 @@ const QuestionPinnedInFeed: React.FC<QuestionPinnedInFeedProps> = ({
         onClick={() => goArticlePinnedDetail(question.id)}
       >
         <p className="mg-right--8">내 의견 남기러 가기</p>
-        <img src={require("../../_assets/iconArrowRight.svg").default} />
+        <img
+          src={require("../../_assets/iconArrowRight.svg").default}
+          alt="페이지 상세 보기"
+        />
       </QuestionPinnedInFeedBtn>
     </QuestionPinnedInFeedContainer>
   );

@@ -3,7 +3,7 @@ import React, { useEffect, useReducer, useState } from "react";
 import { useViewer } from "../../../_providers/useViewer";
 import { useApi } from "../../../api";
 
-import { ScreenHelmet, useNavigator, useParams } from "@karrotframe/navigator";
+import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
 
 import examineResBody from "../../../_modules/examineResBody";
 
@@ -38,9 +38,6 @@ const reducer: React.Reducer<State, Action> = (prevState, action) => {
       };
   }
 };
-
-// reducer
-// type에 따라서 적당한 다음 상태를 연결해주는 친구
 
 const PageArticleCreate: React.FC = () => {
   const api = useApi();
@@ -86,7 +83,6 @@ const PageArticleCreate: React.FC = () => {
   return (
     <div className="Page">
       <ScreenHelmet />
-      {/* articleForm으로 하지 않고 questionForm으로 하는 이유, 또 버튼을 분리하지 않고 form 안에 넣어버리는 이유 = 확장은 나중에 생각할 것, 지금은 question에 한정하여 생각할 것이므로!  */}
       <form className="QuestionCreateUpdateForm pd--16" onSubmit={handleSubmit}>
         <textarea
           className="QuestionCreateUpdateForm-input mg-bottom--16"

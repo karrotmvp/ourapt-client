@@ -1,11 +1,7 @@
-import React, { useState, useEffect, useReducer, useMemo } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 
 import { useApi } from "../../api";
-
 import { useViewer } from "../../_providers/useViewer";
-
-import { css } from "@emotion/react";
-import styled from "@emotion/styled";
 
 import examineResBody from "../../_modules/examineResBody";
 
@@ -143,7 +139,10 @@ const CommentInDetailSubmitForm: React.FC<CommentInDetailSubmitFormProps> = ({
         disabled={submitBtnActiveState.disabled}
         className={"CommentSubmitForm-btn " + submitBtnActiveState.className}
       >
-        <img src={require("../../_assets/CommentSubmitBtnIcon.svg").default} />
+        <img
+          src={require("../../_assets/CommentSubmitBtnIcon.svg").default}
+          alt="댓글 작성"
+        />
       </button>
     </form>
   );

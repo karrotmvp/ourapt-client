@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 
 import { ApartmentDto as Apartment } from "../../__generated__/ourapt";
-
-import { css } from "@emotion/react";
-import styled from "@emotion/styled";
-
 import { useAccessToken } from "../../_providers/useAccessToken";
 import { useApi } from "../../api";
 import { useViewer } from "../../_providers/useViewer";
+
+import styled from "@emotion/styled";
 
 import { mini } from "../../_Karrotmarket/KarrotmarketMini";
 import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
@@ -20,7 +18,7 @@ const PageLanding: React.FC = () => {
     useAccessToken();
   const { viewer } = useViewer();
 
-  const { push, pop, replace } = useNavigator();
+  const { push } = useNavigator();
   const goPageApartmentRequestForm = () => {
     push(`/apartment/request`);
   };
@@ -93,9 +91,7 @@ const PageLanding: React.FC = () => {
   return (
     <div className="Page">
       <ScreenHelmet />
-      {/* {regionId}에서 접속한 사람이 보는 랜딩페이지 */}
       <div className="Page pd--24">
-        {/* {!apartments || apartments.length === 0 ? ( */}
         {!apartments || apartments.length === 0 ? (
           // TODO : Error Throwing 페이지 혹은 이미지 만들어서 넣어놓기
           <div>
