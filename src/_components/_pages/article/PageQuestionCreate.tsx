@@ -82,15 +82,17 @@ const PageArticleCreate: React.FC = () => {
 
   return (
     <div className="Page">
-      <ScreenHelmet />
+      <ScreenHelmet title="게시글 작성" />
       <form className="QuestionCreateUpdateForm pd--16" onSubmit={handleSubmit}>
         <textarea
           className="QuestionCreateUpdateForm-input mg-bottom--16"
-          placeholder="아파트 생활, 맛집, 모임에 대해 글을 써보세요!"
+          placeholder="아파트 생활, 맛집에 대해 글을 써보세요!"
           maxLength={255}
           onChange={handleChange}
         />
-        {state.textLength} / 255
+        <div className="QuestionCreateUpdateForm-textCounter">
+          ({state.textLength}/255)
+        </div>
         <button
           disabled={submitBtnActiveState.disabled}
           className={

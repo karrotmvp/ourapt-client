@@ -60,6 +60,12 @@ const PageArticleDetail: React.FC = () => {
           {question && <QuestionInDetail question={question} />}
         </ArticleArea>
         <CommentsArea>
+          <CommentsAreaTitle>
+            댓글{" "}
+            {question &&
+              question.countOfComments > 0 &&
+              question.countOfComments}
+          </CommentsAreaTitle>
           {comments.map((comment, idx) => {
             return <CommentInDetail key={comment.id} comment={comment} />;
           })}
@@ -77,11 +83,22 @@ export default PageArticleDetail;
 
 const ArticleArea = styled.div`
   width: 100%;
-  margin-bottom: 12px;
-  background-color: purple;
+
+  border-bottom: 12px solid #f5f5f5;
 `;
 
 const CommentsArea = styled.div`
   margin-bottom: auto;
-  background-color: purple;
+`;
+
+const CommentsAreaTitle = styled.div`
+  width: 100%;
+  height: 100%;
+
+  padding: 12px 16px;
+
+  font-size: 16px;
+  text-align: left;
+
+  border-bottom: 1px solid #f5f5f5;
 `;

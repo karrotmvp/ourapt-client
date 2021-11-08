@@ -34,9 +34,18 @@ p {
   line-height: 1em;
 }
 
-/* 전역에서 자간은 일괄 -3으로, 단어 단위로 개행 설정하기 */
 * {
   box-sizing: border-box;
+
+  /* 전역에서 자간은 일괄 -3으로 설정하기 */
   letter-spacing: -0.03em;
   /* word-break: keep-all; */
+
+  /* 전역에서 터치 하이라이트 제거하기 */
+  -webkit-tap-highlight-color: transparent;
+}
+
+*:focus {
+  /* 전역에서 포커스 아웃라인 제거 */
+  outline: none;
 }

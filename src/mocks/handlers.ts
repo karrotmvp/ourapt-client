@@ -10,7 +10,7 @@ export const handlers = [
       return await res(
         ctx.json({
           data: {
-            accessToken: "SCrmWi3Axb_wP02E4J17izn_w5A",
+            accessToken: "LWINKcAYjFUHxiWNUaDf-LAILx4",
             expiredIn: 0,
             scope: "string",
             tokenType: "string",

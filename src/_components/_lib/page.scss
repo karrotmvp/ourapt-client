@@ -2,18 +2,11 @@
 .Page {
   width: 100%;
   // height는 자식 요소들의 크기에 따라 늘어날 수 있도록, min-height만 지정해두겠습니다.
-  // min-height: 100vh;
   min-height: calc(100vh - 44px);
 
   position: relative;
 
-  // display: flex;
-  // flex-direction: column;
-  // align-items: center;
-
-  box-sizing: border-box;
-
-  background-color: cadetblue;
+  background-color: #ffffff;
 }
 
 .PageFeed-inner {
@@ -21,9 +14,7 @@
   height: 100%;
   overflow-y: scroll;
 
-  // PageFeed에만 적용되는 모양이에요! 주의!
   min-height: calc(100vh - 44px - 56px - 16px);
-  background-color: darkgreen;
 }
 
 .PageQuestionDetail-inner {
@@ -31,7 +22,5 @@
   height: 100%;
   overflow-y: scroll;
 
-  // PageFeed에만 적용되는 모양이에요! 주의!
   min-height: calc(100vh - 44px - 56px);
-  background-color: darkgreen;
 }

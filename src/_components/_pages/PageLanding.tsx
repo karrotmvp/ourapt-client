@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { ApartmentDto as Apartment } from "../../__generated__/ourapt";
 import { useAccessToken } from "../../_providers/useAccessToken";
@@ -72,12 +72,13 @@ const PageLanding: React.FC = () => {
   }
 
   const groupedApt = groupingApartments(apartments || []);
-  const isCheckedIn = (apartmentId: string) => {
+
+  const isCheckedIn = useCallback((apartmentId: string) => {
     if (apartmentId === viewer?.checkedIn?.id) {
       return true;
     }
     return false;
-  };
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -85,12 +86,13 @@ const PageLanding: React.FC = () => {
         await api.apartmentController.getAvailableApartmentsUsingGET();
 
       setApartments(resp.data?.apartments ?? []);
+      // setPatchCheckedIn(false);
     })();
   }, [api.apartmentController]);
 
   return (
     <div className="Page">
-      <ScreenHelmet />
+      <ScreenHelmet title="송도 2동" />
       <div className="Page pd--24">
         {!apartments || apartments.length === 0 ? (
           // {true ? (
@@ -170,8 +172,6 @@ const BrandWrapper = styled.div`
 
   display: flex;
   flex-direction: row;
-
-  background-color: black;
 `;
 
 const BrandTitle = styled.div`

@@ -53,8 +53,6 @@ const UserAsAuthor: React.FC<UserAsAuthorProps> = ({
 export default UserAsAuthor;
 
 const UserAsAuthorContainer = styled.div`
-  background-color: yellow;
-
   margin-right: auto;
 
   display: flex;

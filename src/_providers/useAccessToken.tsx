@@ -48,7 +48,7 @@ export const AccessTokenProvider: React.FC = (props) => {
   const manualCode: Boolean = true;
 
   if (manualCode) {
-    code = "oXM_Ug2p1fAbZoOErLbU";
+    code = "gYtxb9jhQuZz5dsg_w8F";
   }
 
   const [state, dispatch] = useReducer(

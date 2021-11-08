@@ -11,6 +11,7 @@ import QuestionPinnedInFeed from "../Question/QuestionPinnedInFeed";
 import QuestionInFeed from "../Question/QuestionInFeed";
 
 import examineResBody from "../../_modules/examineResBody";
+import { useViewer } from "../../_providers/useViewer";
 
 type PageFeedProps = {
   apartmentId: string;
@@ -28,6 +29,15 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
   const { push } = useNavigator();
   const goArticleDetail = (articleId: string) => {
     push(`/article/${articleId}`);
+  };
+
+  const isMyArticle = useViewer().viewer?.id;
+  const ArticleBackgroundColor = (question: Question) => {
+    if (isMyArticle === question.writer.id) {
+      return "#f7f7f7";
+    } else {
+      return "#ffffff";
+    }
   };
 
   const onArticleCreateBtnClick = () => {
@@ -49,20 +59,6 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
     },
     [api.questionController]
   );
-  // async function getQuestionsByCursorPerPage(
-  //   params: string,
-  //   cursor: number,
-  //   perPage: number
-  // ) {
-  //   const response = await api.questionController.getQuestionsUsingGET({
-  //     apartmentId: params,
-  //     cursor,
-  //     perPage,
-  //   });
-  //   const questions = examineResBody(response, "퀘스쳔 가져오기").data
-  //     .questions;
-  //   setQuestions(questions);
-  // }
 
   useEffect(() => {
     (async () => {
@@ -79,12 +75,7 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
     })();
     // TODO: 페이지당 몇 개 확인하기
     getQuestionsByCursorPerPage(params, Date.now(), 100);
-  }, [
-    pinnedQuestion,
-    api.questionController,
-    getQuestionsByCursorPerPage,
-    params,
-  ]);
+  }, [api.questionController, getQuestionsByCursorPerPage, params]);
 
   return (
     <div className="Page">
@@ -93,13 +84,13 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
           push(`/landing`);
         }}
       >
-        tempBtn
+        무시해주세요 버튼
       </button>
       <div className="PageFeed-inner">
         <ScreenHelmet />
         {pinnedQuestion && pinnedQuestion.id && (
           <PinnedArea className="pd--16">
-            <QuestionPinnedInFeed question={pinnedQuestion} />;
+            <QuestionPinnedInFeed question={pinnedQuestion} />
           </PinnedArea>
         )}
         <ArticleArea>
@@ -110,7 +101,7 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
                 우리아파트에 오신 것을 환영해요!
               </ArticleVacantViewTitle>
               <ArticleVacantViewInfo>
-                아파트 생활, 맛집, 모임에 대해 글을 써보세요.
+                아파트 생활, 맛집에 대해 글을 써보세요.
               </ArticleVacantViewInfo>
               <button
                 className="btn-160 btn btn--active mg-top--48"
@@ -120,29 +111,39 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
               </button>
             </div>
           ) : (
-            questions.map((question) => {
-              return (
-                <ArticleWrapper
-                  key={question.id}
-                  className="pd--16"
-                  onClick={() => goArticleDetail(question.id)}
-                >
-                  <QuestionInFeed question={question} />
-                  <CommentThumbnail>
-                    <img
-                      className="mg-right--6"
-                      src={
-                        require("../../_assets/CommentInFeedIcon.svg").default
-                      }
-                      alt="댓글 수"
-                    />
-                    <div className="font-size--15 font-weight--400 font-color--11">
-                      {question.countOfComments}
-                    </div>
-                  </CommentThumbnail>
-                </ArticleWrapper>
-              );
-            })
+            <div>
+              {questions.map((question) => {
+                return (
+                  <ArticleWrapper
+                    key={question.id}
+                    className="pd--16"
+                    style={{
+                      backgroundColor: ArticleBackgroundColor(question),
+                    }}
+                    onClick={() => goArticleDetail(question.id)}
+                  >
+                    <QuestionInFeed question={question} />
+                    <CommentThumbnail>
+                      <img
+                        className="mg-right--6"
+                        src={
+                          require("../../_assets/CommentInFeedIcon.svg").default
+                        }
+                        alt="댓글 수"
+                      />
+                      <div className="font-size--15 font-weight--400 font-color--11">
+                        {question.countOfComments}
+                      </div>
+                    </CommentThumbnail>
+                  </ArticleWrapper>
+                );
+              })}
+              <FeedInfoWrapper>
+                <FeedInfoText>
+                  이웃과 나누고 싶은 이야기를 등록해 보세요!
+                </FeedInfoText>
+              </FeedInfoWrapper>
+            </div>
           )}
         </ArticleArea>
       </div>
@@ -164,42 +165,52 @@ export default PageFeed;
 
 const PinnedArea = styled.div`
   width: 100%;
-  margin-bottom: 12px;
-  background-color: purple;
+
+  border-bottom: 12px solid #f5f5f5;
 `;
 
 const AreaTitle = styled.div`
-  margin-bottom: 1px;
-
   padding-bottom: 8px;
   text-align: left;
 
   font-size: 18px;
   font-weight: bold;
-
-  background-color: lavender;
 `;
 
 const ArticleArea = styled.div`
   width: 100%;
 `;
 const ArticleWrapper = styled.div`
-  margin-top: 1px;
-  margin-bottom: 1px;
-
   display: flex;
   flex-direction: column;
 
-  background-color: lavender;
+  border-bottom: 1px solid #f5f5f5;
 `;
 
 const CommentThumbnail = styled.div`
-  background-color: violet;
-
   margin-left: auto;
 
   display: flex;
   flex-direction: row;
+`;
+
+const FeedInfoWrapper = styled.div`
+  width: 100%;
+  height: 64px;
+
+  padding: 16px 48px;
+`;
+const FeedInfoText = styled.div`
+  width: 100%;
+  height: 100%;
+
+  color: #999999;
+  font-size: 14px;
+  line-height: 32px;
+
+  border-radius: 20px;
+
+  background-color: #f9f9f9;
 `;
 
 const ArticleCreateBtnFloating = styled.div`

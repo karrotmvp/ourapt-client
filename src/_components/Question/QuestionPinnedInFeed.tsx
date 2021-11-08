@@ -49,7 +49,6 @@ const QuestionPinnedInFeedContainer = styled.div`
 
   border: solid 1px #ebebeb;
   border-radius: 8px;
-  //   background-color: lightblue;
 `;
 
 const QuestionPinnedInFeedWrapper = styled.div`
@@ -82,16 +81,20 @@ const MainText = styled.div`
   width: calc(100% - 36px);
   /* margin-right: auto; */
 
+  margin-top: 2px;
+  margin-bottom: 8px;
+
+  font-size: 17px;
+  font-weight: 700;
   text-align: left;
   line-height: 24px;
   vertical-align: middle;
-  background-color: red;
 `;
 
 const QuestionPinnedInFeedBtn = styled.div`
   width: 100%;
 
-  padding-top: 8px;
+  padding-top: 13px;
 
   color: #e95454;
 
@@ -100,5 +103,4 @@ const QuestionPinnedInFeedBtn = styled.div`
   justify-content: center;
 
   border-top: 1px solid #ebebeb;
-  background-color: lightgreen;
 `;

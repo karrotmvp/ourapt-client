@@ -22,7 +22,6 @@ const ApartmentInPageLanding: React.FC<ApartmentInPageLandingProps> = ({
 }) => {
   const borderColor = isCheckedIn ? "#e95454" : "#dbdbdb";
   function Logo(brandName: string) {
-    console.log(brandName);
     switch (brandName) {
       case "더샵":
         return <TheSharp />;
@@ -63,7 +62,6 @@ const ApartmentCard = styled.div`
 
   border: 1px solid;
   border-radius: 8px;
-  background-color: lightseagreen;
 `;
 
 const ApartmentName = styled.div`

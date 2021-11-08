@@ -1,28 +1,106 @@
-import React from "react";
+import React, { useState, useEffect, useReducer } from "react";
 
 import styled from "@emotion/styled";
 
 import { ScreenHelmet } from "@karrotframe/navigator";
 
+type State =
+  | {
+      _t: "blank";
+      mainText: string;
+    }
+  | {
+      _t: "typed";
+      mainText: string;
+    };
+
+type Action = {
+  _t: "CHANGE_TEXT";
+  payload: string;
+};
+
+const reducer: React.Reducer<State, Action> = (prevState, action) => {
+  switch (action.payload) {
+    case "":
+      return {
+        _t: "blank",
+        mainText: action.payload,
+      };
+    default:
+      return {
+        _t: "typed",
+        mainText: action.payload,
+      };
+  }
+};
+
 const PageApartmentRequsetForm: React.FC = () => {
+  const [state, dispatch] = useReducer(reducer, { _t: "blank", mainText: "" });
+
+  const [submitBtnActiveState, setSubmitBtnActiveState] = useState({
+    disabled: true,
+    className: "btn--inactive",
+  });
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    dispatch({
+      _t: "CHANGE_TEXT",
+      payload: e.target.value,
+    });
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (state._t === "typed") {
+      alert("제출!");
+      resetInput();
+    }
+  }
+
+  function resetInput() {
+    dispatch({
+      _t: "CHANGE_TEXT",
+      payload: "",
+    });
+  }
+
+  useEffect(() => {
+    if (state._t === "blank") {
+      setSubmitBtnActiveState({ disabled: true, className: "btn--inactive" });
+    } else {
+      setSubmitBtnActiveState({ disabled: false, className: "btn--active" });
+    }
+  }, [state]);
+
   return (
     <div className="Page">
       <ScreenHelmet />
-      <form className="BriefSubmitForm pd--24" action="submit">
+      <form
+        className="BriefSubmitForm pd--24"
+        action="submit"
+        onSubmit={handleSubmit}
+      >
         <ApartmentRequestFormTitle>
           목록에 살고 계신 아파트가 없나요?
         </ApartmentRequestFormTitle>
         <ApartmentRequestFormInfo>
-          아직 서비스 준비 중인 지역이에요.
+          서비스 준비 중인 지역이라면 아파트가 뜨지 않아요.
           <br />
           나의 지역 오픈 시에 알림을 보내드리고 있어요.
         </ApartmentRequestFormInfo>
         <input
           className="BriefSubmitForm-input mg-bottom--16"
           type="text"
-          placeholder="아파트 이름을 적어주세요"
+          value={state.mainText}
+          onChange={handleChange}
+          placeholder="지역명 + 아파트 이름"
         />
-        <button className="BriefSubmitForm-btn btn-full btn btn--inactive">
+        <button
+          disabled={submitBtnActiveState.disabled}
+          className={
+            "BriefSubmitForm-btn btn-full btn " + submitBtnActiveState.className
+          }
+        >
           오픈하면 알림받기
         </button>
       </form>

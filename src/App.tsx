@@ -5,6 +5,8 @@ import React from "react";
 import { Navigator, Screen } from "@karrotframe/navigator";
 import { mini } from "./_Karrotmarket/KarrotmarketMini";
 
+import { css } from "@emotion/css";
+
 // HOC
 import withLanding from "./_hoc/withLanding";
 import WithModal from "./_hoc/withModal";
@@ -38,6 +40,7 @@ const App: React.FC = () => {
           <ModalProvider>
             <div className="App">
               <Navigator
+                className={css``}
                 theme="Cupertino"
                 onClose={() => {
                   mini.close();
