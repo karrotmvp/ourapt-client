@@ -34,7 +34,7 @@ jobs:
           node --version
           sudo npm install -g npm@latest
           npm --version
-          npm audit fix --force
+          sudo npm audit fix --force
           npm install 
           npm run build
         env:
