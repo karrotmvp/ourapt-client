@@ -25,30 +25,38 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
+      - name: Setup Nodejs
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.11.1
+
       # Build React
       - name: Build React
         run: |
           echo "Env Checking..."
           echo "REACT_APP_ID=${REACT_APP_ID}"
           echo "REACT_APP_PRESET_URL=${REACT_APP_PRESET_URL}"
-          npm cache clean -f
-          sudo npm install -g n
-          sudo n 16.11.1
+          echo "NODE_VERSION is"
           node --version
-          sudo npm install -g npm@latest
+          echo "NPM_VERSION is"
           npm --version
           npm install 
-          echo "BUILDDDDD STARTTTTTT..."
+
+          echo "Build Starting..."
           npm run build
         env:
           REACT_APP_ID: ${{ secrets.ALPHA_REACT_APP_ID }}
           REACT_APP_PRESET_URL: ${{ secrets.ALPHA_REACT_APP_ID }}
 
+      - name: Setup AWS with credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
       # Upload to S3
       - name: Upload to S3
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           aws s3 cp \
             --recursive \
