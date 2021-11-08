@@ -28,7 +28,7 @@ jobs:
           echo "REACT_APP_ID=${REACT_APP_ID}"
           echo "REACT_APP_BASE_URL=${REACT_APP_BASE_URL}"
           echo "REACT_APP_PRESET_URL=${REACT_APP_PRESET_URL}"
-          npm build
+          npm run build
         env:
           REACT_APP_ID: ${{ secrets.ALPHA_REACT_APP_ID }}
           REACT_APP_BASE_URL: ${{ secrets.ALPHA_REACT_APP_ID }}
