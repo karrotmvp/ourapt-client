@@ -73,12 +73,15 @@ const PageLanding: React.FC = () => {
 
   const groupedApt = groupingApartments(apartments || []);
 
-  const isCheckedIn = useCallback((apartmentId: string) => {
-    if (apartmentId === viewer?.checkedIn?.id) {
-      return true;
-    }
-    return false;
-  }, []);
+  const isCheckedIn = useCallback(
+    (apartmentId: string) => {
+      if (apartmentId === viewer?.checkedIn?.id) {
+        return true;
+      }
+      return false;
+    },
+    [viewer?.checkedIn?.id]
+  );
 
   useEffect(() => {
     (async () => {

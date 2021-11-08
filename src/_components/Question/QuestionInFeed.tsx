@@ -13,13 +13,9 @@ type QuestionInFeedProps = {
 
 const ArticleInFeed: React.FC<QuestionInFeedProps> = ({ question }) => {
   const isMyArticle = useViewer().viewer?.id === question.writer.id;
-  const articleBackgroundColor = isMyArticle ? "#f9f9f9" : "#ffffff";
 
   return (
-    <div
-      className="ArticleCard ArticleCardInLi pd-16"
-      style={{ backgroundColor: articleBackgroundColor }}
-    >
+    <div className="ArticleCard ArticleCardInLi pd-16">
       <div className="ArticleCardInlist-Author">
         <UserAsAuthor
           writer={question.writer}
