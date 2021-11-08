@@ -22,6 +22,10 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Build React
       - name: Build React
         run: |
           echo "Env Checking..."
@@ -37,14 +41,12 @@ jobs:
           pwd
           ls -al
           npm install 
-          sudo npm audit fix --force
           npm run build
         env:
           REACT_APP_ID: ${{ secrets.ALPHA_REACT_APP_ID }}
           REACT_APP_BASE_URL: ${{ secrets.ALPHA_REACT_APP_ID }}
           REACT_APP_PRESET_URL: ${{ secrets.ALPHA_REACT_APP_ID }}
 
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Upload to S3
         uses: shallwefootball/s3-upload-action@master
         with:
