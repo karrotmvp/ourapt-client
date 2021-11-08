@@ -30,9 +30,10 @@ jobs:
           echo "REACT_APP_PRESET_URL=${REACT_APP_PRESET_URL}"
           npm cache clean -f
           npm install -g n
-          n 16.11.1
+          sudo n 16.11.1
           node --version
           npm install -g npm@latest
+          npm --version
           npm install 
           npm run build
         env:
