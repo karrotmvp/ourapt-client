@@ -12,8 +12,6 @@ import { useViewer } from "../../_providers/useViewer";
 import { mini } from "../../_Karrotmarket/KarrotmarketMini";
 import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
 
-import examineResBody from "../../_modules/examineResBody";
-
 import ApartmentInLanding from "../Apartment/ApartmentInLanding";
 
 const PageLanding: React.FC = () => {
@@ -21,10 +19,6 @@ const PageLanding: React.FC = () => {
   const { accessToken, issueAccessTokenFromAuthorizationCode } =
     useAccessToken();
   const { viewer } = useViewer();
-
-  // const [apartments, setApartments] = useState<Array<Apartment> | undefined>(
-  //   props.apartments
-  // );
 
   const { push, pop, replace } = useNavigator();
   const goPageApartmentRequestForm = () => {
