@@ -1,7 +1,6 @@
 import React, { useEffect, useReducer, useState } from "react";
 
-import { QuestionDto as Question } from "../../../__generated__/ourapt";
-import { useViewer } from "../../../_providers/useViewer";
+// import { QuestionDto as Question } from "../../../__generated__/ourapt";
 import { useApi } from "../../../api";
 
 import { ScreenHelmet, useNavigator, useParams } from "@karrotframe/navigator";
@@ -45,11 +44,10 @@ const PageArticleCreate: React.FC = () => {
   const articleId = params.articleId || "";
 
   const api = useApi();
-  const { regionId } = useViewer();
   const [state, dispatch] = useReducer(reducer, { _t: "blank", textLength: 0 });
 
   const { push } = useNavigator();
-  const [question, setQuestion] = useState<Question>();
+  // const [question, setQuestion] = useState<Question>();
 
   const [submitBtnActiveState, setSubmitBtnActiveState] = useState({
     disabled: true,

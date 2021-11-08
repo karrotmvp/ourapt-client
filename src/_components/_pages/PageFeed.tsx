@@ -8,7 +8,7 @@ import styled from "@emotion/styled";
 
 import { ScreenHelmet, useNavigator, useParams } from "@karrotframe/navigator";
 
-import ApartmentInNavigator from "../Apartment/ApartmentInNavigator";
+// import ApartmentInNavigator from "../Apartment/ApartmentInNavigator";
 import QuestionPinnedInFeed from "../Question/QuestionPinnedInFeed";
 import QuestionInFeed from "../Question/QuestionInFeed";
 

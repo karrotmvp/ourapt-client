@@ -40,7 +40,7 @@ const PageArticleDetail: React.FC = () => {
       const isMyArticle = myInfo === question.writer.id;
       setIsMyArticle(isMyArticle);
     })();
-  }, [api.questionController, articleId]);
+  }, [api.questionController, articleId, myInfo]);
 
   useEffect(() => {
     (async () => {
@@ -58,6 +58,9 @@ const PageArticleDetail: React.FC = () => {
   }, [isCommentUpdate, api.commentController, articleId]);
 
   const modifyBtn = () => {
+    if (isMyArticle) {
+      return;
+    }
     return;
   };
 

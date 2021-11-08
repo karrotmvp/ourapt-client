@@ -1,6 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react";
 
-import { useViewer } from "../../../_providers/useViewer";
 import { useApi } from "../../../api";
 
 import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
@@ -41,7 +40,6 @@ const reducer: React.Reducer<State, Action> = (prevState, action) => {
 
 const PageArticleCreate: React.FC = () => {
   const api = useApi();
-  const { regionId } = useViewer();
   const [state, dispatch] = useReducer(reducer, { _t: "blank", textLength: 0 });
 
   const { push } = useNavigator();
