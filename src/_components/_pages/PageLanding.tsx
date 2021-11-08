@@ -11,6 +11,7 @@ import { mini } from "../../_Karrotmarket/KarrotmarketMini";
 import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
 
 import ApartmentInLanding from "../Apartment/ApartmentInLanding";
+import PageError from "./PageError";
 
 const PageLanding: React.FC = () => {
   const api = useApi();
@@ -24,15 +25,6 @@ const PageLanding: React.FC = () => {
   };
 
   const [apartments, setApartments] = useState<Array<Apartment>>([]);
-
-  useEffect(() => {
-    (async () => {
-      const resp =
-        await api.apartmentController.getAvailableApartmentsUsingGET();
-
-      setApartments(resp.data?.apartments ?? []);
-    })();
-  }, []);
 
   async function checkedInAndGoFeed(apartmentId: string) {
     const response = await api.userController.changeMyCheckedInUsingPATCH({
@@ -81,23 +73,28 @@ const PageLanding: React.FC = () => {
 
   const groupedApt = groupingApartments(apartments || []);
   const isCheckedIn = (apartmentId: string) => {
-    console.log("무한히 렌더링되나요?");
     if (apartmentId === viewer?.checkedIn?.id) {
       return true;
     }
     return false;
   };
 
+  useEffect(() => {
+    (async () => {
+      const resp =
+        await api.apartmentController.getAvailableApartmentsUsingGET();
+
+      setApartments(resp.data?.apartments ?? []);
+    })();
+  }, [api.apartmentController]);
+
   return (
     <div className="Page">
       <ScreenHelmet />
       <div className="Page pd--24">
         {!apartments || apartments.length === 0 ? (
-          // TODO : Error Throwing 페이지 혹은 이미지 만들어서 넣어놓기
-          <div>
-            아파트먼트 리스트가 0인데 있을 수 없는 일입니다... 에러 쓰로잉
-            페이지로 넘겨줄 것
-          </div>
+          // {true ? (
+          <PageError />
         ) : (
           <div className="width--100">
             <PageLandingTitle>
@@ -125,8 +122,6 @@ const PageLanding: React.FC = () => {
                 </BrandGroupContainer>
               );
             })}
-
-            {apartments.map((apartment, idx) => {})}
             <PageLandingAdditionalInfo
               className="font-color--key font-weight--700"
               onClick={() => goPageApartmentRequestForm()}

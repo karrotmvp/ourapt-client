@@ -83,7 +83,7 @@ export const ViewerProvider: React.FC = (props) => {
 
       distpatchIssuedViewer(getViewerFromAccessToken());
     }
-  }, [accessToken]); // AT가 재설정될 경우에만 새로 돌도록 합니다.
+  }, [accessToken, state, api.userController]); // AT가 재설정될 경우에만 새로 돌도록 합니다.
 
   if (state._t === "pending") {
     return null;

@@ -1,5 +1,3 @@
-import { useApi } from "../api";
-
 import { useAccessToken } from "../_providers/useAccessToken";
 import { useViewer } from "../_providers/useViewer";
 

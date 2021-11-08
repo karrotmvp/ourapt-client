@@ -1,7 +1,6 @@
 import React from "react";
 
 import { KarrotProfile as Writer } from "../../__generated__/ourapt";
-import { useViewer } from "../../_providers/useViewer";
 
 import styled from "@emotion/styled";
 
