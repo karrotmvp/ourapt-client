@@ -34,6 +34,7 @@ jobs:
           node --version
           sudo npm install -g npm@latest
           npm --version
+          pwd
           ls -al
           npm install 
           sudo npm audit fix --force
