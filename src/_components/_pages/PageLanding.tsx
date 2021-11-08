@@ -92,7 +92,7 @@ const PageLanding: React.FC = () => {
       console.log(apartments);
       // setPatchCheckedIn(false);
     })();
-  }, [api.apartmentController]);
+  }, [api.apartmentController, apartments]);
 
   console.log(apartments);
 
