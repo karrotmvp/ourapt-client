@@ -21,10 +21,17 @@ import {
     CommonResponseBodyOneQuestionDto,
     CommonResponseBodyOneQuestionDtoFromJSON,
     CommonResponseBodyOneQuestionDtoToJSON,
-    WriteNewQuestionDto,
-    WriteNewQuestionDtoFromJSON,
-    WriteNewQuestionDtoToJSON,
+    CommonResponseBodyVoid,
+    CommonResponseBodyVoidFromJSON,
+    CommonResponseBodyVoidToJSON,
+    QuestionContentDto,
+    QuestionContentDtoFromJSON,
+    QuestionContentDtoToJSON,
 } from '../models';
+
+export interface DeleteQuestionUsingDELETERequest {
+    questionId: string;
+}
 
 export interface GetPinnedQuestionOfApartmentUsingGETRequest {
     apartmentId: string;
@@ -40,14 +47,53 @@ export interface GetQuestionsUsingGETRequest {
     perPage: number;
 }
 
+export interface UpdateQuestionUsingPATCHRequest {
+    questionId: string;
+    questionContent: QuestionContentDto;
+}
+
 export interface WriteNewQuestionUsingPOSTRequest {
-    questionContent: WriteNewQuestionDto;
+    questionContent: QuestionContentDto;
 }
 
 /**
  * 
  */
 export class Class4Api extends runtime.BaseAPI {
+
+    /**
+     * 질문 삭제하기
+     */
+    async deleteQuestionUsingDELETERaw(requestParameters: DeleteQuestionUsingDELETERequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyVoid>> {
+        if (requestParameters.questionId === null || requestParameters.questionId === undefined) {
+            throw new runtime.RequiredError('questionId','Required parameter requestParameters.questionId was null or undefined when calling deleteQuestionUsingDELETE.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // KarrotAccessToken authentication
+        }
+
+        const response = await this.request({
+            path: `/api/v1/question/{questionId}`.replace(`{${"questionId"}}`, encodeURIComponent(String(requestParameters.questionId))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyVoidFromJSON(jsonValue));
+    }
+
+    /**
+     * 질문 삭제하기
+     */
+    async deleteQuestionUsingDELETE(requestParameters: DeleteQuestionUsingDELETERequest, initOverrides?: RequestInit): Promise<CommonResponseBodyVoid> {
+        const response = await this.deleteQuestionUsingDELETERaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * 사용자에게 보여질 pinned_question 랜덤 조회
@@ -168,6 +214,47 @@ export class Class4Api extends runtime.BaseAPI {
     }
 
     /**
+     * 질문 수정하기
+     */
+    async updateQuestionUsingPATCHRaw(requestParameters: UpdateQuestionUsingPATCHRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyOneQuestionDto>> {
+        if (requestParameters.questionId === null || requestParameters.questionId === undefined) {
+            throw new runtime.RequiredError('questionId','Required parameter requestParameters.questionId was null or undefined when calling updateQuestionUsingPATCH.');
+        }
+
+        if (requestParameters.questionContent === null || requestParameters.questionContent === undefined) {
+            throw new runtime.RequiredError('questionContent','Required parameter requestParameters.questionContent was null or undefined when calling updateQuestionUsingPATCH.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // KarrotAccessToken authentication
+        }
+
+        const response = await this.request({
+            path: `/api/v1/question/{questionId}`.replace(`{${"questionId"}}`, encodeURIComponent(String(requestParameters.questionId))),
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: QuestionContentDtoToJSON(requestParameters.questionContent),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyOneQuestionDtoFromJSON(jsonValue));
+    }
+
+    /**
+     * 질문 수정하기
+     */
+    async updateQuestionUsingPATCH(requestParameters: UpdateQuestionUsingPATCHRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyOneQuestionDto> {
+        const response = await this.updateQuestionUsingPATCHRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * 새로운 질문 작성
      */
     async writeNewQuestionUsingPOSTRaw(requestParameters: WriteNewQuestionUsingPOSTRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyOneQuestionDto>> {
@@ -190,7 +277,7 @@ export class Class4Api extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: WriteNewQuestionDtoToJSON(requestParameters.questionContent),
+            body: QuestionContentDtoToJSON(requestParameters.questionContent),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyOneQuestionDtoFromJSON(jsonValue));

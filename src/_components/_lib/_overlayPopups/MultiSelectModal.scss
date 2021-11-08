@@ -24,13 +24,15 @@
 }
 
 .MultiSelectModal-Selection:first-child {
-  border-radius: 8px 8px 0 0;
-  background-color: darkred;
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
+  // background-color: darkred;
 }
 
 .MultiSelectModal-Selection:last-child {
-  border-radius: 0 0 8px 8px;
-  background-color: darkseagreen;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  // background-color: darkseagreen;
 
   border-bottom: none;
 }

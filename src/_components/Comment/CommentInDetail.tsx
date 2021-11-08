@@ -1,6 +1,7 @@
 import React from "react";
 
 import { CommentDto as Comment } from "../../__generated__/ourapt";
+import { useApi } from "../../api";
 import { useViewer } from "../../_providers/useViewer";
 import { useModal } from "../../_providers/useModal";
 
@@ -10,24 +11,27 @@ import { ReactComponent as KebabIcon } from "../../_assets/kebabIcon.svg";
 
 type CommentInDetailProps = {
   comment: Comment;
+  setIsCommentUpdate: React.Dispatch<React.SetStateAction<Boolean>>;
 };
 
-const CommentInDetail: React.FC<CommentInDetailProps> = ({ comment }) => {
+const CommentInDetail: React.FC<CommentInDetailProps> = ({
+  comment,
+  setIsCommentUpdate,
+}) => {
   const isMyArticle = useViewer().viewer?.id === comment.writer.id;
   const articleBackgroundColor = isMyArticle ? "#f7f7f7" : "#ffffff";
 
+  const api = useApi();
   const { setModal } = useModal();
 
-  function onModifyCommentSelect() {
-    alert(`${comment.id} 수정`);
-  }
-
-  function onDeleteCommentSelect() {
-    setModal(DeleteConfirmationModal);
-  }
-
-  function onDeleteCommentConfirm() {
-    alert("댓글삭제");
+  async function onDeleteCommentConfirm() {
+    const response = await api.commentController.deleteCommentUsingDELETE({
+      commentId: comment.id,
+    });
+    if (response.status === "SUCCESS") {
+      setModal("close");
+      setIsCommentUpdate(true);
+    }
   }
 
   const DeleteConfirmationModal = {
@@ -38,15 +42,14 @@ const CommentInDetail: React.FC<CommentInDetailProps> = ({ comment }) => {
     confirmationAction: onDeleteCommentConfirm,
   };
 
+  function onDeleteCommentSelect() {
+    setModal(DeleteConfirmationModal);
+  }
+
   const ModifyDeleteCommentModal = {
     _t: "MultiSelectModal",
     name: "ModifyDeleteComment",
     selection: [
-      {
-        type: "수정",
-        color: "#222222",
-        action: onModifyCommentSelect,
-      },
       {
         type: "삭제",
         color: "#ff0000",

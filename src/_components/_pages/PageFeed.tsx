@@ -2,16 +2,19 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import { QuestionDto as Question } from "../../__generated__/ourapt";
 import { useApi } from "../../api";
+import { useViewer } from "../../_providers/useViewer";
 
 import styled from "@emotion/styled";
 
 import { ScreenHelmet, useNavigator, useParams } from "@karrotframe/navigator";
 
+import ApartmentInNavigator from "../Apartment/ApartmentInNavigator";
 import QuestionPinnedInFeed from "../Question/QuestionPinnedInFeed";
 import QuestionInFeed from "../Question/QuestionInFeed";
 
 import examineResBody from "../../_modules/examineResBody";
-import { useViewer } from "../../_providers/useViewer";
+
+import { ReactComponent as OuraptLogo } from "../../_assets/ouraptLogo.svg";
 
 type PageFeedProps = {
   apartmentId: string;
@@ -79,15 +82,11 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
 
   return (
     <div className="Page">
-      <button
-        onClick={(e) => {
-          push(`/landing`);
-        }}
-      >
-        무시해주세요 버튼
-      </button>
       <div className="PageFeed-inner">
-        <ScreenHelmet />
+        <ScreenHelmet
+          appendLeft={<OuraptLogo />}
+          // appendRight={<ApartmentInNavigator apartment={apartment} />}
+        />
         {pinnedQuestion && pinnedQuestion.id && (
           <PinnedArea className="pd--16">
             <QuestionPinnedInFeed question={pinnedQuestion} />

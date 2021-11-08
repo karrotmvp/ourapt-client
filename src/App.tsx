@@ -46,8 +46,8 @@ const App: React.FC = () => {
                   mini.close();
                 }}
               >
-                <Screen path="/" component={withLanding} />
-                <Screen path="/landing">
+                {/* <Screen path="/" component={withLanding} /> */}
+                {/* <Screen path="/landing">
                   <PageLanding />
                 </Screen>
                 <Screen path="/apartment/request">
@@ -67,7 +67,7 @@ const App: React.FC = () => {
                 </Screen>
                 <Screen path="/article/:articleId/update">
                   <PageQuestionUpdate />
-                </Screen>
+                </Screen> */}
               </Navigator>
               <WithModal />
             </div>

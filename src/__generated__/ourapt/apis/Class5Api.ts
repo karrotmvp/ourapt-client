@@ -21,10 +21,17 @@ import {
     CommonResponseBodyOneCommentDto,
     CommonResponseBodyOneCommentDtoFromJSON,
     CommonResponseBodyOneCommentDtoToJSON,
+    CommonResponseBodyVoid,
+    CommonResponseBodyVoidFromJSON,
+    CommonResponseBodyVoidToJSON,
     WriteNewCommentDto,
     WriteNewCommentDtoFromJSON,
     WriteNewCommentDtoToJSON,
 } from '../models';
+
+export interface DeleteCommentUsingDELETERequest {
+    commentId: string;
+}
 
 export interface GetCommentsOfQuestionUsingGETRequest {
     questionId: string;
@@ -39,6 +46,40 @@ export interface WriteNewCommentUsingPOSTRequest {
  * 
  */
 export class Class5Api extends runtime.BaseAPI {
+
+    /**
+     * 댓글 삭제하기
+     */
+    async deleteCommentUsingDELETERaw(requestParameters: DeleteCommentUsingDELETERequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyVoid>> {
+        if (requestParameters.commentId === null || requestParameters.commentId === undefined) {
+            throw new runtime.RequiredError('commentId','Required parameter requestParameters.commentId was null or undefined when calling deleteCommentUsingDELETE.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // KarrotAccessToken authentication
+        }
+
+        const response = await this.request({
+            path: `/api/v1/comment/{commentId}`.replace(`{${"commentId"}}`, encodeURIComponent(String(requestParameters.commentId))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyVoidFromJSON(jsonValue));
+    }
+
+    /**
+     * 댓글 삭제하기
+     */
+    async deleteCommentUsingDELETE(requestParameters: DeleteCommentUsingDELETERequest, initOverrides?: RequestInit): Promise<CommonResponseBodyVoid> {
+        const response = await this.deleteCommentUsingDELETERaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * 질문에 달린 게시글 보기

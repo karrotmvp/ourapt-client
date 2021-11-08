@@ -71,7 +71,6 @@ const PageArticleCreate: React.FC = () => {
       const response = await api.questionController.writeNewQuestionUsingPOST({
         questionContent: {
           mainText: state.mainText,
-          regionId: regionId,
         },
       });
       const question = examineResBody(response, "새 게시글 쓰기").data.question;

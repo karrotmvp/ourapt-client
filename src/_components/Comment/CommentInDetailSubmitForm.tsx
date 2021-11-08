@@ -89,6 +89,7 @@ const CommentInDetailSubmitForm: React.FC<CommentInDetailSubmitFormProps> = ({
       payload: "",
     });
     setScrollHeight(32);
+    setShowCounter(false);
   }
 
   useEffect(() => {

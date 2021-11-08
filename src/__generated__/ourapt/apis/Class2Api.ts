@@ -18,12 +18,53 @@ import {
     CommonResponseBodyGetAvailableApartmentsDto,
     CommonResponseBodyGetAvailableApartmentsDtoFromJSON,
     CommonResponseBodyGetAvailableApartmentsDtoToJSON,
+    CommonResponseBodyOneApartmentDto,
+    CommonResponseBodyOneApartmentDtoFromJSON,
+    CommonResponseBodyOneApartmentDtoToJSON,
 } from '../models';
+
+export interface GetApartmentByIdUsingGETRequest {
+    apartmentId: string;
+}
 
 /**
  * 
  */
 export class Class2Api extends runtime.BaseAPI {
+
+    /**
+     * 아파트 ID로 아파트 정보 가져오기
+     */
+    async getApartmentByIdUsingGETRaw(requestParameters: GetApartmentByIdUsingGETRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyOneApartmentDto>> {
+        if (requestParameters.apartmentId === null || requestParameters.apartmentId === undefined) {
+            throw new runtime.RequiredError('apartmentId','Required parameter requestParameters.apartmentId was null or undefined when calling getApartmentByIdUsingGET.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // KarrotAccessToken authentication
+        }
+
+        const response = await this.request({
+            path: `/api/v1/apartment/{apartmentId}`.replace(`{${"apartmentId"}}`, encodeURIComponent(String(requestParameters.apartmentId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyOneApartmentDtoFromJSON(jsonValue));
+    }
+
+    /**
+     * 아파트 ID로 아파트 정보 가져오기
+     */
+    async getApartmentByIdUsingGET(requestParameters: GetApartmentByIdUsingGETRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyOneApartmentDto> {
+        const response = await this.getApartmentByIdUsingGETRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * 해당 리전에 포함된 아파트들 가져오기

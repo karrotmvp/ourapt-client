@@ -45,7 +45,8 @@ const PageQuestionPinnedDetail: React.FC = () => {
   const articleId = params.articleId || "";
 
   const api = useApi();
-  const { regionId } = useViewer();
+  const { viewer, regionId } = useViewer();
+  const currendApt = viewer?.checkedIn?.name;
   const [pinnedQuestion, setPinnedQuestion] = useState<Question>();
 
   const { push } = useNavigator();
@@ -100,7 +101,7 @@ const PageQuestionPinnedDetail: React.FC = () => {
 
   return (
     <div className="Page">
-      <ScreenHelmet />
+      <ScreenHelmet title={currendApt} />
       <form
         id={articleId}
         className="BriefSubmitForm pd--24"

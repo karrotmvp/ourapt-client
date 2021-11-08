@@ -45,11 +45,11 @@ export const AccessTokenProvider: React.FC = (props) => {
     return getCodeFromURLParams();
   }, []);
 
-  const manualCode: Boolean = true;
+  // const manualCode: Boolean = true;
 
-  if (manualCode) {
-    code = "gYtxb9jhQuZz5dsg_w8F";
-  }
+  // if (manualCode) {
+  //   code = "gzSu2D_HPCMogfrrmDXE";
+  // }
 
   const [state, dispatch] = useReducer(
     reducer,

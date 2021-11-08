@@ -51,6 +51,7 @@ export enum CommonResponseBodyVoidStatusEnum {
     KarrotUnauthorizedCode = 'KARROT_UNAUTHORIZED_CODE',
     NotCheckedInUser = 'NOT_CHECKED_IN_USER',
     NotServicedRegion = 'NOT_SERVICED_REGION',
+    NoPermission = 'NO_PERMISSION',
     RegisteredUserNotFound = 'REGISTERED_USER_NOT_FOUND',
     ResourceDuplicate = 'RESOURCE_DUPLICATE',
     Success = 'SUCCESS'

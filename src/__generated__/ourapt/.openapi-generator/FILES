@@ -1,9 +1,12 @@
+.openapi-generator-ignore
 apis/Class1APIApi.ts
 apis/Class2Api.ts
 apis/Class3Api.ts
 apis/Class4Api.ts
 apis/Class5Api.ts
 apis/Class6Api.ts
+apis/Class7Api.ts
+apis/Class99Api.ts
 apis/index.ts
 index.ts
 models/ApartmentDto.ts
@@ -13,6 +16,7 @@ models/CommonResponseBodyGetAvailableApartmentsDto.ts
 models/CommonResponseBodyGetCommentsOfQuestionDto.ts
 models/CommonResponseBodyGetQuestionsDto.ts
 models/CommonResponseBodyKarrotAccessTokenDto.ts
+models/CommonResponseBodyOneApartmentDto.ts
 models/CommonResponseBodyOneCommentDto.ts
 models/CommonResponseBodyOneQuestionDto.ts
 models/CommonResponseBodyOneUserDto.ts
@@ -23,13 +27,15 @@ models/GetQuestionsDto.ts
 models/KarrotAccessTokenDto.ts
 models/KarrotLoginDto.ts
 models/KarrotProfile.ts
+models/NoApartmentAnswerDto.ts
+models/OneApartmentDto.ts
 models/OneCommentDto.ts
 models/OneQuestionDto.ts
 models/OneUserDto.ts
+models/QuestionContentDto.ts
 models/QuestionDto.ts
 models/RegionDto.ts
 models/UserDto.ts
 models/WriteNewCommentDto.ts
-models/WriteNewQuestionDto.ts
 models/index.ts
 runtime.ts

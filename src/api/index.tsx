@@ -6,21 +6,31 @@ import { Class3Api as OAuthControllerApi } from "../__generated__/ourapt";
 import { Class4Api as QuestionControllerApi } from "../__generated__/ourapt";
 import { Class5Api as CommentControllerApi } from "../__generated__/ourapt";
 import { Class6Api as UserControllerApi } from "../__generated__/ourapt";
+import { Class7Api as LogControlloerApi } from "../__generated__/ourapt";
+import { Class99Api as NoApartmentController } from "../__generated__/ourapt";
 
 import { useAccessToken } from "../_providers/useAccessToken";
+import { useViewer } from "../_providers/useViewer";
 
 // API를 만들어주는데,
 function makeApi({ accessToken }: { accessToken?: string | null }) {
+  // const { regionId } = useViewer()
   if (accessToken) {
     const configuration = new Configuration({
       // accessToken,
       apiKey: accessToken,
+      headers: {
+        "Instance-Id": "tempInstance-Id",
+        "Region-Id": "tempRegionId",
+      },
     });
     const apartmentController = new ApartmentControllerApi(configuration);
     const userController = new UserControllerApi(configuration);
     const questionController = new QuestionControllerApi(configuration);
     const commentController = new CommentControllerApi(configuration);
     const oauthController = new OAuthControllerApi(configuration);
+    const logController = new LogControlloerApi(configuration);
+    const noApartmentController = new NoApartmentController(configuration);
 
     return {
       apartmentController,
@@ -28,13 +38,24 @@ function makeApi({ accessToken }: { accessToken?: string | null }) {
       questionController,
       commentController,
       userController,
+      logController,
+      noApartmentController,
     };
   } else {
-    const apartmentController = new ApartmentControllerApi();
-    const userController = new UserControllerApi();
-    const questionController = new QuestionControllerApi();
-    const commentController = new CommentControllerApi();
-    const oauthController = new OAuthControllerApi();
+    const configuration = new Configuration({
+      // accessToken,
+      headers: {
+        "Instance-Id": "tempInstance-Id",
+        "Region-Id": "tempRegionId",
+      },
+    });
+    const apartmentController = new ApartmentControllerApi(configuration);
+    const userController = new UserControllerApi(configuration);
+    const questionController = new QuestionControllerApi(configuration);
+    const commentController = new CommentControllerApi(configuration);
+    const oauthController = new OAuthControllerApi(configuration);
+    const logController = new LogControlloerApi(configuration);
+    const noApartmentController = new NoApartmentController(configuration);
 
     return {
       apartmentController,
@@ -42,6 +63,8 @@ function makeApi({ accessToken }: { accessToken?: string | null }) {
       questionController,
       commentController,
       userController,
+      logController,
+      noApartmentController,
     };
   }
 }

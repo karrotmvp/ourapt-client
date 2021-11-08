@@ -16,39 +16,32 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface WriteNewQuestionDto
+ * @interface QuestionContentDto
  */
-export interface WriteNewQuestionDto {
+export interface QuestionContentDto {
     /**
      * 
      * @type {string}
-     * @memberof WriteNewQuestionDto
+     * @memberof QuestionContentDto
      */
     mainText: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof WriteNewQuestionDto
-     */
-    regionId: string;
 }
 
-export function WriteNewQuestionDtoFromJSON(json: any): WriteNewQuestionDto {
-    return WriteNewQuestionDtoFromJSONTyped(json, false);
+export function QuestionContentDtoFromJSON(json: any): QuestionContentDto {
+    return QuestionContentDtoFromJSONTyped(json, false);
 }
 
-export function WriteNewQuestionDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): WriteNewQuestionDto {
+export function QuestionContentDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): QuestionContentDto {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
         'mainText': json['mainText'],
-        'regionId': json['regionId'],
     };
 }
 
-export function WriteNewQuestionDtoToJSON(value?: WriteNewQuestionDto | null): any {
+export function QuestionContentDtoToJSON(value?: QuestionContentDto | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -58,7 +51,6 @@ export function WriteNewQuestionDtoToJSON(value?: WriteNewQuestionDto | null): a
     return {
         
         'mainText': value.mainText,
-        'regionId': value.regionId,
     };
 }
 

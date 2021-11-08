@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { QuestionDto as Question } from "../../../__generated__/ourapt";
 import { CommentDto as Comment } from "../../../__generated__/ourapt";
 import { useApi } from "../../../api";
+import { useViewer } from "../../../_providers/useViewer";
 
 import styled from "@emotion/styled";
 
@@ -22,6 +23,8 @@ const PageArticleDetail: React.FC = () => {
 
   const [question, setQuestion] = useState<Question>();
   const [comments, setComments] = useState<Array<Comment>>([]);
+  const myInfo = useViewer().viewer?.id;
+  const [isMyArticle, setIsMyArticle] = useState<Boolean>(false);
 
   // 새로 코멘트를 업데이트하면 새로 렌더링되도록 패치하는 flag
   const [isCommentUpdate, setIsCommentUpdate] = useState<Boolean>(false);
@@ -34,6 +37,8 @@ const PageArticleDetail: React.FC = () => {
       const question = examineResBody(response, "게시글 상세에서 본문 조회")
         .data.question;
       setQuestion(question);
+      const isMyArticle = myInfo === question.writer.id;
+      setIsMyArticle(isMyArticle);
     })();
   }, [api.questionController, articleId]);
 
@@ -52,10 +57,14 @@ const PageArticleDetail: React.FC = () => {
     setIsCommentUpdate(false);
   }, [isCommentUpdate, api.commentController, articleId]);
 
+  const modifyBtn = () => {
+    return;
+  };
+
   return (
     <div className="Page">
       <div className="PageQuestionDetail-inner">
-        <ScreenHelmet />
+        <ScreenHelmet title="상세 게시글" appendRight={modifyBtn} />
         <ArticleArea>
           {question && <QuestionInDetail question={question} />}
         </ArticleArea>
@@ -67,7 +76,13 @@ const PageArticleDetail: React.FC = () => {
               question.countOfComments}
           </CommentsAreaTitle>
           {comments.map((comment, idx) => {
-            return <CommentInDetail key={comment.id} comment={comment} />;
+            return (
+              <CommentInDetail
+                key={comment.id}
+                comment={comment}
+                setIsCommentUpdate={setIsCommentUpdate}
+              />
+            );
           })}
         </CommentsArea>
       </div>

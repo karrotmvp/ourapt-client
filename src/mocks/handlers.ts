@@ -1,5 +1,4 @@
 import { rest } from "msw";
-import { createTextChangeRange } from "typescript";
 
 export const handlers = [
   // 캐럿 가져오기 : 해결!
@@ -10,7 +9,7 @@ export const handlers = [
       return await res(
         ctx.json({
           data: {
-            accessToken: "LWINKcAYjFUHxiWNUaDf-LAILx4",
+            accessToken: "Y3oe-iz_lFtl_voiqlVvNtOjdCI",
             expiredIn: 0,
             scope: "string",
             tokenType: "string",
