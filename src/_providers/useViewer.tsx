@@ -12,7 +12,7 @@ import React, {
 
 import {
   UserDto as User,
-  CommonResponseBodyGetOneUserDto,
+  CommonResponseBodyOneUserDto,
 } from "../__generated__/ourapt";
 
 import { useApi } from "../api";
@@ -48,8 +48,6 @@ const ViewerContext = createContext<User | null>(null);
 const RegionIdContext = createContext<string>("");
 
 export const ViewerProvider: React.FC = (props) => {
-  console.log(`안녕하세요! 저는 뷰어 프로바이더입니다. 제가 돌아볼게요. `);
-
   const api = useApi();
   // 무한 렌더링이 일어날까? 아니야... useAT에서 이미 useMemo 했기 때문에 발생하지 않을 것이라고 짐작해보자...
   const { accessToken } = useAccessToken();
@@ -62,16 +60,14 @@ export const ViewerProvider: React.FC = (props) => {
       : { _t: "ready", regionId: regionId, viewer: null }
   );
 
-  console.log(`********** 유즈이펙트 돌아갑니다`);
   useEffect(() => {
     if (accessToken && state._t === "pending") {
-      console.log(`@VProvider --- AT가 있고 && 펜딩이라 뷰어 불러올게요!`);
       const getViewerFromAccessToken = async function () {
         const response = await api.userController.getMyInfoUsingGET();
         return response;
       };
       const distpatchIssuedViewer = async function (
-        getViewerFunction: Promise<CommonResponseBodyGetOneUserDto>
+        getViewerFunction: Promise<CommonResponseBodyOneUserDto>
       ) {
         const resBody = await getViewerFunction;
         const viewer = examineResBody(
@@ -83,28 +79,15 @@ export const ViewerProvider: React.FC = (props) => {
           _t: "SET_VIEWER",
           viewer: viewer,
         });
-
-        console.log(`V 불러왔는데요 : ${viewer}`);
       };
 
       distpatchIssuedViewer(getViewerFromAccessToken());
-    } else {
-      console.log(
-        `@VProvider --- AT가 없거나 이미 V를 다 불러온 상태인가봐요.`
-      );
     }
   }, [accessToken]); // AT가 재설정될 경우에만 새로 돌도록 합니다.
-  console.log(`********** 유즈이펙트 다돌았습니다`);
 
   if (state._t === "pending") {
-    console.log("pending에서 멈추는 경우인데, 이 경우는 나타나면 안돼요.");
     return null;
-  } else {
-    console.log(
-      `ready로 잘 완료됐다면, 저장된 값이 제대로 됐나 확인하기 위해 id를 찍어볼게요 : ${state.viewer?.id}`
-    );
   }
-
   return (
     <ViewerContext.Provider value={state.viewer}>
       <RegionIdContext.Provider value={state.regionId}>

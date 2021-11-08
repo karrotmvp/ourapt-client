@@ -14,41 +14,41 @@
 
 import { exists, mapValues } from '../runtime';
 import {
-    QuestionDto,
-    QuestionDtoFromJSON,
-    QuestionDtoFromJSONTyped,
-    QuestionDtoToJSON,
+    CommentDto,
+    CommentDtoFromJSON,
+    CommentDtoFromJSONTyped,
+    CommentDtoToJSON,
 } from './';
 
 /**
  * 
  * @export
- * @interface GetOneQuestionDto
+ * @interface OneCommentDto
  */
-export interface GetOneQuestionDto {
+export interface OneCommentDto {
     /**
      * 
-     * @type {QuestionDto}
-     * @memberof GetOneQuestionDto
+     * @type {CommentDto}
+     * @memberof OneCommentDto
      */
-    question?: QuestionDto;
+    comment?: CommentDto;
 }
 
-export function GetOneQuestionDtoFromJSON(json: any): GetOneQuestionDto {
-    return GetOneQuestionDtoFromJSONTyped(json, false);
+export function OneCommentDtoFromJSON(json: any): OneCommentDto {
+    return OneCommentDtoFromJSONTyped(json, false);
 }
 
-export function GetOneQuestionDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): GetOneQuestionDto {
+export function OneCommentDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): OneCommentDto {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'question': !exists(json, 'question') ? undefined : QuestionDtoFromJSON(json['question']),
+        'comment': !exists(json, 'comment') ? undefined : CommentDtoFromJSON(json['comment']),
     };
 }
 
-export function GetOneQuestionDtoToJSON(value?: GetOneQuestionDto | null): any {
+export function OneCommentDtoToJSON(value?: OneCommentDto | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -57,7 +57,7 @@ export function GetOneQuestionDtoToJSON(value?: GetOneQuestionDto | null): any {
     }
     return {
         
-        'question': QuestionDtoToJSON(value.question),
+        'comment': CommentDtoToJSON(value.comment),
     };
 }
 

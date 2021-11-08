@@ -23,7 +23,7 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
 
   const api = useApi();
 
-  const [pinnedQuestion, setPinnedQusetion] = useState<Question>();
+  const [pinnedQuestion, setPinnedQuestion] = useState<Question>();
   const [questions, setQuestions] = useState<Array<Question>>([]);
 
   async function getQuestionsByCursorPerPage(
@@ -42,37 +42,40 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
   }
 
   useEffect(() => {
-    console.log(params);
     (async () => {
       const response =
         await api.questionController.getPinnedQuestionOfApartmentUsingGET({
           apartmentId: params,
         });
-      const pinnedQuestion = examineResBody(response, "핀드퀘스쳔 가져오기")
-        .data.question;
-      console.log(`핀드퀘스쳔 찍어볼게요 ${pinnedQuestion}`);
-      setPinnedQusetion(pinnedQuestion);
+      if (response && response.status === "DATA_NOT_FOUND_FROM_DB") {
+      } else {
+        const pinnedQuestion = examineResBody(response, "핀드퀘스쳔 가져오기")
+          .data.question;
+        setPinnedQuestion(pinnedQuestion);
+      }
     })();
     // TODO: 페이지당 몇 개 확인하기
-    getQuestionsByCursorPerPage(params, Date.now(), 3);
+    getQuestionsByCursorPerPage(params, Date.now(), 100);
   }, []);
 
   const { push, pop, replace } = useNavigator();
-  // DELETE
-  // const history = useHistory();
   const goArticleDetail = (articleId: string) => {
     push(`/article/${articleId}`);
-    // DELETE
-    // history.push(`/article/${articleId}`);
   };
 
   const onArticleCreateBtnClick = () => {
     push("article/create");
   };
 
-  console.log(questions);
   return (
     <div className="Page">
+      <button
+        onClick={(e) => {
+          push(`/landing`);
+        }}
+      >
+        tempBtn
+      </button>
       <div className="PageFeed-inner">
         <ScreenHelmet />
         {pinnedQuestion && pinnedQuestion.id && (
@@ -91,7 +94,7 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
                 아파트 생활, 맛집, 모임에 대해 글을 써보세요.
               </ArticleVacantViewInfo>
               <button
-                className="btn-160 btn--active mg-top--48"
+                className="btn-160 btn btn--active mg-top--48"
                 onClick={onArticleCreateBtnClick}
               >
                 게시글 작성
@@ -115,8 +118,7 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
                       alt="댓글 수"
                     />
                     <div className="font-size--15 font-weight--400 font-color--11">
-                      {/* {question.commentsNum} */}
-                      10
+                      {question.countOfComments}
                     </div>
                   </CommentThumbnail>
                 </ArticleWrapper>

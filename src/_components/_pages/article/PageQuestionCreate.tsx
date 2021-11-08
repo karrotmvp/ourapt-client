@@ -10,10 +10,12 @@ import examineResBody from "../../../_modules/examineResBody";
 type State =
   | {
       _t: "blank";
+      textLength: number;
     }
   | {
       _t: "typed";
       mainText: string;
+      textLength: Number;
     };
 
 type Action = {
@@ -26,11 +28,13 @@ const reducer: React.Reducer<State, Action> = (prevState, action) => {
     case "":
       return {
         _t: "blank",
+        textLength: action.payload.length,
       };
     default:
       return {
         _t: "typed",
         mainText: action.payload,
+        textLength: action.payload.length,
       };
   }
 };
@@ -41,7 +45,7 @@ const reducer: React.Reducer<State, Action> = (prevState, action) => {
 const PageArticleCreate: React.FC = () => {
   const api = useApi();
   const { regionId } = useViewer();
-  const [state, dispatch] = useReducer(reducer, { _t: "blank" });
+  const [state, dispatch] = useReducer(reducer, { _t: "blank", textLength: 0 });
 
   const { push } = useNavigator();
 
@@ -73,12 +77,9 @@ const PageArticleCreate: React.FC = () => {
           regionId: regionId,
         },
       });
-      alert(response);
-      alert(JSON.stringify(response, null, 2));
-      if (response && response.status === "SUCCESS") {
-        // TODO: 연결해줄 것
-        // push(`/article/:${response}`)
-      }
+      const question = examineResBody(response, "새 게시글 쓰기").data.question;
+      // const question = response.data.question;
+      push(`/article/${question.id}`);
     }
   }
 
@@ -90,12 +91,14 @@ const PageArticleCreate: React.FC = () => {
         <textarea
           className="QuestionCreateUpdateForm-input mg-bottom--16"
           placeholder="아파트 생활, 맛집, 모임에 대해 글을 써보세요!"
+          maxLength={255}
           onChange={handleChange}
         />
+        {state.textLength} / 255
         <button
           disabled={submitBtnActiveState.disabled}
           className={
-            "QuestionCreateUpdateForm-btn btn-full " +
+            "QuestionCreateUpdateForm-btn btn-full btn " +
             submitBtnActiveState.className
           }
         >

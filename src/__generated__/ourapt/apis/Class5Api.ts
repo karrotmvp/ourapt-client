@@ -18,9 +18,9 @@ import {
     CommonResponseBodyGetCommentsOfQuestionDto,
     CommonResponseBodyGetCommentsOfQuestionDtoFromJSON,
     CommonResponseBodyGetCommentsOfQuestionDtoToJSON,
-    CommonResponseBodyVoid,
-    CommonResponseBodyVoidFromJSON,
-    CommonResponseBodyVoidToJSON,
+    CommonResponseBodyOneCommentDto,
+    CommonResponseBodyOneCommentDtoFromJSON,
+    CommonResponseBodyOneCommentDtoToJSON,
     WriteNewCommentDto,
     WriteNewCommentDtoFromJSON,
     WriteNewCommentDtoToJSON,
@@ -77,7 +77,7 @@ export class Class5Api extends runtime.BaseAPI {
     /**
      * 새로운 댓글 작성
      */
-    async writeNewCommentUsingPOSTRaw(requestParameters: WriteNewCommentUsingPOSTRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyVoid>> {
+    async writeNewCommentUsingPOSTRaw(requestParameters: WriteNewCommentUsingPOSTRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyOneCommentDto>> {
         if (requestParameters.questionId === null || requestParameters.questionId === undefined) {
             throw new runtime.RequiredError('questionId','Required parameter requestParameters.questionId was null or undefined when calling writeNewCommentUsingPOST.');
         }
@@ -104,13 +104,13 @@ export class Class5Api extends runtime.BaseAPI {
             body: WriteNewCommentDtoToJSON(requestParameters.commentContent),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyVoidFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyOneCommentDtoFromJSON(jsonValue));
     }
 
     /**
      * 새로운 댓글 작성
      */
-    async writeNewCommentUsingPOST(requestParameters: WriteNewCommentUsingPOSTRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyVoid> {
+    async writeNewCommentUsingPOST(requestParameters: WriteNewCommentUsingPOSTRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyOneCommentDto> {
         const response = await this.writeNewCommentUsingPOSTRaw(requestParameters, initOverrides);
         return await response.value();
     }

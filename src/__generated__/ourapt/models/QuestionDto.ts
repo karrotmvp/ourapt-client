@@ -34,6 +34,12 @@ export interface QuestionDto {
     byAdmin: boolean;
     /**
      * 
+     * @type {number}
+     * @memberof QuestionDto
+     */
+    countOfComments: number;
+    /**
+     * 
      * @type {Date}
      * @memberof QuestionDto
      */
@@ -44,6 +50,12 @@ export interface QuestionDto {
      * @memberof QuestionDto
      */
     id: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof QuestionDto
+     */
+    isPinned: boolean;
     /**
      * 
      * @type {string}
@@ -75,8 +87,10 @@ export function QuestionDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean
     return {
         
         'byAdmin': json['byAdmin'],
+        'countOfComments': json['countOfComments'],
         'createdAt': (new Date(json['createdAt'])),
         'id': json['id'],
+        'isPinned': json['isPinned'],
         'mainText': json['mainText'],
         'updatedAt': (new Date(json['updatedAt'])),
         'writer': KarrotProfileFromJSON(json['writer']),
@@ -93,8 +107,10 @@ export function QuestionDtoToJSON(value?: QuestionDto | null): any {
     return {
         
         'byAdmin': value.byAdmin,
+        'countOfComments': value.countOfComments,
         'createdAt': (value.createdAt.toISOString()),
         'id': value.id,
+        'isPinned': value.isPinned,
         'mainText': value.mainText,
         'updatedAt': (value.updatedAt.toISOString()),
         'writer': KarrotProfileToJSON(value.writer),

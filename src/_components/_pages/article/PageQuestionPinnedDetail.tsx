@@ -54,6 +54,17 @@ const PageQuestionPinnedDetail: React.FC = () => {
   const { push } = useNavigator();
   // questionId로 Question 내용 받아오기
 
+  useEffect(() => {
+    (async () => {
+      const response = await api.questionController.getQuestionByIdUsingGET({
+        questionId: articleId,
+      });
+      const pinnedQuestion = examineResBody(response, "PinnedDetail 조회").data
+        .question;
+      setPinnedQuestion(pinnedQuestion);
+    })();
+  }, []);
+
   const [submitBtnActiveState, setSubmitBtnActiveState] = useState({
     disabled: true,
     className: "btn--inactive",
@@ -76,20 +87,17 @@ const PageQuestionPinnedDetail: React.FC = () => {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (state._t === "typed") {
-      alert(state.mainText);
-      // const response = await api.commentController.writeNewCommentUsingPOST({
-      //   questionId: articleId,
-      //   commentContent: {
-      //     mainText: state.mainText || "",
-      //     regionId: regionId,
-      //   },
-      // });
-      // alert(response);
-      // examineResBody(response, "PinnedDetail에서 새 코멘트 제출");
-      // if (response.status === "SUCCESS") {
-      //   alert(response);
-      //   push(`article/${articleId}`);
-      // }
+      const response = await api.commentController.writeNewCommentUsingPOST({
+        questionId: articleId,
+        commentContent: {
+          mainText: state.mainText || "",
+          regionId: regionId,
+        },
+      });
+      examineResBody(response, "PinnedDetail에서 새 코멘트 제출");
+      if (response.status === "SUCCESS") {
+        push(`article/${articleId}`);
+      }
     }
   }
 
@@ -102,20 +110,19 @@ const PageQuestionPinnedDetail: React.FC = () => {
         action="submit"
         onSubmit={handleSubmit}
       >
-        <QuestionPinnedTitle>
-          우리 아파트의 벽 색깔 맘에 드나요?
-        </QuestionPinnedTitle>
+        <QuestionPinnedTitle>{pinnedQuestion?.mainText}</QuestionPinnedTitle>
         <input
           className="BriefSubmitForm-input mg-bottom--16"
           type="text"
-          placeholder="어떻게 생각하세요?"
+          maxLength={255}
           onChange={handleChange}
+          placeholder="어떻게 생각하세요?"
         />
         <button
           id="submitBtn"
           disabled={submitBtnActiveState.disabled}
           className={
-            "BriefSubmitForm-btn btn-full " + submitBtnActiveState.className
+            "BriefSubmitForm-btn btn-full btn " + submitBtnActiveState.className
           }
         >
           내 의견 댓글로 남기기

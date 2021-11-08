@@ -18,9 +18,9 @@ import {
     ChangeMyCheckedInDto,
     ChangeMyCheckedInDtoFromJSON,
     ChangeMyCheckedInDtoToJSON,
-    CommonResponseBodyGetOneUserDto,
-    CommonResponseBodyGetOneUserDtoFromJSON,
-    CommonResponseBodyGetOneUserDtoToJSON,
+    CommonResponseBodyOneUserDto,
+    CommonResponseBodyOneUserDtoFromJSON,
+    CommonResponseBodyOneUserDtoToJSON,
     CommonResponseBodyVoid,
     CommonResponseBodyVoidFromJSON,
     CommonResponseBodyVoidToJSON,
@@ -75,7 +75,7 @@ export class Class6Api extends runtime.BaseAPI {
     /**
      * 자신의 정보 조회
      */
-    async getMyInfoUsingGETRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyGetOneUserDto>> {
+    async getMyInfoUsingGETRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyOneUserDto>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -91,13 +91,13 @@ export class Class6Api extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyGetOneUserDtoFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyOneUserDtoFromJSON(jsonValue));
     }
 
     /**
      * 자신의 정보 조회
      */
-    async getMyInfoUsingGET(initOverrides?: RequestInit): Promise<CommonResponseBodyGetOneUserDto> {
+    async getMyInfoUsingGET(initOverrides?: RequestInit): Promise<CommonResponseBodyOneUserDto> {
         const response = await this.getMyInfoUsingGETRaw(initOverrides);
         return await response.value();
     }

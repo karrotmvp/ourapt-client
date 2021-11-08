@@ -78,7 +78,10 @@ const QuestionIcon = styled.div`
 
 const MainText = styled.div`
   height: 48px;
-  margin-right: auto;
+  width: calc(100% - 36px);
+  /* margin-right: auto; */
+
+  text-align: left;
   line-height: 24px;
   vertical-align: middle;
   background-color: red;

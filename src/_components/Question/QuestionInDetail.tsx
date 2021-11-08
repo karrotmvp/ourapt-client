@@ -1,37 +1,25 @@
 import React from "react";
-import {
-  User,
-  Apartment,
-  Question,
-  KarrotProfile,
-} from "../../_types/ouraptTypes";
+
+import { QuestionDto as Question } from "../../__generated__/ourapt";
 
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import UserAsAuthor from "../User/UserAsAuthor";
 
-type tempQuestion = {
-  id: string;
-  user: KarrotProfile;
-  content: string;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
 type QuestionInDetailProps = {
-  question: tempQuestion;
+  question: Question;
 };
 
 const QuestionInDetail: React.FC<QuestionInDetailProps> = ({ question }) => {
   return (
     <div className="ArticleCard pd--16">
       <UserAsAuthor
-        writer={question.user}
+        writer={question.writer}
         createdAt={question.createdAt}
         updatedAt={question.updatedAt}
       />
       <p className="ArticleCard-Content mg-top--10 mg-bottom--64">
-        {question.content}
+        {question.mainText}
       </p>
     </div>
   );

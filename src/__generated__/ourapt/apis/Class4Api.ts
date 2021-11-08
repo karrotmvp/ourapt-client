@@ -15,15 +15,12 @@
 
 import * as runtime from '../runtime';
 import {
-    CommonResponseBodyGetOneQuestionDto,
-    CommonResponseBodyGetOneQuestionDtoFromJSON,
-    CommonResponseBodyGetOneQuestionDtoToJSON,
     CommonResponseBodyGetQuestionsDto,
     CommonResponseBodyGetQuestionsDtoFromJSON,
     CommonResponseBodyGetQuestionsDtoToJSON,
-    CommonResponseBodyVoid,
-    CommonResponseBodyVoidFromJSON,
-    CommonResponseBodyVoidToJSON,
+    CommonResponseBodyOneQuestionDto,
+    CommonResponseBodyOneQuestionDtoFromJSON,
+    CommonResponseBodyOneQuestionDtoToJSON,
     WriteNewQuestionDto,
     WriteNewQuestionDtoFromJSON,
     WriteNewQuestionDtoToJSON,
@@ -55,7 +52,7 @@ export class Class4Api extends runtime.BaseAPI {
     /**
      * 사용자에게 보여질 pinned_question 랜덤 조회
      */
-    async getPinnedQuestionOfApartmentUsingGETRaw(requestParameters: GetPinnedQuestionOfApartmentUsingGETRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyGetOneQuestionDto>> {
+    async getPinnedQuestionOfApartmentUsingGETRaw(requestParameters: GetPinnedQuestionOfApartmentUsingGETRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyOneQuestionDto>> {
         if (requestParameters.apartmentId === null || requestParameters.apartmentId === undefined) {
             throw new runtime.RequiredError('apartmentId','Required parameter requestParameters.apartmentId was null or undefined when calling getPinnedQuestionOfApartmentUsingGET.');
         }
@@ -75,13 +72,13 @@ export class Class4Api extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyGetOneQuestionDtoFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyOneQuestionDtoFromJSON(jsonValue));
     }
 
     /**
      * 사용자에게 보여질 pinned_question 랜덤 조회
      */
-    async getPinnedQuestionOfApartmentUsingGET(requestParameters: GetPinnedQuestionOfApartmentUsingGETRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyGetOneQuestionDto> {
+    async getPinnedQuestionOfApartmentUsingGET(requestParameters: GetPinnedQuestionOfApartmentUsingGETRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyOneQuestionDto> {
         const response = await this.getPinnedQuestionOfApartmentUsingGETRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -89,7 +86,7 @@ export class Class4Api extends runtime.BaseAPI {
     /**
      * question_id 로 Question 조회
      */
-    async getQuestionByIdUsingGETRaw(requestParameters: GetQuestionByIdUsingGETRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyGetOneQuestionDto>> {
+    async getQuestionByIdUsingGETRaw(requestParameters: GetQuestionByIdUsingGETRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyOneQuestionDto>> {
         if (requestParameters.questionId === null || requestParameters.questionId === undefined) {
             throw new runtime.RequiredError('questionId','Required parameter requestParameters.questionId was null or undefined when calling getQuestionByIdUsingGET.');
         }
@@ -109,13 +106,13 @@ export class Class4Api extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyGetOneQuestionDtoFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyOneQuestionDtoFromJSON(jsonValue));
     }
 
     /**
      * question_id 로 Question 조회
      */
-    async getQuestionByIdUsingGET(requestParameters: GetQuestionByIdUsingGETRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyGetOneQuestionDto> {
+    async getQuestionByIdUsingGET(requestParameters: GetQuestionByIdUsingGETRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyOneQuestionDto> {
         const response = await this.getQuestionByIdUsingGETRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -173,7 +170,7 @@ export class Class4Api extends runtime.BaseAPI {
     /**
      * 새로운 질문 작성
      */
-    async writeNewQuestionUsingPOSTRaw(requestParameters: WriteNewQuestionUsingPOSTRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyVoid>> {
+    async writeNewQuestionUsingPOSTRaw(requestParameters: WriteNewQuestionUsingPOSTRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyOneQuestionDto>> {
         if (requestParameters.questionContent === null || requestParameters.questionContent === undefined) {
             throw new runtime.RequiredError('questionContent','Required parameter requestParameters.questionContent was null or undefined when calling writeNewQuestionUsingPOST.');
         }
@@ -196,13 +193,13 @@ export class Class4Api extends runtime.BaseAPI {
             body: WriteNewQuestionDtoToJSON(requestParameters.questionContent),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyVoidFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyOneQuestionDtoFromJSON(jsonValue));
     }
 
     /**
      * 새로운 질문 작성
      */
-    async writeNewQuestionUsingPOST(requestParameters: WriteNewQuestionUsingPOSTRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyVoid> {
+    async writeNewQuestionUsingPOST(requestParameters: WriteNewQuestionUsingPOSTRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyOneQuestionDto> {
         const response = await this.writeNewQuestionUsingPOSTRaw(requestParameters, initOverrides);
         return await response.value();
     }

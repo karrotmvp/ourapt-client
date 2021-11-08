@@ -1,8 +1,10 @@
 .CommentSubmitForm {
   width: 100%;
-  height: 56px;
+  // height: 56px;
+  height: auto;
+  min-height: 56px;
 
-  padding: 12px 16px;
+  padding: 16px;
 
   position: sticky;
   left: 0;
@@ -10,26 +12,53 @@
 
   display: flex;
   flex-direction: row;
-  background-color: burlywood;
+  background-color: #ffffff;
+  // background-color: burlywood;
 }
 
-.CommentSubmitForm-input {
+.CommentSubmitForm-textareaContainer {
   width: 100%;
-
   margin-right: 16px;
-  border: none;
+
+  // background-color: chocolate;
 }
 
-.CommentSubmitForm-input::placeholder {
+.CommentSubmitForm-textarea {
+  width: 100%;
+  min-height: 32px;
+  max-height: 128px;
+
+  padding: 5px 0;
+  border: none;
+
+  font-size: 15px;
+  line-height: 22px;
+  overflow-y: hidden;
+  vertical-align: middle;
+
+  // background-color: blue;
+}
+
+.CommentSubmitForm-textarea::placeholder {
   color: #aaaaaa;
+
   font-size: 15px;
   font-weight: 400;
-  line-height: 24px;
+  line-height: 22px;
+  vertical-align: middle;
+}
+
+.CommentSubmitForm-textCounter {
+  color: #aaaaaa;
+  font-size: 14px;
+  text-align: left;
 }
 
 .CommentSubmitForm-btn {
   width: 32px;
   height: 32px;
+
+  margin-top: auto;
 
   border: none;
   border-radius: 8px;

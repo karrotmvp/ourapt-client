@@ -6,7 +6,7 @@ export default function getTimestamp(createdAt: Date, updatedAt: Date) {
   const editedMomentFromNow = dayjs(updatedAt).fromNow(true);
 
   // 수정 여부
-  const isEdited = Boolean(createdAt !== updatedAt);
+  const isEdited = Boolean(createdAt.getTime() !== updatedAt.getTime());
   return `${editedMomentFromNow} ${isEdited ? "수정" : "작성"}`;
 }
 

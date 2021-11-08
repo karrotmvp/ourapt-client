@@ -7,17 +7,14 @@
 import React from "react";
 
 import { KarrotProfile as Writer } from "../../__generated__/ourapt";
+import { useViewer } from "../../_providers/useViewer";
 
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
 import getTimestamp from "../../_modules/getTimestamp";
-import ArticleCreateBtnIcon from "../../_assets/ArticleCreateBtnIcon.svg";
 
-// 같은 엔티티를 가리키고 있는 인터페이스이므로,
-// 글로벌로 타입을 빼내어 선언하고 묶어놓은 다음에 매번 임포트해서 써볼 수는 없을까?
-// 매번 다른 필드들을 선택적으로 가져오는데, 그리고 그것을 명확하게 보기 쉽게 하려고 하는데,
-// 글로벌 타입 선언이 나을까? 매번 새로 선언하는게 나을까? 고민해보자 ---- 토니는 어떻게할까? 왜?
+import { ReactComponent as KebabIcon } from "../../_assets/kebabIcon.svg";
 
 type UserAsAuthorProps = {
   writer: Writer;
@@ -30,6 +27,8 @@ const UserAsAuthor: React.FC<UserAsAuthorProps> = ({
   createdAt,
   updatedAt,
 }) => {
+  const isMyArticle = useViewer().viewer?.id === writer.id;
+
   const UserAsAuthorProfileImage = styled.div`
     width: 32px;
     height: 32px;

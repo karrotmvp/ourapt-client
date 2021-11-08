@@ -14,49 +14,49 @@
 
 import { exists, mapValues } from '../runtime';
 import {
-    GetOneUserDto,
-    GetOneUserDtoFromJSON,
-    GetOneUserDtoFromJSONTyped,
-    GetOneUserDtoToJSON,
+    OneQuestionDto,
+    OneQuestionDtoFromJSON,
+    OneQuestionDtoFromJSONTyped,
+    OneQuestionDtoToJSON,
 } from './';
 
 /**
  * 
  * @export
- * @interface CommonResponseBodyGetOneUserDto
+ * @interface CommonResponseBodyOneQuestionDto
  */
-export interface CommonResponseBodyGetOneUserDto {
+export interface CommonResponseBodyOneQuestionDto {
     /**
      * 
-     * @type {GetOneUserDto}
-     * @memberof CommonResponseBodyGetOneUserDto
+     * @type {OneQuestionDto}
+     * @memberof CommonResponseBodyOneQuestionDto
      */
-    data?: GetOneUserDto;
+    data?: OneQuestionDto;
     /**
      * 
      * @type {string}
-     * @memberof CommonResponseBodyGetOneUserDto
+     * @memberof CommonResponseBodyOneQuestionDto
      */
     devMessage: string;
     /**
      * 
      * @type {string}
-     * @memberof CommonResponseBodyGetOneUserDto
+     * @memberof CommonResponseBodyOneQuestionDto
      */
     displayMessage: string;
     /**
      * 
      * @type {string}
-     * @memberof CommonResponseBodyGetOneUserDto
+     * @memberof CommonResponseBodyOneQuestionDto
      */
-    status: CommonResponseBodyGetOneUserDtoStatusEnum;
+    status: CommonResponseBodyOneQuestionDtoStatusEnum;
 }
 
 /**
 * @export
 * @enum {string}
 */
-export enum CommonResponseBodyGetOneUserDtoStatusEnum {
+export enum CommonResponseBodyOneQuestionDtoStatusEnum {
     BannedUser = 'BANNED_USER',
     DataNotFoundFromDb = 'DATA_NOT_FOUND_FROM_DB',
     InvalidInput = 'INVALID_INPUT',
@@ -69,24 +69,24 @@ export enum CommonResponseBodyGetOneUserDtoStatusEnum {
     Success = 'SUCCESS'
 }
 
-export function CommonResponseBodyGetOneUserDtoFromJSON(json: any): CommonResponseBodyGetOneUserDto {
-    return CommonResponseBodyGetOneUserDtoFromJSONTyped(json, false);
+export function CommonResponseBodyOneQuestionDtoFromJSON(json: any): CommonResponseBodyOneQuestionDto {
+    return CommonResponseBodyOneQuestionDtoFromJSONTyped(json, false);
 }
 
-export function CommonResponseBodyGetOneUserDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): CommonResponseBodyGetOneUserDto {
+export function CommonResponseBodyOneQuestionDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): CommonResponseBodyOneQuestionDto {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'data': !exists(json, 'data') ? undefined : GetOneUserDtoFromJSON(json['data']),
+        'data': !exists(json, 'data') ? undefined : OneQuestionDtoFromJSON(json['data']),
         'devMessage': json['devMessage'],
         'displayMessage': json['displayMessage'],
         'status': json['status'],
     };
 }
 
-export function CommonResponseBodyGetOneUserDtoToJSON(value?: CommonResponseBodyGetOneUserDto | null): any {
+export function CommonResponseBodyOneQuestionDtoToJSON(value?: CommonResponseBodyOneQuestionDto | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -95,7 +95,7 @@ export function CommonResponseBodyGetOneUserDtoToJSON(value?: CommonResponseBody
     }
     return {
         
-        'data': GetOneUserDtoToJSON(value.data),
+        'data': OneQuestionDtoToJSON(value.data),
         'devMessage': value.devMessage,
         'displayMessage': value.displayMessage,
         'status': value.status,

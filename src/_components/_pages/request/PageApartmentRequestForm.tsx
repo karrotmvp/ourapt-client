@@ -23,7 +23,7 @@ const PageApartmentRequsetForm: React.FC = () => {
           type="text"
           placeholder="아파트 이름을 적어주세요"
         />
-        <button className="BriefSubmitForm-btn btn-full btn--inactive">
+        <button className="BriefSubmitForm-btn btn-full btn btn--inactive">
           오픈하면 알림받기
         </button>
       </form>

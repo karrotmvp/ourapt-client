@@ -7,29 +7,40 @@ import styled from "@emotion/styled";
 
 import { useAccessToken } from "../../_providers/useAccessToken";
 import { useApi } from "../../api";
+import { useViewer } from "../../_providers/useViewer";
 
 import { mini } from "../../_Karrotmarket/KarrotmarketMini";
 import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
 
-import ApartmentInLanding from "../Apartment/ApartmentInLanding";
-import { useViewer } from "../../_providers/useViewer";
 import examineResBody from "../../_modules/examineResBody";
-import { response } from "msw";
 
-type PageLandingProps = {
-  apartments: Array<Apartment>;
-};
+import ApartmentInLanding from "../Apartment/ApartmentInLanding";
 
-const PageLanding: React.FC<PageLandingProps> = ({ apartments }) => {
+const PageLanding: React.FC = () => {
   const api = useApi();
   const { accessToken, issueAccessTokenFromAuthorizationCode } =
     useAccessToken();
   const { viewer } = useViewer();
 
+  // const [apartments, setApartments] = useState<Array<Apartment> | undefined>(
+  //   props.apartments
+  // );
+
   const { push, pop, replace } = useNavigator();
   const goPageApartmentRequestForm = () => {
     push(`/apartment/request`);
   };
+
+  const [apartments, setApartments] = useState<Array<Apartment>>([]);
+
+  useEffect(() => {
+    (async () => {
+      const resp =
+        await api.apartmentController.getAvailableApartmentsUsingGET();
+
+      setApartments(resp.data?.apartments ?? []);
+    })();
+  }, []);
 
   async function checkedInAndGoFeed(apartmentId: string) {
     const response = await api.userController.changeMyCheckedInUsingPATCH({
@@ -50,7 +61,6 @@ const PageLanding: React.FC<PageLandingProps> = ({ apartments }) => {
         if (result && result.code) {
           issueAccessTokenFromAuthorizationCode(result.code);
         }
-        alert(`코드 리젠할게요! ${accessToken}`);
         checkedInAndGoFeed(apartmentId);
       },
     });
@@ -63,12 +73,36 @@ const PageLanding: React.FC<PageLandingProps> = ({ apartments }) => {
       return submitAgreement(apartmentId);
     }
   }
+
+  function groupingApartments(apartments: Array<Apartment>) {
+    let aptH = new Map<string, Array<Apartment>>();
+
+    for (let apt of apartments) {
+      aptH.set(apt.brandName, aptH.get(apt.brandName)?.concat([apt]) || [apt]);
+    }
+    let result: Array<{ brand: string; apartments: Array<Apartment> }> = [];
+    aptH.forEach((value, key, mapObject) =>
+      result.push({ brand: key, apartments: value })
+    );
+    return result;
+  }
+
+  const groupedApt = groupingApartments(apartments || []);
+  const isCheckedIn = (apartmentId: string) => {
+    console.log("무한히 렌더링되나요?");
+    if (apartmentId === viewer?.checkedIn?.id) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <div className="Page">
       <ScreenHelmet />
       {/* {regionId}에서 접속한 사람이 보는 랜딩페이지 */}
       <div className="Page pd--24">
-        {apartments.length === 0 ? (
+        {/* {!apartments || apartments.length === 0 ? ( */}
+        {!apartments || apartments.length === 0 ? (
           // TODO : Error Throwing 페이지 혹은 이미지 만들어서 넣어놓기
           <div>
             아파트먼트 리스트가 0인데 있을 수 없는 일입니다... 에러 쓰로잉
@@ -79,17 +113,30 @@ const PageLanding: React.FC<PageLandingProps> = ({ apartments }) => {
             <PageLandingTitle>
               현재 살고 계신 <br /> 아파트에 방문해 보세요!
             </PageLandingTitle>
-            {apartments.map((apartment, idx) => {
+            {groupedApt.map((brandGroup, idx) => {
               return (
-                <ApartmentInLanding
-                  key={apartment.id}
-                  apartment={apartment}
-                  onApartmentInLandingClick={() => {
-                    onApartmentInLandingClick(apartment.id);
-                  }}
-                />
+                <BrandGroupContainer key={idx}>
+                  <BrandWrapper>
+                    <BrandTitle>{brandGroup.brand}</BrandTitle>
+                    <BrandHorizon />
+                  </BrandWrapper>
+                  {brandGroup.apartments.map((apartment, idx) => {
+                    return (
+                      <ApartmentInLanding
+                        key={apartment.id}
+                        apartment={apartment}
+                        isCheckedIn={isCheckedIn(apartment.id)}
+                        onApartmentInLandingClick={() => {
+                          onApartmentInLandingClick(apartment.id);
+                        }}
+                      />
+                    );
+                  })}
+                </BrandGroupContainer>
               );
             })}
+
+            {apartments.map((apartment, idx) => {})}
             <PageLandingAdditionalInfo
               className="font-color--key font-weight--700"
               onClick={() => goPageApartmentRequestForm()}
@@ -129,4 +176,30 @@ const PageLandingAdditionalInfo = styled.div`
   border-radius: 8px;
 
   background-color: #fdeeee;
+`;
+
+const BrandGroupContainer = styled.div``;
+
+const BrandWrapper = styled.div`
+  margin-bottom: 8px;
+
+  display: flex;
+  flex-direction: row;
+
+  background-color: black;
+`;
+
+const BrandTitle = styled.div`
+  font-size: 15px;
+  font-weight: 700;
+  color: #999999;
+`;
+
+const BrandHorizon = styled.hr`
+  height: 1px;
+  width: 268px;
+
+  margin-right: 0;
+
+  background-color: #f5f5f5;
 `;

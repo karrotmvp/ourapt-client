@@ -41,20 +41,15 @@ const voidFC = () => {};
 const AccessTokenSetterContext = createContext<(code: string) => void>(voidFC);
 
 export const AccessTokenProvider: React.FC = (props) => {
-  console.log(
-    `안녕하세요! 저는 액세스토큰 프로바이더입니다. 제가 돌아볼게요. `
-  );
   const api = useApi();
   let code = useMemo(() => {
     return getCodeFromURLParams();
   }, []);
-  console.log(`코드가 있나요? ${code}`);
 
   const manualCode: Boolean = true;
 
   if (manualCode) {
-    code = "u8m8ShBD27M1mihR6hKX";
-    console.log(`코드는 매뉴얼로 입력해줄게요! ${code}`);
+    code = "oIYrnY_ZAKx4Q-urMdFu";
   }
 
   const [state, dispatch] = useReducer(
@@ -65,13 +60,8 @@ export const AccessTokenProvider: React.FC = (props) => {
       : { _t: "ready", accessToken: null }
   );
 
-  console.log(`지금 스테이터스는요 ${state._t}`);
-  console.log(`********** 유즈이펙트 돌아갑니다`);
   useEffect(() => {
     if (code && code !== "NOT_AGREED" && state._t === "pending") {
-      console.log(
-        `@ATProvider --- 코드가 있고 && 펜딩이라 액세스토큰 불러올게요!`
-      );
       const issueAccessTokenFromAuthorizationCode = async function () {
         const response = await api.oauthController.karrotLoginUsingPOST({
           body: {
@@ -90,23 +80,17 @@ export const AccessTokenProvider: React.FC = (props) => {
           "useAccessToken에서 code로 AT 발급받기"
         ).data.accessToken;
 
-        console.log(`나 지금 프로미스니? ${accessToken}`);
+        // console.log(accessToken);
 
         dispatch({
           _t: "SET_ACCESS_TOKEN",
           accessToken: "Bearer " + accessToken,
         });
-        console.log(`AT 불러왔는데요 : ${accessToken}`);
       };
 
       dispatchIssuedAccessToken(issueAccessTokenFromAuthorizationCode());
-    } else {
-      console.log(
-        `@ATProvider --- 코드가 없거나 이미 AT를 다 불러온 상태인가봐요.`
-      );
     }
   }, [code]);
-  console.log(`********** 유즈이펙트 다돌았습니다`);
 
   const issueAccessTokenFromAuthorizationCode = useCallback(
     async (code: string) => {
@@ -129,12 +113,7 @@ export const AccessTokenProvider: React.FC = (props) => {
   );
 
   if (state._t === "pending") {
-    console.log(
-      "pending에서 멈추는 경우인데, 이 경우는 나타나면 안 돼요. 발급이 실패했나봐요. "
-    );
     return null;
-  } else {
-    console.log(`ready로 잘 완료됐다면, 저장된 값은 : ${state.accessToken}`);
   }
 
   return (

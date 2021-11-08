@@ -81,7 +81,7 @@ const PageArticleCreate: React.FC = () => {
           placeholder="아파트 생활, 맛집, 모임에 대해 글을 써보세요!"
           // onChange={handleChange}
         />
-        <button className="QuestionCreateUpdateForm-btn btn-full btn--active">
+        <button className="QuestionCreateUpdateForm-btn btn-full btn btn--active">
           게시글 올리기
         </button>
       </form>
