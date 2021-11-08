@@ -39,8 +39,9 @@ jobs:
           sudo npm install -g npm@latest
           npm --version
           npm install 
+          sudo npm audit fix --force
           pwd
-          ls -al 
+          ls -al ./src
           echo "BUILDDDDD STARTTTTTT..."
           npm run build
         env:
