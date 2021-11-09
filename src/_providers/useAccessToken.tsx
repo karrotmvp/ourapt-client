@@ -107,25 +107,30 @@ export const AccessTokenProvider: React.FC = (props) => {
 
   const issueAccessTokenFromAuthorizationCode = useCallback(
     async (code: string) => {
-      const response = await api.oauthController.karrotLoginUsingPOST({
-        body: {
-          authorizationCode: code,
-        },
-      });
-
-      const safeBody = examineResBody({
-        resBody: response,
-        validator: (data) => data.accessToken != null,
-        onFailure: () => {
-          getLogger().info(`/error?cause=karrotLoginAtUseAccessToken`);
-        },
-      });
-
-      const accessToken = safeBody.data.accessToken;
-      dispatch({
-        _t: "SET_ACCESS_TOKEN",
-        accessToken: "Bearer " + accessToken,
-      });
+      alert(`코드 받아왔나 확인하기 ${code}`);
+      try {
+        const response = await api.oauthController.karrotLoginUsingPOST({
+          body: {
+            authorizationCode: code,
+          },
+        });
+        alert(`response ${response.data?.accessToken}`);
+        const safeBody = examineResBody({
+          resBody: response,
+          validator: (data) => data.accessToken != null,
+          onFailure: () => {
+            getLogger().info(`/error?cause=karrotLoginAtUseAccessToken`);
+          },
+        });
+        const accessToken = safeBody.data.accessToken;
+        alert(`AT ${accessToken}`);
+        dispatch({
+          _t: "SET_ACCESS_TOKEN",
+          accessToken: "Bearer " + accessToken,
+        });
+      } catch (res) {
+        alert(`캐치 ${JSON.stringify(res, null, 2)}`);
+      }
     },
     [api.oauthController]
   );

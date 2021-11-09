@@ -30,17 +30,29 @@ type State =
       viewer: User | null;
     };
 
-type Action = {
-  _t: "SET_VIEWER";
-  viewer: User;
-};
+type Action =
+  | {
+      _t: "SET_VIEWER";
+      viewer: User;
+    }
+  | {
+      _t: "RESET_VIEWER";
+    };
 
 const reducer: React.Reducer<State, Action> = (prevState, action) => {
-  return {
-    ...prevState,
-    _t: "ready",
-    viewer: action.viewer,
-  };
+  switch (action._t) {
+    case "SET_VIEWER":
+      return {
+        ...prevState,
+        _t: "ready",
+        viewer: action.viewer,
+      };
+    case "RESET_VIEWER":
+      return {
+        ...prevState,
+        _t: "pending",
+      };
+  }
 };
 
 const ViewerContext = createContext<State | null>(null);
@@ -63,7 +75,20 @@ export const ViewerProvider: React.FC = (props) => {
   );
 
   useEffect(() => {
+    if (accessToken !== null) {
+      alert("유즈뷰어 스테이트 리셋중");
+      dispatch({
+        _t: "RESET_VIEWER",
+      });
+      alert("유즈뷰어 스테이트 무한렌더링되면 않됨");
+    }
+  }, [accessToken]);
+
+  useEffect(() => {
+    alert(`useViewer rendering ${accessToken}`);
+    alert(`useViewer rendering ${state._t}`);
     if (accessToken && state._t === "pending") {
+      // if (accessToken) {
       const getViewerFromAccessToken = async function () {
         const response = await api.userController.getMyInfoUsingGET();
         return response;
@@ -89,7 +114,7 @@ export const ViewerProvider: React.FC = (props) => {
       };
       dispatchIssuedViewer(getViewerFromAccessToken);
     }
-  }, [state._t, accessToken, api.userController]); // AT가 재설정될 경우에만 새로 돌도록 합니다.
+  }, [accessToken, api.userController]); // AT가 재설정될 경우에만 새로 돌도록 합니다.
 
   if (state._t === "pending") {
     return null;

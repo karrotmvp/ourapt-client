@@ -43,9 +43,11 @@ const PageLanding: React.FC = () => {
         appId: `${process.env.REACT_APP_ID}`,
       },
       onSuccess: async function (result) {
+        alert(`석세스하였습니다 ${result.code}`);
         if (result && result.code) {
           await issueAccessTokenFromAuthorizationCode(result.code);
         }
+        alert(`AT세팅한 다음이고요`);
         // viewer가 재
         checkedInAndGoFeed(apartmentId);
       },
