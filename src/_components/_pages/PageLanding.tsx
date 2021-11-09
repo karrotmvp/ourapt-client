@@ -32,6 +32,7 @@ const PageLanding: React.FC = () => {
         newApartmentId: apartmentId,
       },
     });
+    alert(JSON.stringify(response, null, 2));
     if (response.status === 'SUCCESS') push(`/feed/${apartmentId}`);
   }
 
@@ -42,20 +43,16 @@ const PageLanding: React.FC = () => {
         appId: `${process.env.REACT_APP_ID}`,
       },
       onSuccess: function (result) {
-        alert(JSON.stringify(result, null, 2));
-        alert('APT_ID ' + apartmentId);
         if (result && result.code) {
           issueAccessTokenFromAuthorizationCode(result.code);
         }
         checkedInAndGoFeed(apartmentId);
       },
-      onFailure: () => {
-        alert('Fail to START PRESET');
-      },
     });
   };
 
   function onApartmentInLandingClick(apartmentId: string) {
+    alert(JSON.stringify(accessToken, null, 2));
     if (accessToken) {
       return checkedInAndGoFeed(apartmentId);
     } else {
