@@ -6,7 +6,7 @@ import { Class3Api as OAuthControllerApi } from '../__generated__/ourapt';
 import { Class4Api as QuestionControllerApi } from '../__generated__/ourapt';
 import { Class5Api as CommentControllerApi } from '../__generated__/ourapt';
 import { Class6Api as UserControllerApi } from '../__generated__/ourapt';
-import { Class7Api as LogControlloerApi } from '../__generated__/ourapt';
+import { Class7Api as LogControllerApi } from '../__generated__/ourapt';
 import { Class99Api as NoApartmentController } from '../__generated__/ourapt';
 
 import { useAccessToken } from '../_providers/useAccessToken';
@@ -33,7 +33,7 @@ function makeApi({ accessToken }: { accessToken?: string | null }) {
     const questionController = new QuestionControllerApi(configuration);
     const commentController = new CommentControllerApi(configuration);
     const oauthController = new OAuthControllerApi(configuration);
-    const logController = new LogControlloerApi(configuration);
+    const logController = new LogControllerApi(configuration);
     const noApartmentController = new NoApartmentController(configuration);
 
     return {
@@ -58,7 +58,7 @@ function makeApi({ accessToken }: { accessToken?: string | null }) {
     const questionController = new QuestionControllerApi(configuration);
     const commentController = new CommentControllerApi(configuration);
     const oauthController = new OAuthControllerApi(configuration);
-    const logController = new LogControlloerApi(configuration);
+    const logController = new LogControllerApi(configuration);
     const noApartmentController = new NoApartmentController(configuration);
 
     return {
