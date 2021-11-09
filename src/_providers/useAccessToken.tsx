@@ -5,31 +5,31 @@ import React, {
   useEffect,
   useMemo,
   useReducer,
-} from "react";
+} from 'react';
 
-import { useApi } from "../api";
-import { CommonResponseBodyKarrotAccessTokenDto } from "../__generated__/ourapt";
+import { useApi } from '../api';
+import { CommonResponseBodyKarrotAccessTokenDto } from '../__generated__/ourapt';
 
-import examineResBody from "../_modules/examineResBody";
-import { getCodeFromURLParams } from "../_modules/getQueryFromURLParams";
+import examineResBody from '../_modules/examineResBody';
+import { getCodeFromURLParams } from '../_modules/getQueryFromURLParams';
 
 type State =
   | {
-      _t: "pending"; // 코드가 있지만 아직 액세스 토큰을 받아오지 않는 경우
+      _t: 'pending'; // 코드가 있지만 아직 액세스 토큰을 받아오지 않는 경우
     }
   | {
-      _t: "ready"; // 코드가 없는 경우, 코드가 있고 액세스 토큰을 받아온 경우
+      _t: 'ready'; // 코드가 없는 경우, 코드가 있고 액세스 토큰을 받아온 경우
       accessToken: string | null;
     };
 
 type Action = {
-  _t: "SET_ACCESS_TOKEN";
+  _t: 'SET_ACCESS_TOKEN';
   accessToken: string;
 };
 
 const reducer: React.Reducer<State, Action> = (prevState, action) => {
   return {
-    _t: "ready",
+    _t: 'ready',
     accessToken: action.accessToken,
   };
 };
@@ -48,19 +48,19 @@ export const AccessTokenProvider: React.FC = (props) => {
 
   const manualCodeOnBrowser: Boolean = false;
   if (manualCodeOnBrowser) {
-    code = "L6cT52X2GjNN6YYm_B0o";
+    code = 'L6cT52X2GjNN6YYm_B0o';
   }
 
   const [state, dispatch] = useReducer(
     reducer,
     // code 유무 파악해서 없는 경우 바로 ready로 넘겨주고, 있는 경우 액세스토큰 받아와야 하니 대기상태로 넘겨줄것
-    code && code !== "NOT_AGREED"
-      ? { _t: "pending" }
-      : { _t: "ready", accessToken: null }
+    code && code !== 'NOT_AGREED'
+      ? { _t: 'pending' }
+      : { _t: 'ready', accessToken: null }
   );
 
   useEffect(() => {
-    if (code && code !== "NOT_AGREED" && state._t === "pending") {
+    if (code && code !== 'NOT_AGREED' && state._t === 'pending') {
       const issueAccessTokenFromAuthorizationCode = async function () {
         const response = await api.oauthController.karrotLoginUsingPOST({
           body: {
@@ -73,22 +73,26 @@ export const AccessTokenProvider: React.FC = (props) => {
       const dispatchIssuedAccessToken = async function (
         issueAccessTokenFunction: Promise<CommonResponseBodyKarrotAccessTokenDto>
       ) {
-        const response = await issueAccessTokenFunction;
+        try {
+          const response = await issueAccessTokenFunction;
 
-        const safeBody = examineResBody({
-          resBody: response,
-          validator: (data) => data.accessToken != null,
-          onFailure: () => {
-            alert(`/error?cause=karrotLoginAtUseAccessToken`);
-          },
-        });
+          const safeBody = examineResBody({
+            resBody: response,
+            validator: (data) => data.accessToken != null,
+            onFailure: () => {
+              alert(`/error?cause=karrotLoginAtUseAccessToken`);
+            },
+          });
 
-        const accessToken = safeBody.data.accessToken;
+          const accessToken = safeBody.data.accessToken;
 
-        dispatch({
-          _t: "SET_ACCESS_TOKEN",
-          accessToken: "Bearer " + accessToken,
-        });
+          dispatch({
+            _t: 'SET_ACCESS_TOKEN',
+            accessToken: 'Bearer ' + accessToken,
+          });
+        } catch (response) {
+          alert('CATCH: ' + JSON.stringify(response, null, 2));
+        }
       };
 
       dispatchIssuedAccessToken(issueAccessTokenFromAuthorizationCode());
@@ -113,14 +117,14 @@ export const AccessTokenProvider: React.FC = (props) => {
 
       const accessToken = safeBody.data.accessToken;
       dispatch({
-        _t: "SET_ACCESS_TOKEN",
-        accessToken: "Bearer " + accessToken,
+        _t: 'SET_ACCESS_TOKEN',
+        accessToken: 'Bearer ' + accessToken,
       });
     },
     [api.oauthController]
   );
 
-  if (state._t === "pending") {
+  if (state._t === 'pending') {
     return null;
   }
 
