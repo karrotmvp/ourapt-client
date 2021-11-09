@@ -49,7 +49,7 @@ const PageQuestionPinnedDetail: React.FC = () => {
   const currendApt = viewer?.checkedIn?.name;
   const [pinnedQuestion, setPinnedQuestion] = useState<Question>();
 
-  const { push } = useNavigator();
+  const { push, replace } = useNavigator();
   // questionId로 Question 내용 받아오기
 
   useEffect(() => {
@@ -105,7 +105,7 @@ const PageQuestionPinnedDetail: React.FC = () => {
         },
       });
       if (safeBody.status === "SUCCESS") {
-        push(`article/${articleId}`);
+        replace(`article/${articleId}`);
       }
     }
   }

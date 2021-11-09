@@ -25,11 +25,12 @@ const PageArticleDetail: React.FC = () => {
 
   const { push } = useNavigator();
 
-  const [question, setQuestion] = useState<Question>();
-  const [comments, setComments] = useState<Array<Comment>>([]);
   const myInfo = useViewer().viewer?.id;
   const [isMyArticle, setIsMyArticle] = useState<Boolean>(false);
 
+  const [question, setQuestion] = useState<Question>();
+  const [comments, setComments] = useState<Array<Comment>>([]);
+  const [commentsnum, setCommentsnum] = useState<Number>(0);
   // 새로 코멘트를 업데이트하면 새로 렌더링되도록 패치하는 flag
   const [isCommentUpdate, setIsCommentUpdate] = useState<Boolean>(false);
 
@@ -73,18 +74,20 @@ const PageArticleDetail: React.FC = () => {
     // isCommentUpdate === true 인 경우에만 렌더링 되도록 할 수는 없나?
   }, [isCommentUpdate, api.commentController, articleId, push]);
 
-  const modifyBtn = () => {
-    if (isMyArticle) {
-      return (
-        <KebabIcon
-          onClick={(e) => {
-            push(`/article/${articleId}/update`);
-          }}
-        />
-      );
-    }
-    return;
-  };
+  const modifyBtn = isMyArticle ? (
+    <KebabIcon
+      className="mg-right--17"
+      onClick={(e) => {
+        push(`/article/${articleId}/update`);
+      }}
+    />
+  ) : (
+    <div></div>
+  );
+
+  useEffect(() => {
+    setCommentsnum(comments.length);
+  }, [comments]);
 
   return (
     <div className="Page">
@@ -95,10 +98,7 @@ const PageArticleDetail: React.FC = () => {
         </ArticleArea>
         <CommentsArea>
           <CommentsAreaTitle>
-            댓글{" "}
-            {question &&
-              question.countOfComments > 0 &&
-              question.countOfComments}
+            댓글{commentsnum !== 0 && " " + commentsnum}
           </CommentsAreaTitle>
           {comments.map((comment, idx) => {
             return (

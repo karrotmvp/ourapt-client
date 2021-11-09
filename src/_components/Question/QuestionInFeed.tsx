@@ -12,7 +12,7 @@ type QuestionInFeedProps = {
 };
 
 const ArticleInFeed: React.FC<QuestionInFeedProps> = ({ question }) => {
-  const isMyArticle = useViewer().viewer?.id === question.writer.id;
+  // const isMyArticle = useViewer().viewer?.id === question.writer.id;
 
   return (
     <div className="ArticleCard ArticleCardInLi pd-16">
@@ -22,7 +22,7 @@ const ArticleInFeed: React.FC<QuestionInFeedProps> = ({ question }) => {
           createdAt={question.createdAt}
           updatedAt={question.updatedAt}
         />
-        {isMyArticle && <KebabIcon />}
+        {/* {isMyArticle && <KebabIcon />} */}
       </div>
       <p className="ArticleCard-Content ArticleCardInList-Content mg-top--10 mg-bottom--16">
         {question.mainText}

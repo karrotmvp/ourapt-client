@@ -42,7 +42,7 @@ const PageArticleCreate: React.FC = () => {
   const api = useApi();
   const [state, dispatch] = useReducer(reducer, { _t: "blank", textLength: 0 });
 
-  const { push } = useNavigator();
+  const { push, replace } = useNavigator();
 
   const [submitBtnActiveState, setSubmitBtnActiveState] = useState({
     disabled: true,
@@ -81,7 +81,7 @@ const PageArticleCreate: React.FC = () => {
       });
 
       const question = safeBody.data.question;
-      push(`/article/${question.id}`);
+      replace(`/article/${question.id}`);
     }
   }
 

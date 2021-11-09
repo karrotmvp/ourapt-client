@@ -34,14 +34,14 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
     push(`/article/${articleId}`);
   };
 
-  const isMyArticle = useViewer().viewer?.id;
-  const ArticleBackgroundColor = (question: Question) => {
-    if (isMyArticle === question.writer.id) {
-      return "#f7f7f7";
-    } else {
-      return "#ffffff";
-    }
-  };
+  // const isMyArticle = useViewer().viewer?.id;
+  // const ArticleBackgroundColor = (question: Question) => {
+  //   if (isMyArticle === question.writer.id) {
+  //     return "#f7f7f7";
+  //   } else {
+  //     return "#ffffff";
+  //   }
+  // };
 
   const onArticleCreateBtnClick = () => {
     push("article/create");
@@ -135,9 +135,9 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
                   <ArticleWrapper
                     key={question.id}
                     className="pd--16"
-                    style={{
-                      backgroundColor: ArticleBackgroundColor(question),
-                    }}
+                    // style={{
+                    //   backgroundColor: ArticleBackgroundColor(question),
+                    // }}
                     onClick={() => goArticleDetail(question.id)}
                   >
                     <QuestionInFeed question={question} />
