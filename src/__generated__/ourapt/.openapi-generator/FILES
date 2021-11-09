@@ -1,3 +1,4 @@
+.openapi-generator-ignore
 apis/Class1APIApi.ts
 apis/Class2Api.ts
 apis/Class3Api.ts
