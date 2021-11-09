@@ -9,6 +9,7 @@ import examineResBody from "../../../_modules/examineResBody";
 type State =
   | {
       _t: "blank";
+      mainText: string;
       textLength: Number;
     }
   | {
@@ -27,6 +28,7 @@ const reducer: React.Reducer<State, Action> = (prevState, action) => {
     case "":
       return {
         _t: "blank",
+        mainText: action.payload,
         textLength: action.payload.length,
       };
     default:
@@ -40,7 +42,11 @@ const reducer: React.Reducer<State, Action> = (prevState, action) => {
 
 const PageArticleCreate: React.FC = () => {
   const api = useApi();
-  const [state, dispatch] = useReducer(reducer, { _t: "blank", textLength: 0 });
+  const [state, dispatch] = useReducer(reducer, {
+    _t: "blank",
+    mainText: "",
+    textLength: 0,
+  });
 
   const { push, replace } = useNavigator();
 
@@ -58,8 +64,7 @@ const PageArticleCreate: React.FC = () => {
   }, [state]);
 
   function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    // FIXME : 기존 state 값 대신에 e.target.value의 length로 검증할 것
-    if (state.textLength > 255) {
+    if (e.target.value.length > 255) {
       dispatch({
         _t: "CHANGE_TEXT",
         payload: e.target.value.substring(0, 255),
@@ -100,6 +105,7 @@ const PageArticleCreate: React.FC = () => {
         <textarea
           className="QuestionCreateUpdateForm-input mg-bottom--16"
           placeholder="아파트 생활, 맛집에 대해 글을 써보세요!"
+          value={state.mainText}
           onChange={handleChange}
         />
         <div className="QuestionCreateUpdateForm-textCounter">
