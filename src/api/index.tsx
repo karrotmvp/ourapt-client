@@ -76,7 +76,6 @@ function makeApi({ accessToken }: { accessToken?: string | null }) {
 const ApiContext = createContext(makeApi({}));
 
 export const ApiProvider: React.FC = (props) => {
-  getLogger().info('API_PROVIDER_RENDERING');
   const { accessToken } = useAccessToken();
 
   const api = useMemo(() => makeApi({ accessToken }), [accessToken]);

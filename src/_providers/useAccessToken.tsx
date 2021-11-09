@@ -42,7 +42,6 @@ const AccessTokenSetterContext =
   createContext<(code: string) => Promise<void>>(voidFC);
 
 export const AccessTokenProvider: React.FC = (props) => {
-  getLogger().info('ACCESS_TOKEN_PROVIDER_RENDERING');
   const api = useApi();
   let code = useMemo(() => {
     return getCodeFromURLParams();
@@ -86,7 +85,6 @@ export const AccessTokenProvider: React.FC = (props) => {
         });
 
         const accessToken = safeBody.data.accessToken;
-        getLogger().info('PROVIDER_INIT: ' + accessToken);
 
         dispatch({
           _t: 'SET_ACCESS_TOKEN',
@@ -94,7 +92,6 @@ export const AccessTokenProvider: React.FC = (props) => {
         });
       };
 
-      getLogger().info('INITIALIZE_ACCESS_TOKEN');
       dispatchIssuedAccessToken(issueAccessTokenFromAuthorizationCode());
     }
   }, [code, state, api.oauthController]);
@@ -116,7 +113,6 @@ export const AccessTokenProvider: React.FC = (props) => {
       });
 
       const accessToken = safeBody.data.accessToken;
-      getLogger().info('ACCESS_TOKEN_SETTER: ' + accessToken);
       dispatch({
         _t: 'SET_ACCESS_TOKEN',
         accessToken: 'Bearer ' + accessToken,
@@ -126,7 +122,6 @@ export const AccessTokenProvider: React.FC = (props) => {
   );
 
   if (state._t === 'pending') {
-    getLogger().info('ACCESS_TOKEN_PROVIDER_PENDING');
     return null;
   }
 
