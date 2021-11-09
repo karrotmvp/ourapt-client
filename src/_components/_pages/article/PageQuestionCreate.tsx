@@ -9,7 +9,7 @@ import examineResBody from "../../../_modules/examineResBody";
 type State =
   | {
       _t: "blank";
-      textLength: number;
+      textLength: Number;
     }
   | {
       _t: "typed";
@@ -58,10 +58,17 @@ const PageArticleCreate: React.FC = () => {
   }, [state]);
 
   function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    dispatch({
-      _t: "CHANGE_TEXT",
-      payload: e.target.value,
-    });
+    if (state.textLength > 255) {
+      dispatch({
+        _t: "CHANGE_TEXT",
+        payload: e.target.value.substring(0, 255),
+      });
+    } else {
+      dispatch({
+        _t: "CHANGE_TEXT",
+        payload: e.target.value,
+      });
+    }
   }
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
