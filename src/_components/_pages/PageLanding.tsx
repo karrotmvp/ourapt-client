@@ -12,6 +12,8 @@ import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
 
 import ApartmentInLanding from "../Apartment/ApartmentInLanding";
 import PageError from "./PageError";
+import examineResponse from "../../_modules/examineResponse";
+import examineResBody from "../../_modules/examineResBody";
 
 const PageLanding: React.FC = () => {
   const api = useApi();
@@ -87,9 +89,17 @@ const PageLanding: React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      const resp =
+      const resBody =
         await api.apartmentController.getAvailableApartmentsUsingGET();
-      setApartments(() => resp.data?.apartments ?? []);
+      const safeBody = examineResBody({
+        resBody,
+        validator: (data) => data.apartments != null,
+        onFailure: () => {
+          push(`/error?cause=getAvailableApartmentsAtPageLanding`);
+        },
+      });
+
+      setApartments(() => safeBody.apartments);
     })();
   }, [api.apartmentController]);
 
@@ -99,7 +109,7 @@ const PageLanding: React.FC = () => {
       <div className="Page pd--24">
         {!apartments || apartments.length === 0 ? (
           // {true ? (
-          <PageError />
+          <div>로딩</div> // loading
         ) : (
           <div className="width--100">
             <PageLandingTitle>

@@ -72,7 +72,7 @@ const App: React.FC = () => {
                   <PageQuestionUpdate />
                 </Screen>
                 <Screen path="/error">
-                  <PageError />
+                  <PageError cause={""} />
                 </Screen>
               </Navigator>
               <WithModal />

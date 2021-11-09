@@ -3,8 +3,16 @@ import React from "react";
 import styled from "@emotion/styled";
 
 import { ReactComponent as PageErrorIcon } from "../../_assets/PageErrorIcon.svg";
+import { useParams } from "@karrotframe/navigator";
 
-const PageError: React.FC = () => {
+type PageErrorProps = {
+  cause: string;
+};
+
+const PageError: React.FC<PageErrorProps> = ({ cause }) => {
+  const params = useParams<{ cause?: string }>().cause || "atComponent";
+  const causeAtURL = params;
+
   function onGoBackBtnClick() {
     return;
   }
@@ -18,6 +26,7 @@ const PageError: React.FC = () => {
       <button className="btn-184 btn btn--active" onClick={onGoBackBtnClick}>
         이전 페이지로 돌아가기
       </button>
+      <p>{cause}</p>
     </PageErrorContainer>
   );
 };
