@@ -49,7 +49,7 @@ export const AccessTokenProvider: React.FC = (props) => {
 
   const manualCodeOnBrowser: Boolean = false;
   if (manualCodeOnBrowser) {
-    code = "L6cT52X2GjNN6YYm_B0o";
+    code = "C0yi0mBbuPLQOHudncfi";
   }
 
   const [state, dispatch] = useReducer(
@@ -87,6 +87,11 @@ export const AccessTokenProvider: React.FC = (props) => {
 
           const accessToken = safeBody.data.accessToken;
 
+          if (manualCodeOnBrowser) {
+            console.log(accessToken);
+            alert(accessToken);
+          }
+
           dispatch({
             _t: "SET_ACCESS_TOKEN",
             accessToken: "Bearer " + accessToken,
@@ -98,7 +103,7 @@ export const AccessTokenProvider: React.FC = (props) => {
 
       dispatchIssuedAccessToken(issueAccessTokenFromAuthorizationCode());
     }
-  }, [code, state, api.oauthController]);
+  }, [code, state, api.oauthController, manualCodeOnBrowser]);
 
   const issueAccessTokenFromAuthorizationCode = useCallback(
     async (code: string) => {

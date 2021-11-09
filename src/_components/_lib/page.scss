@@ -2,7 +2,7 @@
 .Page {
   width: 100%;
   // height는 자식 요소들의 크기에 따라 늘어날 수 있도록, min-height만 지정해두겠습니다.
-  min-height: calc(100vh - 44px);
+  min-height: calc(100vh - 56px);
 
   position: relative;
 
@@ -14,7 +14,7 @@
   height: 100%;
   overflow-y: scroll;
 
-  min-height: calc(100vh - 44px - 56px - 16px);
+  min-height: calc(100vh - 56px - 56px - 16px);
 }
 
 .PageQuestionDetail-inner {
@@ -22,5 +22,5 @@
   height: 100%;
   overflow-y: scroll;
 
-  min-height: calc(100vh - 44px - 56px);
+  min-height: calc(100vh - 56px - 56px);
 }

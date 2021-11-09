@@ -1,20 +1,20 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from "react";
 
-import { QuestionDto as Question } from '../../__generated__/ourapt';
-import { useApi } from '../../api';
-import { useViewer } from '../../_providers/useViewer';
+import { QuestionDto as Question } from "../../__generated__/ourapt";
+import { useApi } from "../../api";
+import { useViewer } from "../../_providers/useViewer";
 
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 
-import { ScreenHelmet, useNavigator, useParams } from '@karrotframe/navigator';
+import { ScreenHelmet, useNavigator, useParams } from "@karrotframe/navigator";
 
-// import ApartmentInNavigator from "../Apartment/ApartmentInNavigator";
-import QuestionPinnedInFeed from '../Question/QuestionPinnedInFeed';
-import QuestionInFeed from '../Question/QuestionInFeed';
+import ApartmentInNavigator from "../Apartment/ApartmentInNavigator";
+import QuestionPinnedInFeed from "../Question/QuestionPinnedInFeed";
+import QuestionInFeed from "../Question/QuestionInFeed";
 
-import examineResBody from '../../_modules/examineResBody';
+import examineResBody from "../../_modules/examineResBody";
 
-import { ReactComponent as OuraptLogo } from '../../_assets/ouraptLogo.svg';
+import { ReactComponent as OuraptLogo } from "../../_assets/ouraptLogo.svg";
 
 type PageFeedProps = {
   apartmentId: string;
@@ -37,14 +37,14 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
   const isMyArticle = useViewer().viewer?.id;
   const ArticleBackgroundColor = (question: Question) => {
     if (isMyArticle === question.writer.id) {
-      return '#f7f7f7';
+      return "#f7f7f7";
     } else {
-      return '#ffffff';
+      return "#ffffff";
     }
   };
 
   const onArticleCreateBtnClick = () => {
-    push('article/create');
+    push("article/create");
   };
 
   const getQuestionsByCursorPerPage = useCallback(
@@ -74,7 +74,7 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
         await api.questionController.getPinnedQuestionOfApartmentUsingGET({
           apartmentId: params,
         });
-      if (response && response.status === 'DATA_NOT_FOUND_FROM_DB') {
+      if (response && response.status === "DATA_NOT_FOUND_FROM_DB") {
       } else {
         const safeBody = examineResBody({
           resBody: response,
@@ -95,7 +95,7 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
       <div className="PageFeed-inner">
         <ScreenHelmet
           appendLeft={<OuraptLogo />}
-          // appendRight={<ApartmentInNavigator apartment={apartment} />}
+          appendRight={<ApartmentInNavigator apartmentId={apartmentId} />}
         />
         {pinnedQuestion && pinnedQuestion.id && (
           <PinnedArea className="pd--16">
@@ -136,7 +136,7 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
                       <img
                         className="mg-right--6"
                         src={
-                          require('../../_assets/CommentInFeedIcon.svg').default
+                          require("../../_assets/CommentInFeedIcon.svg").default
                         }
                         alt="댓글 수"
                       />
@@ -160,7 +160,7 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
         <div className="btn--floating">
           <ArticleCreateBtnFloating onClick={onArticleCreateBtnClick}>
             <img
-              src={require('../../_assets/ArticleCreateBtnIcon.svg').default}
+              src={require("../../_assets/ArticleCreateBtnIcon.svg").default}
               alt="게시글 쓰기"
             />
           </ArticleCreateBtnFloating>
