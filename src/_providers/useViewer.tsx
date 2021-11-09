@@ -15,12 +15,9 @@ import {
   CommonResponseBodyOneUserDto,
 } from "../__generated__/ourapt";
 
-import { LogFirstRequestUsingGETRefererEnum as RefEnum } from "../__generated__/ourapt";
-
 import { useApi } from "../api";
 import { useAccessToken } from "./useAccessToken";
 import examineResBody from "../_modules/examineResBody";
-import { getRegionFromURLParams } from "../_modules/getQueryFromURLParams";
 
 type State =
   | {
@@ -51,9 +48,6 @@ export const ViewerProvider: React.FC = (props) => {
   const api = useApi();
 
   const { accessToken } = useAccessToken();
-
-  const regionId = getRegionFromURLParams();
-  const InstanceId = RefEnum.Unknown;
 
   const [state, dispatch] = useReducer(
     reducer,

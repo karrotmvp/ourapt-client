@@ -41,7 +41,9 @@ const App: React.FC = () => {
           <ModalProvider>
             <div className="App">
               <Navigator
-                className={css``}
+                className={css`
+                  --kf_navigator_navbar-height: 56px;
+                `}
                 theme="Cupertino"
                 onClose={() => {
                   mini.close();

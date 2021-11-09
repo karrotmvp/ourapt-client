@@ -45,12 +45,14 @@ const PageLanding: React.FC = () => {
         if (result && result.code) {
           await issueAccessTokenFromAuthorizationCode(result.code);
         }
+        // viewer가 재
         checkedInAndGoFeed(apartmentId);
       },
     });
   };
 
   function onApartmentInLandingClick(apartmentId: string) {
+    alert(`아파트먼트클릭시 액세스토큰 ${accessToken}`);
     if (accessToken) {
       return checkedInAndGoFeed(apartmentId);
     } else {

@@ -29,7 +29,6 @@ const PageErrorContainer = styled.div`
   height: 100%;
 
   margin-top: 92px;
-  background-color: aliceblue;
 `;
 
 const PageErrorTitle = styled.div`
