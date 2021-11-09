@@ -12,11 +12,14 @@
  * Do not edit the class manually.
  */
 
-// export const BASE_PATH = "http://api-alpha.daangn-ourapt.com".replace(/\/+$/, "");
-export const BASE_PATH = "https://d73c-121-166-172-250.ngrok.io".replace(
+export const BASE_PATH = "http://api-alpha.daangn-ourapt.com".replace(
   /\/+$/,
   ""
 );
+// export const BASE_PATH = "https://d73c-121-166-172-250.ngrok.io".replace(
+//   /\/+$/,
+//   ""
+// );
 
 const isBlob = (value: any) =>
   typeof Blob !== "undefined" && value instanceof Blob;
