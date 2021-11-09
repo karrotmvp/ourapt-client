@@ -47,7 +47,7 @@ jobs:
         env:
           REACT_APP_ENV: alpha
           REACT_APP_ID: ${{ secrets.ALPHA_REACT_APP_ID }}
-          REACT_APP_PRESET_URL: ${{ secrets.ALPHA_REACT_APP_ID }}
+          REACT_APP_PRESET_URL: ${{ secrets.ALPHA_REACT_APP_PRESET_URL }}
 
       # Setup AWS
       - name: Setup AWS with credentials
