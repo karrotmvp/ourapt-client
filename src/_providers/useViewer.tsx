@@ -15,6 +15,8 @@ import {
   CommonResponseBodyOneUserDto,
 } from "../__generated__/ourapt";
 
+import { LogFirstRequestUsingGETRefererEnum as RefEnum } from "../__generated__/ourapt";
+
 import { useApi } from "../api";
 import { useAccessToken } from "./useAccessToken";
 import examineResBody from "../_modules/examineResBody";
@@ -24,12 +26,13 @@ type State =
   | {
       _t: "pending"; // 액세스토큰이 있지만 아직 뷰어 정보를 받아오지 않는 경우
       regionId: string;
-      instanceId: string;
+      instanceId: RefEnum;
+      viewer: User | null;
     }
   | {
       _t: "ready"; // 액세스토큰이 null 인 경우 - viewer도 null / 액세스토큰이 있고 viewer를 받아온 경우
       regionId: string;
-      instanceId: string;
+      instanceId: RefEnum;
       viewer: User | null;
     };
 
@@ -46,9 +49,10 @@ const reducer: React.Reducer<State, Action> = (prevState, action) => {
   };
 };
 
-const ViewerContext = createContext<User | null>(null);
-const RegionIdContext = createContext<string>("");
-const InstanceIdContext = createContext<string>("");
+const ViewerContext = createContext<State | null>(null);
+// const ViewerContext = createContext<User | null>(null);
+// const RegionIdContext = createContext<string>("");
+// const InstanceIdContext = createContext<string>("");
 
 export const ViewerProvider: React.FC = (props) => {
   const api = useApi();
@@ -56,12 +60,17 @@ export const ViewerProvider: React.FC = (props) => {
   const { accessToken } = useAccessToken();
 
   const regionId = getRegionFromURLParams();
-  const InstanceId = "tempAtUseAccessToken";
+  const InstanceId = RefEnum.Unknown;
 
   const [state, dispatch] = useReducer(
     reducer,
     accessToken
-      ? { _t: "pending", regionId: regionId, instanceId: InstanceId }
+      ? {
+          _t: "pending",
+          regionId: regionId,
+          instanceId: InstanceId,
+          viewer: null,
+        }
       : {
           _t: "ready",
           regionId: regionId,
@@ -90,7 +99,6 @@ export const ViewerProvider: React.FC = (props) => {
           viewer: viewer,
         });
       };
-
       distpatchIssuedViewer(getViewerFromAccessToken());
     }
   }, [state._t, accessToken, api.userController]); // AT가 재설정될 경우에만 새로 돌도록 합니다.
@@ -100,20 +108,25 @@ export const ViewerProvider: React.FC = (props) => {
   }
 
   return (
-    <RegionIdContext.Provider value={state.regionId}>
-      <InstanceIdContext.Provider value={state.instanceId}>
-        <ViewerContext.Provider value={state.viewer}>
-          {props.children}
-        </ViewerContext.Provider>
-      </InstanceIdContext.Provider>
-    </RegionIdContext.Provider>
+    // <RegionIdContext.Provider value={state.regionId}>
+    //   <InstanceIdContext.Provider value={state.instanceId}>
+    <ViewerContext.Provider value={state}>
+      {props.children}
+    </ViewerContext.Provider>
+    //   </InstanceIdContext.Provider>
+    // </RegionIdContext.Provider>
   );
 };
 
+// const RegionProvider
+
 export function useViewer() {
-  const viewer = useContext(ViewerContext);
-  const regionId = useContext(RegionIdContext);
-  const instanceId = useContext(InstanceIdContext);
+  const myInfoContext = useContext(ViewerContext);
+  const viewer = myInfoContext?.viewer;
+  const regionId = myInfoContext?.regionId ?? "unknownRegion";
+  const instanceId = myInfoContext?.instanceId ?? RefEnum.Unknown;
+  // const regionId = useContext(RegionIdContext);
+  // const instanceId = useContext(InstanceIdContext);
 
   return useMemo(
     () => ({ viewer, regionId, instanceId }),
