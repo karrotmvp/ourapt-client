@@ -1,17 +1,18 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from "react";
 
-import { ApartmentDto as Apartment } from '../../__generated__/ourapt';
-import { useAccessToken } from '../../_providers/useAccessToken';
-import { useApi } from '../../api';
-import { useViewer } from '../../_providers/useViewer';
+import { ApartmentDto as Apartment } from "../../__generated__/ourapt";
+import { useAccessToken } from "../../_providers/useAccessToken";
+import { useApi } from "../../api";
+import { useViewer } from "../../_providers/useViewer";
 
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 
-import { mini } from '../../_Karrotmarket/KarrotmarketMini';
-import { ScreenHelmet, useNavigator } from '@karrotframe/navigator';
+import { mini } from "../../_Karrotmarket/KarrotmarketMini";
+import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
 
-import ApartmentInLanding from '../Apartment/ApartmentInLanding';
-import examineResBody from '../../_modules/examineResBody';
+import ApartmentInLanding from "../Apartment/ApartmentInLanding";
+import examineResBody from "../../_modules/examineResBody";
+import getLogger from "../../_modules/logger";
 
 const PageLanding: React.FC = () => {
   const api = useApi();
@@ -32,7 +33,7 @@ const PageLanding: React.FC = () => {
         newApartmentId: apartmentId,
       },
     });
-    if (response.status === 'SUCCESS') push(`/feed/${apartmentId}`);
+    if (response.status === "SUCCESS") push(`/feed/${apartmentId}`);
   }
 
   const submitAgreement = (apartmentId: string) => {
@@ -52,7 +53,7 @@ const PageLanding: React.FC = () => {
   };
 
   function onApartmentInLandingClick(apartmentId: string) {
-    alert(`아파트먼트클릭시 액세스토큰 ${accessToken}`);
+    getLogger().info(`아파트먼트클릭시 액세스토큰 ${accessToken}`);
     if (accessToken) {
       return checkedInAndGoFeed(apartmentId);
     } else {
