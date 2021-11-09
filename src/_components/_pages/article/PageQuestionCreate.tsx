@@ -6,6 +6,7 @@ import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
 
 import examineResBody from "../../../_modules/examineResBody";
 
+// FIXME: State에서 textlength 받을 필요 없음. CommentSubmit폼 참조해서 .lenght로 바로 받아버리자!
 type State =
   | {
       _t: "blank";
