@@ -1,74 +1,74 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer } from 'react';
 
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
-import { ScreenHelmet } from "@karrotframe/navigator";
+import { ScreenHelmet } from '@karrotframe/navigator';
 
 type State =
   | {
-      _t: "blank";
+      _t: 'blank';
       mainText: string;
     }
   | {
-      _t: "typed";
+      _t: 'typed';
       mainText: string;
     };
 
 type Action = {
-  _t: "CHANGE_TEXT";
+  _t: 'CHANGE_TEXT';
   payload: string;
 };
 
 const reducer: React.Reducer<State, Action> = (prevState, action) => {
   switch (action.payload) {
-    case "":
+    case '':
       return {
-        _t: "blank",
+        _t: 'blank',
         mainText: action.payload,
       };
     default:
       return {
-        _t: "typed",
+        _t: 'typed',
         mainText: action.payload,
       };
   }
 };
 
-const PageApartmentRequsetForm: React.FC = () => {
-  const [state, dispatch] = useReducer(reducer, { _t: "blank", mainText: "" });
+const PageApartmentRequestForm: React.FC = () => {
+  const [state, dispatch] = useReducer(reducer, { _t: 'blank', mainText: '' });
 
   const [submitBtnActiveState, setSubmitBtnActiveState] = useState({
     disabled: true,
-    className: "btn--inactive",
+    className: 'btn--inactive',
   });
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     dispatch({
-      _t: "CHANGE_TEXT",
+      _t: 'CHANGE_TEXT',
       payload: e.target.value,
     });
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (state._t === "typed") {
-      alert("제출!");
+    if (state._t === 'typed') {
+      alert('제출!');
       resetInput();
     }
   }
 
   function resetInput() {
     dispatch({
-      _t: "CHANGE_TEXT",
-      payload: "",
+      _t: 'CHANGE_TEXT',
+      payload: '',
     });
   }
 
   useEffect(() => {
-    if (state._t === "blank") {
-      setSubmitBtnActiveState({ disabled: true, className: "btn--inactive" });
+    if (state._t === 'blank') {
+      setSubmitBtnActiveState({ disabled: true, className: 'btn--inactive' });
     } else {
-      setSubmitBtnActiveState({ disabled: false, className: "btn--active" });
+      setSubmitBtnActiveState({ disabled: false, className: 'btn--active' });
     }
   }, [state]);
 
@@ -98,7 +98,7 @@ const PageApartmentRequsetForm: React.FC = () => {
         <button
           disabled={submitBtnActiveState.disabled}
           className={
-            "BriefSubmitForm-btn btn-full btn " + submitBtnActiveState.className
+            'BriefSubmitForm-btn btn-full btn ' + submitBtnActiveState.className
           }
         >
           오픈하면 알림받기
@@ -108,7 +108,7 @@ const PageApartmentRequsetForm: React.FC = () => {
   );
 };
 
-export default PageApartmentRequsetForm;
+export default PageApartmentRequestForm;
 
 const ApartmentRequestFormTitle = styled.div`
   font-size: 22px;

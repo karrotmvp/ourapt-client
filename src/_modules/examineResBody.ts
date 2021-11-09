@@ -9,7 +9,7 @@ export default function examineResBody({
 }) {
   if (
     !resBody ||
-    resBody.status !== "SUCCESS" ||
+    resBody.status !== 'SUCCESS' ||
     !resBody.data ||
     !validator(resBody.data)
   ) {

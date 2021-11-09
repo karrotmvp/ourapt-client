@@ -1,19 +1,17 @@
-import { useAccessToken } from "../_providers/useAccessToken";
-import { useApi } from "../api";
-import { useViewer } from "../_providers/useViewer";
+import { useAccessToken } from '../_providers/useAccessToken';
+import { useApi } from '../api';
+import { useViewer } from '../_providers/useViewer';
 
-import { useNavigator } from "@karrotframe/navigator";
+import { useNavigator } from '@karrotframe/navigator';
 
-import PageLanding from "../_components/_pages/PageLanding";
-import PageFeed from "../_components/_pages/PageFeed";
-import PageError from "../_components/_pages/PageError";
+import PageLanding from '../_components/_pages/PageLanding';
+import PageFeed from '../_components/_pages/PageFeed';
+import PageError from '../_components/_pages/PageError';
 
-import { getRefFromURLParams } from "../_modules/getQueryFromURLParams";
-import { useEffect } from "react";
+import { getRefFromURLParams } from '../_modules/getQueryFromURLParams';
+import { useEffect } from 'react';
 
 export default function WithLanding() {
-  // const OnLanding: React.FC = () => {
-
   const ref = getRefFromURLParams();
   const api = useApi();
   const { push } = useNavigator();
@@ -23,7 +21,7 @@ export default function WithLanding() {
       const response = await api.logController.logFirstRequestUsingGET({
         referer: ref,
       });
-      if (response.status !== "SUCCESS") {
+      if (response.status !== 'SUCCESS') {
         push(`/error`);
       }
     })();
