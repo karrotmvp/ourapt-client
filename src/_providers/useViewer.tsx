@@ -8,36 +8,37 @@ import React, {
   useEffect,
   useMemo,
   useReducer,
-} from 'react';
+} from "react";
 
 import {
   UserDto as User,
   CommonResponseBodyOneUserDto,
-} from '../__generated__/ourapt';
+} from "../__generated__/ourapt";
 
-import { useApi } from '../api';
-import { useAccessToken } from './useAccessToken';
-import examineResBody from '../_modules/examineResBody';
+import { useApi } from "../api";
+import { useAccessToken } from "./useAccessToken";
+import examineResBody from "../_modules/examineResBody";
+import getLogger from "../_modules/logger";
 
 type State =
   | {
-      _t: 'pending'; // 액세스토큰이 있지만 아직 뷰어 정보를 받아오지 않는 경우
+      _t: "pending"; // 액세스토큰이 있지만 아직 뷰어 정보를 받아오지 않는 경우
       viewer: User | null;
     }
   | {
-      _t: 'ready'; // 액세스토큰이 null 인 경우 - viewer도 null / 액세스토큰이 있고 viewer를 받아온 경우
+      _t: "ready"; // 액세스토큰이 null 인 경우 - viewer도 null / 액세스토큰이 있고 viewer를 받아온 경우
       viewer: User | null;
     };
 
 type Action = {
-  _t: 'SET_VIEWER';
+  _t: "SET_VIEWER";
   viewer: User;
 };
 
 const reducer: React.Reducer<State, Action> = (prevState, action) => {
   return {
     ...prevState,
-    _t: 'ready',
+    _t: "ready",
     viewer: action.viewer,
   };
 };
@@ -52,17 +53,17 @@ export const ViewerProvider: React.FC = (props) => {
     reducer,
     accessToken
       ? {
-          _t: 'pending',
+          _t: "pending",
           viewer: null,
         }
       : {
-          _t: 'ready',
+          _t: "ready",
           viewer: null,
         }
   );
 
   useEffect(() => {
-    if (accessToken && state._t === 'pending') {
+    if (accessToken && state._t === "pending") {
       const getViewerFromAccessToken = async function () {
         const response = await api.userController.getMyInfoUsingGET();
         return response;
@@ -76,13 +77,13 @@ export const ViewerProvider: React.FC = (props) => {
           resBody: response,
           validator: (data) => data.user != null,
           onFailure: () => {
-            alert(`/error?cause=getMyInfoAtUseViewer`);
+            getLogger().info(`/error?cause=getMyInfoAtUseViewer`);
           },
         });
 
         const viewer = safeBody.data.user;
         dispatch({
-          _t: 'SET_VIEWER',
+          _t: "SET_VIEWER",
           viewer: viewer,
         });
       };
@@ -90,7 +91,7 @@ export const ViewerProvider: React.FC = (props) => {
     }
   }, [state._t, accessToken, api.userController]); // AT가 재설정될 경우에만 새로 돌도록 합니다.
 
-  if (state._t === 'pending') {
+  if (state._t === "pending") {
     return null;
   }
 
