@@ -1,3 +1,4 @@
+import { useNavigator } from "@karrotframe/navigator";
 import React, { useState, useEffect, useReducer } from "react";
 
 import { useApi } from "../../api";
@@ -47,6 +48,8 @@ const CommentInDetailSubmitForm: React.FC<CommentInDetailSubmitFormProps> = ({
 
   const api = useApi();
 
+  const { push } = useNavigator();
+
   const [submitBtnActiveState, setSubmitBtnActiveState] = useState({
     disabled: true,
     className: "btn--inactive",
@@ -72,8 +75,13 @@ const CommentInDetailSubmitForm: React.FC<CommentInDetailSubmitFormProps> = ({
           mainText: state.mainText || "",
         },
       });
-      examineResBody(response, "QuestionDetail에서 새 코멘트 제출");
-      if (response.status === "SUCCESS") {
+      const safeBody = examineResBody({
+        resBody: response,
+        onFailure: () => {
+          push(`/error?cause=writeNewComments`);
+        },
+      });
+      if (safeBody.status === "SUCCESS") {
         setIsCommentUpdate(true);
         resetTextarea();
       }

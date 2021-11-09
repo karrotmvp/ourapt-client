@@ -11,7 +11,7 @@ type PageErrorProps = {
 
 const PageError: React.FC<PageErrorProps> = ({ cause }) => {
   const params = useParams<{ cause?: string }>().cause || "atComponent";
-  const causeAtURL = params;
+  const causeParam = cause !== "" ? cause : params;
 
   function onGoBackBtnClick() {
     return;
@@ -26,7 +26,7 @@ const PageError: React.FC<PageErrorProps> = ({ cause }) => {
       <button className="btn-184 btn btn--active" onClick={onGoBackBtnClick}>
         이전 페이지로 돌아가기
       </button>
-      <p>{cause}</p>
+      <p>{causeParam}</p>
     </PageErrorContainer>
   );
 };

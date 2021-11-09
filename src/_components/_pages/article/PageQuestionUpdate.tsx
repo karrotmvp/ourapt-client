@@ -59,14 +59,22 @@ const PageArticleCreate: React.FC = () => {
       const response = await api.questionController.getQuestionByIdUsingGET({
         questionId: articleId,
       });
-      const question = examineResBody(response, "게시글 수정하기").data
-        .question;
+
+      const safeBody = examineResBody({
+        resBody: response,
+        validator: (data) => data.question != null,
+        onFailure: () => {
+          push(`/error?cause=getQuestionByIdAtPageQuestionUpdate`);
+        },
+      });
+
+      const question = safeBody.data.question;
       dispatch({
         _t: "CHANGE_TEXT",
         payload: question,
       });
     })();
-  }, [api.questionController, articleId]);
+  }, [api.questionController, articleId, push]);
 
   useEffect(() => {
     if (state._t === "blank") {
@@ -90,8 +98,16 @@ const PageArticleCreate: React.FC = () => {
           mainText: state.mainText,
         },
       });
-      const question = examineResBody(response, "새 게시글 쓰기").data.question;
-      // const question = response.data.question;
+
+      const safeBody = examineResBody({
+        resBody: response,
+        validator: (data) => data.question != null,
+        onFailure: () => {
+          push(`/error?cause=writeNewQuestionAtPageQuestionUpdate`);
+        },
+      });
+
+      const question = safeBody.data.question;
       push(`/article/${question.id}`);
     }
   }

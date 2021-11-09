@@ -12,6 +12,7 @@ import { CommonResponseBodyKarrotAccessTokenDto } from "../__generated__/ourapt"
 
 import examineResBody from "../_modules/examineResBody";
 import { getCodeFromURLParams } from "../_modules/getQueryFromURLParams";
+import { useNavigator } from "@karrotframe/navigator";
 
 type State =
   | {
@@ -42,6 +43,7 @@ const AccessTokenSetterContext =
 
 export const AccessTokenProvider: React.FC = (props) => {
   const api = useApi();
+  const { push } = useNavigator();
   let code = useMemo(() => {
     return getCodeFromURLParams();
   }, []);
@@ -73,11 +75,17 @@ export const AccessTokenProvider: React.FC = (props) => {
       const dispatchIssuedAccessToken = async function (
         issueAccessTokenFunction: Promise<CommonResponseBodyKarrotAccessTokenDto>
       ) {
-        const resBody = await issueAccessTokenFunction;
-        const accessToken = examineResBody(
-          resBody,
-          "useAccessToken에서 code로 AT 발급받기"
-        ).data.accessToken;
+        const response = await issueAccessTokenFunction;
+
+        const safeBody = examineResBody({
+          resBody: response,
+          validator: (data) => data.accessToken != null,
+          onFailure: () => {
+            push(`/error?cause=karrotLoginAtUseAccessToken`);
+          },
+        });
+
+        const accessToken = safeBody.data.accessToken;
 
         console.log(accessToken);
 
@@ -89,7 +97,7 @@ export const AccessTokenProvider: React.FC = (props) => {
 
       dispatchIssuedAccessToken(issueAccessTokenFromAuthorizationCode());
     }
-  }, [code, state, api.oauthController]);
+  }, [code, state, api.oauthController, push]);
 
   const issueAccessTokenFromAuthorizationCode = useCallback(
     async (code: string) => {
@@ -98,17 +106,23 @@ export const AccessTokenProvider: React.FC = (props) => {
           authorizationCode: code,
         },
       });
-      const accessToken = examineResBody(
-        response,
-        "외부에서 useAccessToken 활용하여 code로 AT 발급받기"
-      ).data.accessToken;
+
+      const safeBody = examineResBody({
+        resBody: response,
+        validator: (data) => data.accessToken != null,
+        onFailure: () => {
+          push(`/error?cause=karrotLoginAtUseAccessToken`);
+        },
+      });
+
+      const accessToken = safeBody.data.accessToken;
 
       dispatch({
         _t: "SET_ACCESS_TOKEN",
         accessToken: "Bearer " + accessToken,
       });
     },
-    [api.oauthController]
+    [api.oauthController, push]
   );
 
   if (state._t === "pending") {

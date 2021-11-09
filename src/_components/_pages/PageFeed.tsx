@@ -62,10 +62,10 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
             push(`/error?cause=getQuestionsByCursorPerPageAtPageFeed`);
           },
         });
-        setQuestions(safeBody.questions);
+        setQuestions(safeBody.data.questions);
       })();
     },
-    [api.questionController]
+    [api.questionController, push]
   );
 
   useEffect(() => {
@@ -76,14 +76,19 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
         });
       if (response && response.status === "DATA_NOT_FOUND_FROM_DB") {
       } else {
-        const pinnedQuestion = examineResBody(response, "핀드퀘스쳔 가져오기")
-          .data.question;
-        setPinnedQuestion(pinnedQuestion);
+        const safeBody = examineResBody({
+          resBody: response,
+          validator: (data) => data.question != null,
+          onFailure: () => {
+            push(`/error?cause=getPinnedQuestionAtPageFeed`);
+          },
+        });
+        setPinnedQuestion(safeBody.data.question);
       }
     })();
     // TODO: 페이지당 몇 개 확인하기
     getQuestionsByCursorPerPage(params, Date.now(), 100);
-  }, [api.questionController, getQuestionsByCursorPerPage, params]);
+  }, [api.questionController, getQuestionsByCursorPerPage, params, push]);
 
   return (
     <div className="Page">

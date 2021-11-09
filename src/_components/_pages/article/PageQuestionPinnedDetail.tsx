@@ -57,11 +57,17 @@ const PageQuestionPinnedDetail: React.FC = () => {
       const response = await api.questionController.getQuestionByIdUsingGET({
         questionId: articleId,
       });
-      const pinnedQuestion = examineResBody(response, "PinnedDetail 조회").data
-        .question;
-      setPinnedQuestion(pinnedQuestion);
+
+      const safeBody = examineResBody({
+        resBody: response,
+        validator: (data) => data.question != null,
+        onFailure: () => {
+          push(`/error?cause=getQuestionByIdAtPageQuestionPinnedDetail`);
+        },
+      });
+      setPinnedQuestion(safeBody.data.question);
     })();
-  }, [articleId, api.questionController]);
+  }, [articleId, api.questionController, push]);
 
   const [submitBtnActiveState, setSubmitBtnActiveState] = useState({
     disabled: true,
@@ -91,8 +97,14 @@ const PageQuestionPinnedDetail: React.FC = () => {
           mainText: state.mainText || "",
         },
       });
-      examineResBody(response, "PinnedDetail에서 새 코멘트 제출");
-      if (response.status === "SUCCESS") {
+
+      const safeBody = examineResBody({
+        resBody: response,
+        onFailure: () => {
+          push(`/error?cause=writeCommentsAtPageQuestionPinnedDetail`);
+        },
+      });
+      if (safeBody.status === "SUCCESS") {
         push(`article/${articleId}`);
       }
     }

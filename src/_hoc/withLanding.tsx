@@ -44,7 +44,7 @@ export default function WithLanding() {
     return <PageLanding />;
   }
   // TODO: error Throwing Page 만들기
-  return <PageError />;
+  return <PageError cause="atPageLanding" />;
 }
 
 // export default OnLanding;

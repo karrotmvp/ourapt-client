@@ -4,7 +4,7 @@ export default function examineResBody({
   onFailure = () => {},
 }: {
   resBody: any;
-  validator: (data: any) => boolean;
+  validator?: (data: any) => boolean;
   onFailure: () => void;
 }) {
   if (

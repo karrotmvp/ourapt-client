@@ -71,8 +71,16 @@ const PageArticleCreate: React.FC = () => {
           mainText: state.mainText,
         },
       });
-      const question = examineResBody(response, "새 게시글 쓰기").data.question;
-      // const question = response.data.question;
+
+      const safeBody = examineResBody({
+        resBody: response,
+        validator: (data) => data.question != null,
+        onFailure: () => {
+          push(`/error?cause=writeNewQuestionAtPageQuestionCreate`);
+        },
+      });
+
+      const question = safeBody.data.question;
       push(`/article/${question.id}`);
     }
   }

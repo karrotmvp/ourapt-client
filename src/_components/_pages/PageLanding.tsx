@@ -11,8 +11,6 @@ import { mini } from "../../_Karrotmarket/KarrotmarketMini";
 import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
 
 import ApartmentInLanding from "../Apartment/ApartmentInLanding";
-import PageError from "./PageError";
-import examineResponse from "../../_modules/examineResponse";
 import examineResBody from "../../_modules/examineResBody";
 
 const PageLanding: React.FC = () => {
@@ -98,10 +96,10 @@ const PageLanding: React.FC = () => {
           push(`/error?cause=getAvailableApartmentsAtPageLanding`);
         },
       });
-
-      setApartments(() => safeBody.apartments);
+      // 여기 왜 리턴으로 받나요?
+      setApartments(() => safeBody.data.apartments);
     })();
-  }, [api.apartmentController]);
+  }, [api.apartmentController, push]);
 
   return (
     <div className="Page">

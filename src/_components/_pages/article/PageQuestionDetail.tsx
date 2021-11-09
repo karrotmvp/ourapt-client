@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
-import { QuestionDto as Question } from '../../../__generated__/ourapt';
-import { CommentDto as Comment } from '../../../__generated__/ourapt';
-import { useApi } from '../../../api';
-import { useViewer } from '../../../_providers/useViewer';
+import { QuestionDto as Question } from "../../../__generated__/ourapt";
+import { CommentDto as Comment } from "../../../__generated__/ourapt";
+import { useApi } from "../../../api";
+import { useViewer } from "../../../_providers/useViewer";
 
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 
-import { ScreenHelmet, useNavigator, useParams } from '@karrotframe/navigator';
+import { ScreenHelmet, useNavigator, useParams } from "@karrotframe/navigator";
 
-import QuestionInDetail from '../../Question/QuestionInDetail';
-import CommentInDetail from '../../Comment/CommentInDetail';
-import CommentInDetailSubmitForm from '../../Comment/CommentInDetailSubmitForm';
+import QuestionInDetail from "../../Question/QuestionInDetail";
+import CommentInDetail from "../../Comment/CommentInDetail";
+import CommentInDetailSubmitForm from "../../Comment/CommentInDetailSubmitForm";
 
-import { ReactComponent as KebabIcon } from '../../../_assets/kebabIcon.svg';
+import { ReactComponent as KebabIcon } from "../../../_assets/kebabIcon.svg";
 
-import examineResBody from '../../../_modules/examineResBody';
+import examineResBody from "../../../_modules/examineResBody";
 
 const PageArticleDetail: React.FC = () => {
   const params = useParams<{ articleId?: string }>();
-  const articleId = params.articleId || '';
+  const articleId = params.articleId || "";
 
   const api = useApi();
 
@@ -38,13 +38,19 @@ const PageArticleDetail: React.FC = () => {
       const response = await api.questionController.getQuestionByIdUsingGET({
         questionId: articleId,
       });
-      const question = examineResBody(response, '게시글 상세에서 본문 조회')
-        .data.question;
-      setQuestion(question);
-      const isMyArticle = myInfo === question.writer.id;
+
+      const safeBody = examineResBody({
+        resBody: response,
+        validator: (data) => data.question != null,
+        onFailure: () => {
+          push(`/error?cause=getQuestionByIdAtPageQuestionDetail`);
+        },
+      });
+      setQuestion(safeBody.data.question);
+      const isMyArticle = myInfo === question?.writer.id;
       setIsMyArticle(isMyArticle);
     })();
-  }, [api.questionController, articleId, myInfo]);
+  }, [api.questionController, articleId, myInfo, push, question?.writer.id]);
 
   useEffect(() => {
     (async () => {
@@ -52,14 +58,20 @@ const PageArticleDetail: React.FC = () => {
         await api.commentController.getCommentsOfQuestionUsingGET({
           questionId: articleId,
         });
-      const comments = examineResBody(response, '게시글 상세에서 댓글 조회')
-        .data.comments;
-      setComments(comments);
+
+      const safeBody = examineResBody({
+        resBody: response,
+        validator: (data) => data.comments != null,
+        onFailure: () => {
+          push(`/error?cause=getCommentsAtPageQuestionDetail`);
+        },
+      });
+      setComments(safeBody.data.comments);
       setIsCommentUpdate(false);
     })();
     // 초기화를 어디서 해줘야 할지 모르겠다. 초기화 하는 순간 다시 렌더링 되지 않나?
     // isCommentUpdate === true 인 경우에만 렌더링 되도록 할 수는 없나?
-  }, [isCommentUpdate, api.commentController, articleId]);
+  }, [isCommentUpdate, api.commentController, articleId, push]);
 
   const modifyBtn = () => {
     if (isMyArticle) {
@@ -83,7 +95,7 @@ const PageArticleDetail: React.FC = () => {
         </ArticleArea>
         <CommentsArea>
           <CommentsAreaTitle>
-            댓글{' '}
+            댓글{" "}
             {question &&
               question.countOfComments > 0 &&
               question.countOfComments}
