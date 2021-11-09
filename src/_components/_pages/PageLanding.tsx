@@ -36,15 +36,14 @@ const PageLanding: React.FC = () => {
   }
 
   const submitAgreement = (apartmentId: string) => {
-    alert('PRESET_URL ' + process.env.REACT_APP_PRESET_URL);
-    alert('APP_ID' + process.env.REACT_APP_ID);
-
     mini.startPreset({
       preset: `${process.env.REACT_APP_PRESET_URL}`,
       params: {
         appId: `${process.env.REACT_APP_ID}`,
       },
       onSuccess: function (result) {
+        alert(JSON.stringify(result, null, 2));
+        alert('APT_ID ' + apartmentId);
         if (result && result.code) {
           issueAccessTokenFromAuthorizationCode(result.code);
         }
@@ -92,7 +91,6 @@ const PageLanding: React.FC = () => {
         await api.apartmentController.getAvailableApartmentsUsingGET();
 
       setApartments(resp.data?.apartments ?? []);
-      console.log(apartments);
       // setPatchCheckedIn(false);
     })();
   }, [api.apartmentController, apartments]);
