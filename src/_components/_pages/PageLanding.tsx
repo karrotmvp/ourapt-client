@@ -49,6 +49,9 @@ const PageLanding: React.FC = () => {
         }
         checkedInAndGoFeed(apartmentId);
       },
+      onFailure: () => {
+        alert('Fail to START PRESET');
+      },
     });
   };
 
