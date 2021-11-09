@@ -44,10 +44,6 @@ export class Class2Api extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // KarrotAccessToken authentication
-        }
-
         const response = await this.request({
             path: `/api/v1/apartment/{apartmentId}`.replace(`{${"apartmentId"}}`, encodeURIComponent(String(requestParameters.apartmentId))),
             method: 'GET',

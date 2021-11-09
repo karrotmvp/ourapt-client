@@ -45,7 +45,7 @@ const PageQuestionPinnedDetail: React.FC = () => {
   const articleId = params.articleId || "";
 
   const api = useApi();
-  const { viewer, regionId } = useViewer();
+  const { viewer } = useViewer();
   const currendApt = viewer?.checkedIn?.name;
   const [pinnedQuestion, setPinnedQuestion] = useState<Question>();
 
@@ -89,7 +89,6 @@ const PageQuestionPinnedDetail: React.FC = () => {
         questionId: articleId,
         commentContent: {
           mainText: state.mainText || "",
-          regionId: regionId,
         },
       });
       examineResBody(response, "PinnedDetail에서 새 코멘트 제출");

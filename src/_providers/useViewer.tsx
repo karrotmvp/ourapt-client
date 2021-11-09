@@ -24,10 +24,12 @@ type State =
   | {
       _t: "pending"; // 액세스토큰이 있지만 아직 뷰어 정보를 받아오지 않는 경우
       regionId: string;
+      instanceId: string;
     }
   | {
       _t: "ready"; // 액세스토큰이 null 인 경우 - viewer도 null / 액세스토큰이 있고 viewer를 받아온 경우
       regionId: string;
+      instanceId: string;
       viewer: User | null;
     };
 
@@ -46,18 +48,26 @@ const reducer: React.Reducer<State, Action> = (prevState, action) => {
 
 const ViewerContext = createContext<User | null>(null);
 const RegionIdContext = createContext<string>("");
+const InstanceIdContext = createContext<string>("");
 
 export const ViewerProvider: React.FC = (props) => {
   const api = useApi();
-  // 무한 렌더링이 일어날까? 아니야... useAT에서 이미 useMemo 했기 때문에 발생하지 않을 것이라고 짐작해보자...
+
   const { accessToken } = useAccessToken();
+
   const regionId = getRegionFromURLParams();
+  const InstanceId = "tempAtUseAccessToken";
 
   const [state, dispatch] = useReducer(
     reducer,
     accessToken
-      ? { _t: "pending", regionId: regionId }
-      : { _t: "ready", regionId: regionId, viewer: null }
+      ? { _t: "pending", regionId: regionId, instanceId: InstanceId }
+      : {
+          _t: "ready",
+          regionId: regionId,
+          instanceId: InstanceId,
+          viewer: null,
+        }
   );
 
   useEffect(() => {
@@ -83,23 +93,30 @@ export const ViewerProvider: React.FC = (props) => {
 
       distpatchIssuedViewer(getViewerFromAccessToken());
     }
-  }, [accessToken, state, api.userController]); // AT가 재설정될 경우에만 새로 돌도록 합니다.
+  }, [state._t, accessToken, api.userController]); // AT가 재설정될 경우에만 새로 돌도록 합니다.
 
   if (state._t === "pending") {
     return null;
   }
+
   return (
-    <ViewerContext.Provider value={state.viewer}>
-      <RegionIdContext.Provider value={state.regionId}>
-        {props.children}
-      </RegionIdContext.Provider>
-    </ViewerContext.Provider>
+    <RegionIdContext.Provider value={state.regionId}>
+      <InstanceIdContext.Provider value={state.instanceId}>
+        <ViewerContext.Provider value={state.viewer}>
+          {props.children}
+        </ViewerContext.Provider>
+      </InstanceIdContext.Provider>
+    </RegionIdContext.Provider>
   );
 };
 
 export function useViewer() {
   const viewer = useContext(ViewerContext);
   const regionId = useContext(RegionIdContext);
+  const instanceId = useContext(InstanceIdContext);
 
-  return useMemo(() => ({ viewer, regionId }), [viewer, regionId]);
+  return useMemo(
+    () => ({ viewer, regionId, instanceId }),
+    [viewer, regionId, instanceId]
+  );
 }

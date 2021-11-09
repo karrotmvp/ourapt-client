@@ -5,31 +5,31 @@ import React, {
   useEffect,
   useMemo,
   useReducer,
-} from 'react';
+} from "react";
 
-import { useApi } from '../api';
-import { CommonResponseBodyKarrotAccessTokenDto } from '../__generated__/ourapt';
+import { useApi } from "../api";
+import { CommonResponseBodyKarrotAccessTokenDto } from "../__generated__/ourapt";
 
-import examineResBody from '../_modules/examineResBody';
-import { getCodeFromURLParams } from '../_modules/getQueryFromURLParams';
+import examineResBody from "../_modules/examineResBody";
+import { getCodeFromURLParams } from "../_modules/getQueryFromURLParams";
 
 type State =
   | {
-      _t: 'pending'; // 코드가 있지만 아직 액세스 토큰을 받아오지 않는 경우
+      _t: "pending"; // 코드가 있지만 아직 액세스 토큰을 받아오지 않는 경우
     }
   | {
-      _t: 'ready'; // 코드가 없는 경우, 코드가 있고 액세스 토큰을 받아온 경우
+      _t: "ready"; // 코드가 없는 경우, 코드가 있고 액세스 토큰을 받아온 경우
       accessToken: string | null;
     };
 
 type Action = {
-  _t: 'SET_ACCESS_TOKEN';
+  _t: "SET_ACCESS_TOKEN";
   accessToken: string;
 };
 
 const reducer: React.Reducer<State, Action> = (prevState, action) => {
   return {
-    _t: 'ready',
+    _t: "ready",
     accessToken: action.accessToken,
   };
 };
@@ -46,21 +46,21 @@ export const AccessTokenProvider: React.FC = (props) => {
     return getCodeFromURLParams();
   }, []);
 
-  //   const manualCode: Boolean = true;
-  //   if (manualCode) {
-  //     code = 'tAiAm6WiH0jXvnclVNga';
-  //   }
+  const manualCodeOnBrowser: Boolean = true;
+  if (manualCodeOnBrowser) {
+    code = "KZt3fgXB9BXpeXHF84UN";
+  }
 
   const [state, dispatch] = useReducer(
     reducer,
     // code 유무 파악해서 없는 경우 바로 ready로 넘겨주고, 있는 경우 액세스토큰 받아와야 하니 대기상태로 넘겨줄것
-    code && code !== 'NOT_AGREED'
-      ? { _t: 'pending' }
-      : { _t: 'ready', accessToken: null }
+    code && code !== "NOT_AGREED"
+      ? { _t: "pending" }
+      : { _t: "ready", accessToken: null }
   );
 
   useEffect(() => {
-    if (code && code !== 'NOT_AGREED' && state._t === 'pending') {
+    if (code && code !== "NOT_AGREED" && state._t === "pending") {
       const issueAccessTokenFromAuthorizationCode = async function () {
         const response = await api.oauthController.karrotLoginUsingPOST({
           body: {
@@ -76,14 +76,14 @@ export const AccessTokenProvider: React.FC = (props) => {
         const resBody = await issueAccessTokenFunction;
         const accessToken = examineResBody(
           resBody,
-          'useAccessToken에서 code로 AT 발급받기'
+          "useAccessToken에서 code로 AT 발급받기"
         ).data.accessToken;
 
         console.log(accessToken);
 
         dispatch({
-          _t: 'SET_ACCESS_TOKEN',
-          accessToken: 'Bearer ' + accessToken,
+          _t: "SET_ACCESS_TOKEN",
+          accessToken: "Bearer " + accessToken,
         });
       };
 
@@ -100,18 +100,18 @@ export const AccessTokenProvider: React.FC = (props) => {
       });
       const accessToken = examineResBody(
         response,
-        '외부에서 useAccessToken 활용하여 code로 AT 발급받기'
+        "외부에서 useAccessToken 활용하여 code로 AT 발급받기"
       ).data.accessToken;
 
       dispatch({
-        _t: 'SET_ACCESS_TOKEN',
-        accessToken: 'Bearer ' + accessToken,
+        _t: "SET_ACCESS_TOKEN",
+        accessToken: "Bearer " + accessToken,
       });
     },
     [api.oauthController]
   );
 
-  if (state._t === 'pending') {
+  if (state._t === "pending") {
     return null;
   }
 

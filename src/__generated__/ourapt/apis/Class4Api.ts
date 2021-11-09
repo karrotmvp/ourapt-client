@@ -107,10 +107,6 @@ export class Class4Api extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // KarrotAccessToken authentication
-        }
-
         const response = await this.request({
             path: `/api/v1/apartment/{apartmentId}/questions/pinned`.replace(`{${"apartmentId"}}`, encodeURIComponent(String(requestParameters.apartmentId))),
             method: 'GET',
@@ -190,10 +186,6 @@ export class Class4Api extends runtime.BaseAPI {
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // KarrotAccessToken authentication
-        }
 
         const response = await this.request({
             path: `/api/v1/apartment/{apartmentId}/questions`.replace(`{${"apartmentId"}}`, encodeURIComponent(String(requestParameters.apartmentId))),

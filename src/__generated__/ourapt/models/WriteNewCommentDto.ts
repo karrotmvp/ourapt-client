@@ -25,12 +25,6 @@ export interface WriteNewCommentDto {
      * @memberof WriteNewCommentDto
      */
     mainText: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof WriteNewCommentDto
-     */
-    regionId: string;
 }
 
 export function WriteNewCommentDtoFromJSON(json: any): WriteNewCommentDto {
@@ -44,7 +38,6 @@ export function WriteNewCommentDtoFromJSONTyped(json: any, ignoreDiscriminator: 
     return {
         
         'mainText': json['mainText'],
-        'regionId': json['regionId'],
     };
 }
 
@@ -58,7 +51,6 @@ export function WriteNewCommentDtoToJSON(value?: WriteNewCommentDto | null): any
     return {
         
         'mainText': value.mainText,
-        'regionId': value.regionId,
     };
 }
 

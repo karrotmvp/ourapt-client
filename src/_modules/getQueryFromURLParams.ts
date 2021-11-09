@@ -1,3 +1,5 @@
+import { LogFirstRequestUsingGETRefererEnum as RefEnum } from "../__generated__/ourapt";
+
 let urlSearchParams = new URLSearchParams(window.location.search);
 
 export function getRegionFromURLParams() {
@@ -20,5 +22,15 @@ export function getCodeFromURLParams() {
     return code;
   } else {
     return "NOT_AGREED";
+  }
+}
+
+export function getRefFromURLParams() {
+  const referer = urlSearchParams.get("ref");
+
+  if (referer) {
+    return referer as RefEnum;
+  } else {
+    return RefEnum.Unknown;
   }
 }

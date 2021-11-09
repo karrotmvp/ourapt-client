@@ -73,5 +73,6 @@ export enum LogFirstRequestUsingGETRefererEnum {
     Feed = 'FEED',
     Message = 'MESSAGE',
     NearBy = 'NEAR_BY',
-    Qr = 'QR'
+    Qr = 'QR',
+    Unknown = 'UNKNOWN'
 }

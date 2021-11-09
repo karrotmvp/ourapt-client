@@ -19,6 +19,7 @@ import PageQuestionPinnedDetail from "./_components/_pages/article/PageQuestionP
 import PageQuestionDetail from "./_components/_pages/article/PageQuestionDetail";
 import PageQuestionUpdate from "./_components/_pages/article/PageQuestionUpdate";
 import PageQuestionCreate from "./_components/_pages/article/PageQuestionCreate";
+import PageError from "./_components/_pages/PageError";
 
 import { ApiProvider } from "./api";
 import { AccessTokenProvider } from "./_providers/useAccessToken";
@@ -67,6 +68,9 @@ const App: React.FC = () => {
                 </Screen>
                 <Screen path="/article/:articleId/update">
                   <PageQuestionUpdate />
+                </Screen>
+                <Screen path="/error">
+                  <PageError />
                 </Screen>
               </Navigator>
               <WithModal />

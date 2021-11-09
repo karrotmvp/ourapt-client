@@ -10,17 +10,25 @@ import { Class7Api as LogControlloerApi } from "../__generated__/ourapt";
 import { Class99Api as NoApartmentController } from "../__generated__/ourapt";
 
 import { useAccessToken } from "../_providers/useAccessToken";
+import { useViewer } from "../_providers/useViewer";
+
+const GetParams = () => {
+  const { regionId, instanceId } = useViewer();
+  return {
+    regionId,
+    instanceId,
+  };
+};
 
 // API를 만들어주는데,
 function makeApi({ accessToken }: { accessToken?: string | null }) {
-  // const { regionId } = useViewer()
   if (accessToken) {
     const configuration = new Configuration({
       // accessToken,
       apiKey: accessToken,
       headers: {
-        "Instance-Id": "tempInstance-Id",
-        "Region-Id": "tempRegionId",
+        "Region-Id": GetParams().regionId,
+        "Instance-Id": GetParams().instanceId,
       },
     });
     const apartmentController = new ApartmentControllerApi(configuration);

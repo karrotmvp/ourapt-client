@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useReducer } from "react";
 
 import { useApi } from "../../api";
-import { useViewer } from "../../_providers/useViewer";
 
 import examineResBody from "../../_modules/examineResBody";
 
@@ -47,7 +46,6 @@ const CommentInDetailSubmitForm: React.FC<CommentInDetailSubmitFormProps> = ({
   const [state, dispatch] = useReducer(reducer, { _t: "blank", mainText: "" });
 
   const api = useApi();
-  const { regionId } = useViewer();
 
   const [submitBtnActiveState, setSubmitBtnActiveState] = useState({
     disabled: true,
@@ -72,7 +70,6 @@ const CommentInDetailSubmitForm: React.FC<CommentInDetailSubmitFormProps> = ({
         questionId: articleId,
         commentContent: {
           mainText: state.mainText || "",
-          regionId: regionId,
         },
       });
       examineResBody(response, "QuestionDetail에서 새 코멘트 제출");
