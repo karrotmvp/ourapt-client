@@ -32,7 +32,6 @@ const PageLanding: React.FC = () => {
         newApartmentId: apartmentId,
       },
     });
-    alert(JSON.stringify(response, null, 2));
     if (response.status === 'SUCCESS') push(`/feed/${apartmentId}`);
   }
 
@@ -42,9 +41,9 @@ const PageLanding: React.FC = () => {
       params: {
         appId: `${process.env.REACT_APP_ID}`,
       },
-      onSuccess: function (result) {
+      onSuccess: async function (result) {
         if (result && result.code) {
-          issueAccessTokenFromAuthorizationCode(result.code);
+          await issueAccessTokenFromAuthorizationCode(result.code);
         }
         checkedInAndGoFeed(apartmentId);
       },
@@ -52,7 +51,6 @@ const PageLanding: React.FC = () => {
   };
 
   function onApartmentInLandingClick(apartmentId: string) {
-    alert(JSON.stringify(accessToken, null, 2));
     if (accessToken) {
       return checkedInAndGoFeed(apartmentId);
     } else {
@@ -89,13 +87,9 @@ const PageLanding: React.FC = () => {
     (async () => {
       const resp =
         await api.apartmentController.getAvailableApartmentsUsingGET();
-
-      setApartments(resp.data?.apartments ?? []);
-      // setPatchCheckedIn(false);
+      setApartments(() => resp.data?.apartments ?? []);
     })();
-  }, [api.apartmentController, apartments]);
-
-  console.log(apartments);
+  }, [api.apartmentController]);
 
   return (
     <div className="Page">

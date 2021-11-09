@@ -1,23 +1,23 @@
-import { rest } from "msw";
+import { rest } from 'msw';
 
 export const handlers = [
   // 캐럿 가져오기 : 해결!
   rest.post(
-    "http://api-alpha.daangn-ourapt.com/api/v1/oauth/karrot",
+    'http://api-alpha.daangn-ourapt.com/api/v1/oauth/karrot',
     async (req, res, ctx) => {
       // alert("제가 돌아보겠습니다!");
       return await res(
         ctx.json({
           data: {
-            accessToken: "Y3oe-iz_lFtl_voiqlVvNtOjdCI",
+            accessToken: 'nDOFmPhYwk5-2t-vo1M70xBwtEg',
             expiredIn: 0,
-            scope: "string",
-            tokenType: "string",
+            scope: 'string',
+            tokenType: 'string',
           },
-          devMessage: "string",
-          displayMessage: "string",
+          devMessage: 'string',
+          displayMessage: 'string',
           // status: "DATA_NOT_FOUND_FROM_DB",
-          status: "SUCCESS",
+          status: 'SUCCESS',
         })
       );
     }
