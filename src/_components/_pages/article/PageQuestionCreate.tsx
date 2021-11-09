@@ -58,6 +58,7 @@ const PageArticleCreate: React.FC = () => {
   }, [state]);
 
   function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    // FIXME : 기존 state 값 대신에 e.target.value의 length로 검증할 것
     if (state.textLength > 255) {
       dispatch({
         _t: "CHANGE_TEXT",
@@ -99,7 +100,6 @@ const PageArticleCreate: React.FC = () => {
         <textarea
           className="QuestionCreateUpdateForm-input mg-bottom--16"
           placeholder="아파트 생활, 맛집에 대해 글을 써보세요!"
-          maxLength={255}
           onChange={handleChange}
         />
         <div className="QuestionCreateUpdateForm-textCounter">

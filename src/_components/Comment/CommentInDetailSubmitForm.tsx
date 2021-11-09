@@ -59,10 +59,17 @@ const CommentInDetailSubmitForm: React.FC<CommentInDetailSubmitFormProps> = ({
   const [showCounter, setShowCounter] = useState(false);
 
   function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    dispatch({
-      _t: "CHANGE_TEXT",
-      payload: e.target.value,
-    });
+    if (e.target.value.length > 80) {
+      dispatch({
+        _t: "CHANGE_TEXT",
+        payload: e.target.value.substring(0, 80),
+      });
+    } else {
+      dispatch({
+        _t: "CHANGE_TEXT",
+        payload: e.target.value,
+      });
+    }
     setScrollHeight(e.target.scrollHeight);
   }
 
@@ -124,7 +131,6 @@ const CommentInDetailSubmitForm: React.FC<CommentInDetailSubmitFormProps> = ({
           className="CommentSubmitForm-textarea"
           rows={1}
           style={{ height: scrollHeight }}
-          maxLength={255}
           value={state.mainText}
           onChange={handleChange}
           onKeyDown={(e) => {
@@ -137,7 +143,7 @@ const CommentInDetailSubmitForm: React.FC<CommentInDetailSubmitFormProps> = ({
         />
         {showCounter && (
           <div className="CommentSubmitForm-textCounter">
-            ({state.mainText.length}/255)
+            ({state.mainText.length}/80)
           </div>
         )}
       </div>
