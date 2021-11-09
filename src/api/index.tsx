@@ -1,21 +1,20 @@
-import React, { createContext, useContext, useMemo } from 'react';
+import React, { createContext, useContext, useMemo } from "react";
 
-import { Configuration } from '../__generated__/ourapt';
-import { Class2Api as ApartmentControllerApi } from '../__generated__/ourapt';
-import { Class3Api as OAuthControllerApi } from '../__generated__/ourapt';
-import { Class4Api as QuestionControllerApi } from '../__generated__/ourapt';
-import { Class5Api as CommentControllerApi } from '../__generated__/ourapt';
-import { Class6Api as UserControllerApi } from '../__generated__/ourapt';
-import { Class7Api as LogControllerApi } from '../__generated__/ourapt';
-import { Class99Api as NoApartmentController } from '../__generated__/ourapt';
+import { Configuration } from "../__generated__/ourapt";
+import { Class2Api as ApartmentControllerApi } from "../__generated__/ourapt";
+import { Class3Api as OAuthControllerApi } from "../__generated__/ourapt";
+import { Class4Api as QuestionControllerApi } from "../__generated__/ourapt";
+import { Class5Api as CommentControllerApi } from "../__generated__/ourapt";
+import { Class6Api as UserControllerApi } from "../__generated__/ourapt";
+import { Class7Api as LogControllerApi } from "../__generated__/ourapt";
+import { Class99Api as NoApartmentController } from "../__generated__/ourapt";
 
-import { useAccessToken } from '../_providers/useAccessToken';
+import { useAccessToken } from "../_providers/useAccessToken";
 
-import { getRegionFromURLParams } from '../_modules/getQueryFromURLParams';
-import getLogger from '../_modules/logger';
+import { getRegionFromURLParams } from "../_modules/getQueryFromURLParams";
 
 const regionId = getRegionFromURLParams();
-const instanceId = 'initInstancId';
+const instanceId = "initInstancId";
 
 // API를 만들어주는데,
 function makeApi({ accessToken }: { accessToken?: string | null }) {
@@ -24,8 +23,8 @@ function makeApi({ accessToken }: { accessToken?: string | null }) {
       // accessToken,
       apiKey: accessToken,
       headers: {
-        'Region-Id': regionId,
-        'Instance-Id': instanceId,
+        "Region-Id": regionId,
+        "Instance-Id": instanceId,
       },
     });
     const apartmentController = new ApartmentControllerApi(configuration);
@@ -49,8 +48,8 @@ function makeApi({ accessToken }: { accessToken?: string | null }) {
     const configuration = new Configuration({
       // accessToken,
       headers: {
-        'Region-Id': regionId,
-        'Instance-Id': instanceId,
+        "Region-Id": regionId,
+        "Instance-Id": instanceId,
       },
     });
     const apartmentController = new ApartmentControllerApi(configuration);

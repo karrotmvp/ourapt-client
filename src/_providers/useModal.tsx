@@ -4,8 +4,7 @@ import React, {
   useReducer,
   useCallback,
   useMemo,
-} from 'react';
-import getLogger from '../_modules/logger';
+} from "react";
 
 type Modal = MultiSelectModal | ConfirmationModal;
 
@@ -31,65 +30,65 @@ type ConfirmationModal = {
 
 type State =
   | {
-      _t: 'modal-closed';
+      _t: "modal-closed";
     }
   | {
-      _t: 'multiSelectModal-opened';
+      _t: "multiSelectModal-opened";
       modal: MultiSelectModal;
     }
   | {
-      _t: 'confirmationModal-opened';
+      _t: "confirmationModal-opened";
       modal: ConfirmationModal;
     };
 
 type Action =
   | {
-      _t: 'OPEN_MULTISELECT_MODAL';
+      _t: "OPEN_MULTISELECT_MODAL";
       payload: MultiSelectModal;
     }
   | {
-      _t: 'OPEN_CONFIRMATION_MODAL';
+      _t: "OPEN_CONFIRMATION_MODAL";
       payload: ConfirmationModal;
     }
   | {
-      _t: 'CLOSE_MODAL';
+      _t: "CLOSE_MODAL";
     };
 
 const reducer: React.Reducer<State, Action> = (prevState, action) => {
   switch (action._t) {
-    case 'OPEN_MULTISELECT_MODAL':
-      return { _t: 'multiSelectModal-opened', modal: action.payload };
-    case 'OPEN_CONFIRMATION_MODAL':
-      return { _t: 'confirmationModal-opened', modal: action.payload };
+    case "OPEN_MULTISELECT_MODAL":
+      return { _t: "multiSelectModal-opened", modal: action.payload };
+    case "OPEN_CONFIRMATION_MODAL":
+      return { _t: "confirmationModal-opened", modal: action.payload };
     default:
-      return { _t: 'modal-closed' };
+      return { _t: "modal-closed" };
   }
 };
 
-const ModalContext = createContext<State>({ _t: 'modal-closed' });
+const ModalContext = createContext<State>({ _t: "modal-closed" });
 
 const voidFC = () => {};
 const ModalSetterContext =
-  createContext<(modal: Modal | 'close') => void>(voidFC);
+  createContext<(modal: Modal | "close") => void>(voidFC);
 
 export const ModalProvider: React.FC = (props) => {
-  const [state, dispatch] = useReducer(reducer, { _t: 'modal-closed' });
+  const [state, dispatch] = useReducer(reducer, { _t: "modal-closed" });
 
-  const setModal = useCallback((modal: Modal | 'close') => {
-    if (modal === 'close') {
+  const setModal = useCallback((modal: Modal | "close") => {
+    if (modal === "close") {
       console.log(`셋모달 ${modal}`);
-      dispatch({ _t: 'CLOSE_MODAL' });
+      dispatch({ _t: "CLOSE_MODAL" });
       return;
     }
     switch (modal._t) {
-      case 'MultiSelectModal':
-        dispatch({ _t: 'OPEN_MULTISELECT_MODAL', payload: modal });
+      case "MultiSelectModal":
+        dispatch({ _t: "OPEN_MULTISELECT_MODAL", payload: modal });
         return;
-      case 'ConfirmationModal':
-        dispatch({ _t: 'OPEN_CONFIRMATION_MODAL', payload: modal });
+      case "ConfirmationModal":
+        dispatch({ _t: "OPEN_CONFIRMATION_MODAL", payload: modal });
         return;
       default:
-        dispatch({ _t: 'CLOSE_MODAL' });
+        dispatch({ _t: "CLOSE_MODAL" });
         return;
     }
   }, []);
