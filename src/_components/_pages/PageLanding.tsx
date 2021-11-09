@@ -1,17 +1,17 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from 'react';
 
-import { ApartmentDto as Apartment } from "../../__generated__/ourapt";
-import { useAccessToken } from "../../_providers/useAccessToken";
-import { useApi } from "../../api";
-import { useViewer } from "../../_providers/useViewer";
+import { ApartmentDto as Apartment } from '../../__generated__/ourapt';
+import { useAccessToken } from '../../_providers/useAccessToken';
+import { useApi } from '../../api';
+import { useViewer } from '../../_providers/useViewer';
 
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
-import { mini } from "../../_Karrotmarket/KarrotmarketMini";
-import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
+import { mini } from '../../_Karrotmarket/KarrotmarketMini';
+import { ScreenHelmet, useNavigator } from '@karrotframe/navigator';
 
-import ApartmentInLanding from "../Apartment/ApartmentInLanding";
-import PageError from "./PageError";
+import ApartmentInLanding from '../Apartment/ApartmentInLanding';
+import PageError from './PageError';
 
 const PageLanding: React.FC = () => {
   const api = useApi();
@@ -32,10 +32,13 @@ const PageLanding: React.FC = () => {
         newApartmentId: apartmentId,
       },
     });
-    if (response.status === "SUCCESS") push(`/feed/${apartmentId}`);
+    if (response.status === 'SUCCESS') push(`/feed/${apartmentId}`);
   }
 
   const submitAgreement = (apartmentId: string) => {
+    alert('PRESET_URL ' + process.env.REACT_APP_PRESET_URL);
+    alert('APP_ID' + process.env.REACT_APP_ID);
+
     mini.startPreset({
       preset: `${process.env.REACT_APP_PRESET_URL}`,
       params: {
