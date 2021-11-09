@@ -1,4 +1,5 @@
 import { LogFirstRequestUsingGETRefererEnum as RefEnum } from "../__generated__/ourapt";
+import getLogger from "./logger";
 
 let urlSearchParams = new URLSearchParams(window.location.search);
 
@@ -18,7 +19,9 @@ export function getRegionFromURLParams() {
 
 export function getCodeFromURLParams() {
   const code = urlSearchParams.get("code");
+  getLogger().info("코드 가져올게요");
   if (code) {
+    getLogger().info(code);
     return code;
   } else {
     return "NOT_AGREED";
