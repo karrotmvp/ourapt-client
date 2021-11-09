@@ -46,9 +46,9 @@ export const AccessTokenProvider: React.FC = (props) => {
     return getCodeFromURLParams();
   }, []);
 
-  const manualCodeOnBrowser: Boolean = true;
+  const manualCodeOnBrowser: Boolean = false;
   if (manualCodeOnBrowser) {
-    code = "KZt3fgXB9BXpeXHF84UN";
+    code = "L6cT52X2GjNN6YYm_B0o";
   }
 
   const [state, dispatch] = useReducer(

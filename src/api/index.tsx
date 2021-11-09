@@ -9,21 +9,15 @@ import { Class6Api as UserControllerApi } from "../__generated__/ourapt";
 import { Class7Api as LogControlloerApi } from "../__generated__/ourapt";
 import { Class99Api as NoApartmentController } from "../__generated__/ourapt";
 
-import { LogFirstRequestUsingGETRefererEnum as RefEnum } from "../__generated__/ourapt";
-
 import { useAccessToken } from "../_providers/useAccessToken";
-import { useViewer } from "../_providers/useViewer";
+
+import { getRegionFromURLParams } from "../_modules/getQueryFromURLParams";
+
+const regionId = getRegionFromURLParams();
+const instanceId = "initInstancId";
 
 // API를 만들어주는데,
-function makeApi({
-  accessToken,
-  regionId,
-  instanceId,
-}: {
-  accessToken?: string | null;
-  regionId: string;
-  instanceId: RefEnum;
-}) {
+function makeApi({ accessToken }: { accessToken?: string | null }) {
   if (accessToken) {
     const configuration = new Configuration({
       // accessToken,
@@ -78,17 +72,13 @@ function makeApi({
   }
 }
 
-const ApiContext = createContext(
-  makeApi({ regionId: "00000000", instanceId: "UnKnown" as RefEnum })
-);
+const ApiContext = createContext(makeApi({}));
 
 export const ApiProvider: React.FC = (props) => {
-  const { regionId, instanceId } = useViewer();
+  // const { regionId, instanceId } = useViewer();
   const { accessToken } = useAccessToken();
-  const api = useMemo(
-    () => makeApi({ accessToken, regionId, instanceId }),
-    [accessToken, regionId, instanceId]
-  );
+
+  const api = useMemo(() => makeApi({ accessToken }), [accessToken]);
 
   return (
     <ApiContext.Provider value={api}>{props.children}</ApiContext.Provider>
