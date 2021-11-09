@@ -1,3 +1,5 @@
+import getLogger from './logger';
+
 export default function examineResBody({
   resBody,
   validator = () => true,
@@ -13,6 +15,7 @@ export default function examineResBody({
     !resBody.data ||
     !validator(resBody.data)
   ) {
+    getLogger().info('responseBody: ' + JSON.stringify(resBody, null, 2));
     onFailure();
     return;
   }
