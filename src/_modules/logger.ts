@@ -1,7 +1,9 @@
+const logger = {
+  info: (message: string) => {
+    console.log(message);
+  },
+};
+
 export default function getLogger() {
-  return {
-    info: (message: string) => {
-      console.log(message);
-    },
-  };
+  return logger;
 }

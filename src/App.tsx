@@ -8,7 +8,7 @@ import { mini } from './_Karrotmarket/KarrotmarketMini';
 import { css } from '@emotion/css';
 
 // HOC
-import withLanding from './_hoc/withLanding';
+import WithLanding from './_hoc/withLanding';
 import WithModal from './_hoc/withModal';
 
 // 페이지뷰
@@ -49,7 +49,7 @@ const App: React.FC = () => {
           <ViewerProvider>
             <ModalProvider>
               <div className="App">
-                <Screen path="/" component={withLanding} />
+                <Screen path="/" component={WithLanding} />
                 <Screen path="/landing">
                   <PageLanding />
                 </Screen>

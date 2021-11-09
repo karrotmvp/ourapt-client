@@ -13,6 +13,7 @@ import { CommonResponseBodyKarrotAccessTokenDto } from '../__generated__/ourapt'
 import examineResBody from '../_modules/examineResBody';
 import { getCodeFromURLParams } from '../_modules/getQueryFromURLParams';
 import { useNavigator } from '@karrotframe/navigator';
+import getLogger from '../_modules/logger';
 
 type State =
   | {
@@ -86,8 +87,7 @@ export const AccessTokenProvider: React.FC = (props) => {
         });
 
         const accessToken = safeBody.data.accessToken;
-
-        console.log(accessToken);
+        getLogger().info(accessToken);
 
         dispatch({
           _t: 'SET_ACCESS_TOKEN',
