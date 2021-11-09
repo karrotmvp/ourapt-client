@@ -55,6 +55,7 @@ const CommentInDetailSubmitForm: React.FC<CommentInDetailSubmitFormProps> = ({
     className: "btn--inactive",
   });
 
+  const [defaultScrollHeight, setDefaultScrollHeight] = useState(84);
   const [scrollHeight, setScrollHeight] = useState(32);
   const [showCounter, setShowCounter] = useState(false);
 
@@ -100,9 +101,16 @@ const CommentInDetailSubmitForm: React.FC<CommentInDetailSubmitFormProps> = ({
       _t: "CHANGE_TEXT",
       payload: "",
     });
-    setScrollHeight(32);
+    setScrollHeight(defaultScrollHeight);
     setShowCounter(false);
   }
+
+  useEffect(() => {
+    const textArea = document.getElementById("CommentSubmitForm-textarea");
+    if (textArea && textArea.scrollHeight < defaultScrollHeight) {
+      setDefaultScrollHeight(textArea.scrollHeight);
+    }
+  }, [state]);
 
   useEffect(() => {
     if (state._t === "blank") {
@@ -113,7 +121,7 @@ const CommentInDetailSubmitForm: React.FC<CommentInDetailSubmitFormProps> = ({
   }, [state]);
 
   useEffect(() => {
-    if (scrollHeight > 32) {
+    if (scrollHeight > defaultScrollHeight) {
       setShowCounter(true);
     }
   }, [scrollHeight]);
@@ -135,7 +143,7 @@ const CommentInDetailSubmitForm: React.FC<CommentInDetailSubmitFormProps> = ({
           onChange={handleChange}
           onKeyDown={(e) => {
             if (e.key === "Backspace") {
-              setScrollHeight(32);
+              setScrollHeight(defaultScrollHeight);
               setShowCounter(false);
             }
           }}
