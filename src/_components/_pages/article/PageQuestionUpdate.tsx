@@ -10,6 +10,7 @@ import examineResBody from "../../../_modules/examineResBody";
 type State =
   | {
       _t: "blank";
+      mainText: string;
       textLength: number;
     }
   | {
@@ -28,6 +29,7 @@ const reducer: React.Reducer<State, Action> = (prevState, action) => {
     case "":
       return {
         _t: "blank",
+        mainText: action.payload,
         textLength: action.payload.length,
       };
     default:
@@ -44,9 +46,13 @@ const PageArticleCreate: React.FC = () => {
   const articleId = params.articleId || "";
 
   const api = useApi();
-  const [state, dispatch] = useReducer(reducer, { _t: "blank", textLength: 0 });
+  const [state, dispatch] = useReducer(reducer, {
+    _t: "blank",
+    mainText: "",
+    textLength: 0,
+  });
 
-  const { push } = useNavigator();
+  const { push, replace } = useNavigator();
   // const [question, setQuestion] = useState<Question>();
 
   const [submitBtnActiveState, setSubmitBtnActiveState] = useState({
@@ -71,7 +77,7 @@ const PageArticleCreate: React.FC = () => {
       const question = safeBody.data.question;
       dispatch({
         _t: "CHANGE_TEXT",
-        payload: question,
+        payload: question.mainText,
       });
     })();
   }, [api.questionController, articleId, push]);
@@ -85,10 +91,17 @@ const PageArticleCreate: React.FC = () => {
   }, [state]);
 
   function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    dispatch({
-      _t: "CHANGE_TEXT",
-      payload: e.target.value,
-    });
+    if (e.target.value.length > 255) {
+      dispatch({
+        _t: "CHANGE_TEXT",
+        payload: e.target.value.substring(0, 255),
+      });
+    } else {
+      dispatch({
+        _t: "CHANGE_TEXT",
+        payload: e.target.value,
+      });
+    }
   }
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -108,7 +121,7 @@ const PageArticleCreate: React.FC = () => {
       });
 
       const question = safeBody.data.question;
-      push(`/article/${question.id}`);
+      replace(`/article/${question.id}`);
     }
   }
 
@@ -119,7 +132,7 @@ const PageArticleCreate: React.FC = () => {
         <textarea
           className="QuestionCreateUpdateForm-input mg-bottom--16"
           placeholder="아파트 생활, 맛집에 대해 글을 써보세요!"
-          maxLength={255}
+          value={state.mainText}
           onChange={handleChange}
         />
         <div className="QuestionCreateUpdateForm-textCounter">
