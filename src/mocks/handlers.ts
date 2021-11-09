@@ -5,7 +5,6 @@ export const handlers = [
   rest.post(
     "https://api-alpha.daangn-ourapt.com/api/v1/oauth/karrot",
     async (req, res, ctx) => {
-      // alert("제가 돌아보겠습니다!");
       return await res(
         ctx.json({
           data: {

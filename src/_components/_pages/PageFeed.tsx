@@ -20,9 +20,9 @@ type PageFeedProps = {
   apartmentId: string;
 };
 
-const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
+const PageFeed: React.FC<PageFeedProps> = (props) => {
   const params =
-    useParams<{ apartmentId?: string }>().apartmentId || apartmentId;
+    useParams<{ apartmentId?: string }>().apartmentId || props.apartmentId;
 
   const api = useApi();
 
@@ -90,12 +90,21 @@ const PageFeed: React.FC<PageFeedProps> = ({ apartmentId }) => {
     getQuestionsByCursorPerPage(params, Date.now(), 100);
   }, [api.questionController, getQuestionsByCursorPerPage, params, push]);
 
+  function onApartmentInNavigatorClick() {
+    push(`/landing`);
+  }
+
   return (
     <div className="Page">
       <div className="PageFeed-inner">
         <ScreenHelmet
           appendLeft={<OuraptLogo />}
-          appendRight={<ApartmentInNavigator apartmentId={apartmentId} />}
+          appendRight={
+            <ApartmentInNavigator
+              apartmentId={params}
+              onClickAction={onApartmentInNavigatorClick}
+            />
+          }
         />
         {pinnedQuestion && pinnedQuestion.id && (
           <PinnedArea className="pd--16">

@@ -14,10 +14,12 @@ import examineResBody from "../../_modules/examineResBody";
 
 type ApartmentInNavigatorProps = {
   apartmentId: string;
+  onClickAction?: () => void;
 };
 
 const ApartmentInNavigator: React.FC<ApartmentInNavigatorProps> = ({
   apartmentId,
+  onClickAction,
 }) => {
   const api = useApi();
   const { push } = useNavigator();
@@ -36,32 +38,65 @@ const ApartmentInNavigator: React.FC<ApartmentInNavigatorProps> = ({
           push(`/error?cause=getApartmentByIdAtNavigator`);
         },
       }).data.apartment;
-      setApartment(apartment);
+      setApartment(() => apartment);
     })();
-  }, [apartment, apartmentId, api.apartmentController, push]);
+  }, [apartmentId, api.apartmentController, push]);
 
   function Logo(brandName: string) {
     switch (brandName) {
       case "더샵":
-        return <TheSharp style={{ width: "24px", height: "24px" }} />;
+        return (
+          <TheSharp
+            style={{
+              width: "24px",
+              height: "24px",
+              border: "1px solid #EBEBEB",
+              borderRadius: "50%",
+            }}
+          />
+        );
       case "자이":
-        return <Xi style={{ width: "24px", height: "24px" }} />;
+        return (
+          <Xi
+            style={{
+              width: "24px",
+              height: "24px",
+              border: "1px solid #EBEBEB",
+              borderRadius: "50%",
+            }}
+          />
+        );
       case "푸르지오":
-        return <Prugio style={{ width: "24px", height: "24px" }} />;
+        return (
+          <Prugio
+            style={{
+              width: "24px",
+              height: "24px",
+              border: "1px solid #EBEBEB",
+              borderRadius: "50%",
+            }}
+          />
+        );
+      default:
+        return (
+          <Prugio
+            style={{
+              width: "24px",
+              height: "24px",
+              border: "1px solid #EBEBEB",
+              borderRadius: "50%",
+            }}
+          />
+        );
     }
   }
 
   if (!apartment) {
-    return <div></div>;
+    return <div>왜?</div>;
   } else
     return (
-      <ApartmentWrapper
-        onClick={() => {
-          alert("여기 클릭!");
-          push(`/landing`);
-        }}
-      >
-        <ApartmentName>{apartment.name}</ApartmentName>
+      <ApartmentWrapper className="vertical--center" onClick={onClickAction}>
+        <ApartmentName className="mg-right--4">{apartment.name}</ApartmentName>
         {Logo(apartment.brandName)}
       </ApartmentWrapper>
     );
