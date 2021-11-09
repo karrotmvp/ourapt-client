@@ -12,7 +12,6 @@ import { CommonResponseBodyKarrotAccessTokenDto } from '../__generated__/ourapt'
 
 import examineResBody from '../_modules/examineResBody';
 import { getCodeFromURLParams } from '../_modules/getQueryFromURLParams';
-import { useNavigator } from '@karrotframe/navigator';
 import getLogger from '../_modules/logger';
 
 type State =
@@ -43,8 +42,8 @@ const AccessTokenSetterContext =
   createContext<(code: string) => Promise<void>>(voidFC);
 
 export const AccessTokenProvider: React.FC = (props) => {
+  getLogger().info('ACCESS_TOKEN_PROVIDER_RENDERING');
   const api = useApi();
-  const { push } = useNavigator();
   let code = useMemo(() => {
     return getCodeFromURLParams();
   }, []);
@@ -82,12 +81,12 @@ export const AccessTokenProvider: React.FC = (props) => {
           resBody: response,
           validator: (data) => data.accessToken != null,
           onFailure: () => {
-            push(`/error?cause=karrotLoginAtUseAccessToken`);
+            alert(`/error?cause=karrotLoginAtUseAccessToken`);
           },
         });
 
         const accessToken = safeBody.data.accessToken;
-        getLogger().info(accessToken);
+        getLogger().info('PROVIDER_INIT: ' + accessToken);
 
         dispatch({
           _t: 'SET_ACCESS_TOKEN',
@@ -95,9 +94,10 @@ export const AccessTokenProvider: React.FC = (props) => {
         });
       };
 
+      getLogger().info('INITIALIZE_ACCESS_TOKEN');
       dispatchIssuedAccessToken(issueAccessTokenFromAuthorizationCode());
     }
-  }, [code, state, api.oauthController, push]);
+  }, [code, state, api.oauthController]);
 
   const issueAccessTokenFromAuthorizationCode = useCallback(
     async (code: string) => {
@@ -111,21 +111,22 @@ export const AccessTokenProvider: React.FC = (props) => {
         resBody: response,
         validator: (data) => data.accessToken != null,
         onFailure: () => {
-          push(`/error?cause=karrotLoginAtUseAccessToken`);
+          alert(`/error?cause=karrotLoginAtUseAccessToken`);
         },
       });
 
       const accessToken = safeBody.data.accessToken;
-
+      getLogger().info('ACCESS_TOKEN_SETTER: ' + accessToken);
       dispatch({
         _t: 'SET_ACCESS_TOKEN',
         accessToken: 'Bearer ' + accessToken,
       });
     },
-    [api.oauthController, push]
+    [api.oauthController]
   );
 
   if (state._t === 'pending') {
+    getLogger().info('ACCESS_TOKEN_PROVIDER_PENDING');
     return null;
   }
 

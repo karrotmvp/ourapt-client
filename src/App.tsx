@@ -35,20 +35,20 @@ if (process.env.REACT_APP_TEST === 'MSW_버전') {
 
 const App: React.FC = () => {
   return (
-    <Navigator
-      className={css`
-        --kf_navigator_navbar-height: 56px;
-      `}
-      theme="Cupertino"
-      onClose={() => {
-        mini.close();
-      }}
-    >
-      <AccessTokenProvider>
-        <ApiProvider>
-          <ViewerProvider>
-            <ModalProvider>
-              <div className="App">
+    <AccessTokenProvider>
+      <ApiProvider>
+        <ViewerProvider>
+          <ModalProvider>
+            <div className="App">
+              <Navigator
+                className={css`
+                  --kf_navigator_navbar-height: 56px;
+                `}
+                theme="Cupertino"
+                onClose={() => {
+                  mini.close();
+                }}
+              >
                 <Screen path="/" component={WithLanding} />
                 <Screen path="/landing">
                   <PageLanding />
@@ -75,12 +75,12 @@ const App: React.FC = () => {
                   <PageError cause={''} />
                 </Screen>
                 <WithModal />
-              </div>
-            </ModalProvider>
-          </ViewerProvider>
-        </ApiProvider>
-      </AccessTokenProvider>
-    </Navigator>
+              </Navigator>
+            </div>
+          </ModalProvider>
+        </ViewerProvider>
+      </ApiProvider>
+    </AccessTokenProvider>
   );
 };
 

@@ -18,7 +18,6 @@ import {
 import { useApi } from '../api';
 import { useAccessToken } from './useAccessToken';
 import examineResBody from '../_modules/examineResBody';
-import { useNavigator } from '@karrotframe/navigator';
 
 type State =
   | {
@@ -47,7 +46,6 @@ const ViewerContext = createContext<State | null>(null);
 
 export const ViewerProvider: React.FC = (props) => {
   const api = useApi();
-  const { push } = useNavigator();
   const { accessToken } = useAccessToken();
 
   const [state, dispatch] = useReducer(
@@ -78,7 +76,7 @@ export const ViewerProvider: React.FC = (props) => {
           resBody: response,
           validator: (data) => data.user != null,
           onFailure: () => {
-            push(`/error?cause=getMyInfoAtUseViewer`);
+            alert(`/error?cause=getMyInfoAtUseViewer`);
           },
         });
 
@@ -90,7 +88,7 @@ export const ViewerProvider: React.FC = (props) => {
       };
       dispatchIssuedViewer(getViewerFromAccessToken);
     }
-  }, [state._t, accessToken, api.userController, push]); // AT가 재설정될 경우에만 새로 돌도록 합니다.
+  }, [state._t, accessToken, api.userController]); // AT가 재설정될 경우에만 새로 돌도록 합니다.
 
   if (state._t === 'pending') {
     return null;

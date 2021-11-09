@@ -1,6 +1,7 @@
 const logger = {
   info: (message: string) => {
-    console.log(message);
+    alert(message);
+    // console.log(message);
   },
 };
 

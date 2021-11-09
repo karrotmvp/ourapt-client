@@ -12,6 +12,7 @@ import { Class99Api as NoApartmentController } from '../__generated__/ourapt';
 import { useAccessToken } from '../_providers/useAccessToken';
 
 import { getRegionFromURLParams } from '../_modules/getQueryFromURLParams';
+import getLogger from '../_modules/logger';
 
 const regionId = getRegionFromURLParams();
 const instanceId = 'initInstancId';
@@ -75,7 +76,7 @@ function makeApi({ accessToken }: { accessToken?: string | null }) {
 const ApiContext = createContext(makeApi({}));
 
 export const ApiProvider: React.FC = (props) => {
-  // const { regionId, instanceId } = useViewer();
+  getLogger().info('API_PROVIDER_RENDERING');
   const { accessToken } = useAccessToken();
 
   const api = useMemo(() => makeApi({ accessToken }), [accessToken]);

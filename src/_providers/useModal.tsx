@@ -5,6 +5,7 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
+import getLogger from '../_modules/logger';
 
 type Modal = MultiSelectModal | ConfirmationModal;
 
@@ -72,6 +73,7 @@ const ModalSetterContext =
   createContext<(modal: Modal | 'close') => void>(voidFC);
 
 export const ModalProvider: React.FC = (props) => {
+  getLogger().info('MODAL_PROVIDER_RENDERED');
   const [state, dispatch] = useReducer(reducer, { _t: 'modal-closed' });
 
   const setModal = useCallback((modal: Modal | 'close') => {
