@@ -18,9 +18,14 @@ const instanceId = "initInstancId";
 
 // API를 만들어주는데,
 function makeApi({ accessToken }: { accessToken?: string | null }) {
+  const HTTPS_BASE_PATH =
+    process.env.ENV === "production"
+      ? "https://api.daangn-ourapt.com".replace(/\/+$/, "")
+      : "https://api-alpha.daangn-ourapt.com".replace(/\/+$/, "");
+
   if (accessToken) {
     const configuration = new Configuration({
-      // accessToken,
+      basePath: HTTPS_BASE_PATH,
       apiKey: accessToken,
       headers: {
         "Region-Id": regionId,
@@ -46,7 +51,7 @@ function makeApi({ accessToken }: { accessToken?: string | null }) {
     };
   } else {
     const configuration = new Configuration({
-      // accessToken,
+      basePath: HTTPS_BASE_PATH,
       headers: {
         "Region-Id": regionId,
         "Instance-Id": instanceId,

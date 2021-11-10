@@ -152,7 +152,6 @@ export const ViewerProvider: React.FC = (props) => {
 
   // FIXME: invalidateViewer
   const refreshViewer = () => {
-    getLogger().alert(`리프레셔 ${accessToken}`);
     dispatch({
       _t: "REFRESH_VIEWER",
     });
