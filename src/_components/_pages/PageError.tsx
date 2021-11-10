@@ -17,7 +17,7 @@ const PageError: React.FC<PageErrorProps> = ({ cause }) => {
     return;
   }
   return (
-    <PageErrorContainer className="center">
+    <PageErrorContainer className="Page center">
       <PageErrorIcon />
       <PageErrorTitle>불편을 드려서 정말 죄송해요.</PageErrorTitle>
       <PageErrorInfo>
@@ -26,7 +26,7 @@ const PageError: React.FC<PageErrorProps> = ({ cause }) => {
       <button className="btn-184 btn btn--active" onClick={onGoBackBtnClick}>
         이전 페이지로 돌아가기
       </button>
-      <p>{causeParam}</p>
+      <ErrorLog>{causeParam}</ErrorLog>
     </PageErrorContainer>
   );
 };
@@ -34,9 +34,6 @@ const PageError: React.FC<PageErrorProps> = ({ cause }) => {
 export default PageError;
 
 const PageErrorContainer = styled.div`
-  width: 100%;
-  height: 100%;
-
   margin-top: 92px;
 `;
 
@@ -53,4 +50,9 @@ const PageErrorInfo = styled.div`
 
   color: #555555;
   font-size: 15px;
+`;
+
+const ErrorLog = styled.p`
+  color: #f9f9f9;
+  font-size: 6px;
 `;

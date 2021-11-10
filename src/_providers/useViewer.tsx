@@ -81,8 +81,6 @@ export const ViewerProvider: React.FC = (props) => {
   );
 
   useEffect(() => {
-    alert(`useViewer rendering ${accessToken}`);
-    alert(`useViewer rendering ${state._t}`);
     if (accessToken && state._t === "pending") {
       // if (accessToken) {
       const getViewerFromAccessToken = async function () {
@@ -113,7 +111,6 @@ export const ViewerProvider: React.FC = (props) => {
   }, [state._t, accessToken, api.userController]); // AT가 재설정될 경우에만 새로 돌도록 합니다.
 
   const setViewerWithAccessToken = useCallback(async () => {
-    alert(`액세스토큰세터 다시 돌아볼게요 ${accessToken}`);
     const response = await api.userController.getMyInfoUsingGET();
     const safeBody = examineResBody({
       resBody: response,
@@ -130,8 +127,6 @@ export const ViewerProvider: React.FC = (props) => {
   }, [api.userController, accessToken]);
 
   const refreshViewer = () => {
-    alert("리프레셔돌아가는데요");
-    alert(accessToken);
     dispatch({
       _t: "REFRESH_VIEWER",
     });
