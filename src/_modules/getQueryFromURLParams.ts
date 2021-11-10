@@ -1,5 +1,4 @@
 import { LogFirstRequestUsingGETRefererEnum as RefEnum } from "../__generated__/ourapt";
-import getLogger from "./logger";
 
 let urlSearchParams = new URLSearchParams(window.location.search);
 

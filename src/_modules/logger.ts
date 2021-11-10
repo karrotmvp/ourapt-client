@@ -1,21 +1,25 @@
-const logger =
-  process.env.REACT_APP_ENV === "alpha" || process.env.REACT_APP_ENV === "MSW"
-    ? {
-        log: (message: string) => {
-          console.log(message);
-        },
-        POP: (message: string) => {
-          alert(message);
-        },
-        data: (message: string) => {
-          // alert(message);
-          // console.info(message);
-        },
-        error: (message: string) => {
-          console.error(message);
-        },
-      }
-    : {};
+const logOptions =
+  process.env.REACT_APP_ENV === "alpha" || process.env.REACT_APP_ENV === "MSW";
+
+const voidFC = (message: string) => {};
+
+const logger = logOptions
+  ? {
+      log: (message: string) => {
+        console.log(message);
+      },
+      POP: (message: string) => {
+        alert(message);
+      },
+      data: (message: string) => {
+        // alert(message);
+        // console.info(message);
+      },
+      error: (message: string) => {
+        console.error(message);
+      },
+    }
+  : { log: voidFC, POP: voidFC, data: voidFC, error: voidFC };
 
 export default function getLogger() {
   return logger;
