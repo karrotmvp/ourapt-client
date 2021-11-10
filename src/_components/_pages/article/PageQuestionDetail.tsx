@@ -77,12 +77,14 @@ const PageArticleDetail: React.FC = () => {
   }, [isCommentUpdate, api.commentController, articleId, push]);
 
   const modifyBtn = isMyArticle ? (
-    <KebabIcon
-      className="mg-right--17"
-      onClick={(e) => {
-        setModal(ModifyDeleteQuestionModal);
-      }}
-    />
+    <KebabWrapper>
+      <KebabIcon
+        className="mg-right--17"
+        onClick={(e) => {
+          setModal(ModifyDeleteQuestionModal);
+        }}
+      />
+    </KebabWrapper>
   ) : (
     <div></div>
   );
@@ -179,6 +181,10 @@ const PageArticleDetail: React.FC = () => {
 };
 
 export default PageArticleDetail;
+
+const KebabWrapper = styled.div`
+  padding-left: 16px;
+`;
 
 const ArticleArea = styled.div`
   width: 100%;

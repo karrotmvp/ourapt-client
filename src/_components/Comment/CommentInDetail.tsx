@@ -8,6 +8,7 @@ import { useModal } from "../../_providers/useModal";
 import UserAsAuthor from "../User/UserAsAuthor";
 
 import { ReactComponent as KebabIcon } from "../../_assets/kebabIcon.svg";
+import styled from "@emotion/styled";
 
 type CommentInDetailProps = {
   comment: Comment;
@@ -70,11 +71,13 @@ const CommentInDetail: React.FC<CommentInDetailProps> = ({
           updatedAt={comment.updatedAt}
         />
         {isMyArticle && (
-          <KebabIcon
-            onClick={(e) => {
-              setModal(ModifyDeleteCommentModal);
-            }}
-          />
+          <KebabWrapper>
+            <KebabIcon
+              onClick={(e) => {
+                setModal(ModifyDeleteCommentModal);
+              }}
+            />
+          </KebabWrapper>
         )}
       </div>
       <p className="ArticleCard-Content ArticleCardInList-Content mg-top--10">
@@ -85,3 +88,8 @@ const CommentInDetail: React.FC<CommentInDetailProps> = ({
 };
 
 export default CommentInDetail;
+
+const KebabWrapper = styled.div`
+  padding-left: 14px;
+  padding-right: 2px;
+`;
