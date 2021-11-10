@@ -8,6 +8,7 @@
     "eject": "react-scripts eject",
     "start": "react-scripts start",
     "test": "react-scripts test",
+    "code": "dotenv -e .env.code react-scripts start",
     "msw": "dotenv -e .env.msw react-scripts start",
     "alpha": "dotenv -e .env.alpha react-scripts start",
     "alpha:build": "dotenv -e .env.alpha react-scripts build",
