@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-export const BASE_PATH = "https://api-alpha.daangn-ourapt.com".replace(
+export const BASE_PATH = "http://api-alpha.daangn-ourapt.com".replace(
   /\/+$/,
   ""
 );

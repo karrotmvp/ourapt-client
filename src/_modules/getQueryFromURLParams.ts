@@ -34,3 +34,12 @@ export function getRefFromURLParams() {
     return RefEnum.Unknown;
   }
 }
+
+export function getPreloadFromURLParams() {
+  const isPreload = urlSearchParams.get("preload");
+  if (isPreload) {
+    return true;
+  } else {
+    return false;
+  }
+}

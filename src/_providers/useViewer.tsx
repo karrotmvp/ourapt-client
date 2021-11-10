@@ -80,6 +80,30 @@ export const ViewerProvider: React.FC = (props) => {
         }
   );
 
+  // TONY START
+  // const getViewerFromAccessToken = () => {
+  //   return api.userController.getMyInfoUsingGET();
+  // };
+
+  // useEffect(
+  //   () => {
+  //     // ...
+  //   },
+  //   [
+  //     //...
+  //   ]
+  // );
+
+  // const refreshViewer = async () => {
+  //   const viewer = await getViewerFromAccessToken();
+  //   dispatch({
+  //     _t: "SET_VIEWER",
+  //     viewer,
+  //   });
+  // };
+
+  // TONY END
+
   useEffect(() => {
     if (accessToken && state._t === "pending") {
       // if (accessToken) {
@@ -126,7 +150,9 @@ export const ViewerProvider: React.FC = (props) => {
     });
   }, [api.userController]);
 
+  // FIXME: invalidateViewer
   const refreshViewer = () => {
+    getLogger().alert(`리프레셔 ${accessToken}`);
     dispatch({
       _t: "REFRESH_VIEWER",
     });

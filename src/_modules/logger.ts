@@ -8,7 +8,7 @@ const logger = logOptions
       log: (message: string) => {
         console.log(message);
       },
-      POP: (message: string) => {
+      alert: (message: string) => {
         alert(message);
       },
       data: (message: string) => {
@@ -19,7 +19,7 @@ const logger = logOptions
         console.error(message);
       },
     }
-  : { log: voidFC, POP: voidFC, data: voidFC, error: voidFC };
+  : { log: voidFC, alert: voidFC, data: voidFC, error: voidFC };
 
 export default function getLogger() {
   return logger;

@@ -92,7 +92,7 @@ const ApartmentInNavigator: React.FC<ApartmentInNavigatorProps> = ({
   }
 
   if (!apartment) {
-    return <div>왜?</div>;
+    return <div></div>;
   } else
     return (
       <ApartmentWrapper className="vertical--center" onClick={onClickAction}>

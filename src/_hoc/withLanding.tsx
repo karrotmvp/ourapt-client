@@ -1,48 +1,117 @@
-import { useAccessToken } from '../_providers/useAccessToken';
-import { useApi } from '../api';
-import { useViewer } from '../_providers/useViewer';
+import React, { useState } from "react";
 
-import { useNavigator } from '@karrotframe/navigator';
+import { useAccessToken } from "../_providers/useAccessToken";
+import { useApi } from "../api";
+import { useViewer } from "../_providers/useViewer";
 
-import PageLanding from '../_components/_pages/PageLanding';
-import PageFeed from '../_components/_pages/PageFeed';
-import PageError from '../_components/_pages/PageError';
+import { mini } from "../_Karrotmarket/KarrotmarketMini";
+import { useNavigator } from "@karrotframe/navigator";
 
-import { getRefFromURLParams } from '../_modules/getQueryFromURLParams';
-import { useEffect } from 'react';
+import PageLanding from "../_components/_pages/PageLanding";
+import PageFeed from "../_components/_pages/PageFeed";
+// import PageError from "../_components/_pages/PageError";
+
+import {
+  getPreloadFromURLParams,
+  getRefFromURLParams,
+} from "../_modules/getQueryFromURLParams";
+import { useCallback, useEffect, useReducer } from "react";
+
+type State =
+  | {
+      _t: "before-preset"; // 동의하지 않았고, 프리셋에 진입하기 전이거나 진입하기까지의 상태
+    }
+  | {
+      _t: "leave-preset"; // 동의하지 않았고, 프리셋 진입 이후 동의 없이 프리셋을 닫은 상태
+    }
+  | {
+      _t: "agreed"; // 이미 동의한 상태
+    };
+
+type Action = {
+  _t: "CLOSE_PRESET";
+};
+
+const reducer: React.Reducer<State, Action> = (prevState, action) => {
+  switch (action._t) {
+    case "CLOSE_PRESET":
+      return { _t: "leave-preset" };
+  }
+};
 
 export default function WithLanding() {
   const ref = getRefFromURLParams();
   const api = useApi();
   const { push } = useNavigator();
 
-  useEffect(() => {
+  const isPreload = getPreloadFromURLParams();
+  const { issueAccessTokenFromAuthorizationCode } = useAccessToken();
+  const { viewer, refreshViewer } = useViewer();
+
+  const [state, dispatch] = useReducer(
+    reducer,
+    viewer ? { _t: "agreed" } : { _t: "before-preset" }
+  );
+
+  const patchFirstlog = useCallback(() => {
     (async () => {
       const response = await api.logController.logFirstRequestUsingGET({
         referer: ref,
       });
-      if (response.status !== 'SUCCESS') {
+      if (response.status !== "SUCCESS") {
         push(`/error`);
       }
     })();
   }, [api.logController, push, ref]);
 
-  const { accessToken } = useAccessToken();
-  const { viewer } = useViewer();
+  const submitAgreement = useCallback(() => {
+    mini.startPreset({
+      preset: `${process.env.REACT_APP_PRESET_URL}`,
+      params: {
+        appId: `${process.env.REACT_APP_ID}`,
+      },
+      onSuccess: function (result) {
+        if (result && result.code) {
+          issueAccessTokenFromAuthorizationCode(result.code);
+          refreshViewer();
+          setIsMiniClosing(false);
+        }
+      },
+      onClose: () => {
+        dispatch({ _t: "CLOSE_PRESET" });
+      },
+    });
+  }, [issueAccessTokenFromAuthorizationCode, refreshViewer]);
 
-  // 동의하지 않은 경우, 코드가 없기 때문에 액세스토큰도 없다.
+  const [isMiniClosing, setIsMiniClosing] = useState(true);
+
+  useEffect(() => {
+    if (!isPreload && state._t === "before-preset") {
+      submitAgreement();
+    }
+  }, [state, submitAgreement, isPreload]);
+
+  useEffect(() => {
+    if (isMiniClosing && state._t === "leave-preset") {
+      mini.close();
+    }
+  }, [state._t, isMiniClosing]);
+
   if (viewer && viewer.checkedIn) {
     const checkedInApartmentId = viewer.checkedIn.id;
+    patchFirstlog();
     return <PageFeed apartmentId={checkedInApartmentId} />;
   }
   if (viewer && !viewer.checkedIn) {
+    patchFirstlog();
     return <PageLanding />;
   }
-  if (!accessToken) {
-    return <PageLanding />;
-  }
-  // TODO: error Throwing Page 만들기
-  return <PageError cause="atPageLanding" />;
+
+  return (
+    <div>
+      <PageLanding />
+    </div>
+  );
 }
 
 // export default OnLanding;

@@ -21,7 +21,7 @@ import {
 } from '../models';
 
 export interface LogFirstRequestUsingGETRequest {
-    referer: LogFirstRequestUsingGETRefererEnum;
+    referer?: LogFirstRequestUsingGETRefererEnum;
 }
 
 /**
@@ -33,10 +33,6 @@ export class Class7Api extends runtime.BaseAPI {
      * 앱 방문시 첫 요청
      */
     async logFirstRequestUsingGETRaw(requestParameters: LogFirstRequestUsingGETRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyVoid>> {
-        if (requestParameters.referer === null || requestParameters.referer === undefined) {
-            throw new runtime.RequiredError('referer','Required parameter requestParameters.referer was null or undefined when calling logFirstRequestUsingGET.');
-        }
-
         const queryParameters: any = {};
 
         if (requestParameters.referer !== undefined) {
@@ -44,6 +40,10 @@ export class Class7Api extends runtime.BaseAPI {
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // KarrotAccessToken authentication
+        }
 
         const response = await this.request({
             path: `/api/v1/log/first-request`,

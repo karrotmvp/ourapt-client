@@ -106,7 +106,8 @@ const PageArticleCreate: React.FC = () => {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (state._t === "typed") {
-      const response = await api.questionController.writeNewQuestionUsingPOST({
+      const response = await api.questionController.updateQuestionUsingPATCH({
+        questionId: articleId,
         questionContent: {
           mainText: state.mainText,
         },
@@ -119,7 +120,6 @@ const PageArticleCreate: React.FC = () => {
           push(`/error?cause=writeNewQuestionAtPageQuestionUpdate`);
         },
       });
-
       const question = safeBody.data.question;
       replace(`/article/${question.id}`);
     }

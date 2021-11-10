@@ -46,6 +46,10 @@ export class Class99Api extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // KarrotAccessToken authentication
+        }
+
         const response = await this.request({
             path: `/api/v1/no-apartment`,
             method: 'POST',
