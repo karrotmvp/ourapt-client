@@ -106,25 +106,23 @@ export const AccessTokenProvider: React.FC = (props) => {
 
   const issueAccessTokenFromAuthorizationCode = useCallback(
     async (code: string) => {
-      try {
-        const response = await api.oauthController.karrotLoginUsingPOST({
-          body: {
-            authorizationCode: code,
-          },
-        });
-        const safeBody = examineResBody({
-          resBody: response,
-          validator: (data) => data.accessToken != null,
-          onFailure: () => {
-            getLogger().info(`/error?cause=karrotLoginAtUseAccessToken`);
-          },
-        });
-        const accessToken = safeBody.data.accessToken;
-        dispatch({
-          _t: "SET_ACCESS_TOKEN",
-          accessToken: "Bearer " + accessToken,
-        });
-      } catch (res) {}
+      const response = await api.oauthController.karrotLoginUsingPOST({
+        body: {
+          authorizationCode: code,
+        },
+      });
+      const safeBody = examineResBody({
+        resBody: response,
+        validator: (data) => data.accessToken != null,
+        onFailure: () => {
+          getLogger().info(`/error?cause=karrotLoginAtUseAccessToken`);
+        },
+      });
+      const accessToken = safeBody.data.accessToken;
+      dispatch({
+        _t: "SET_ACCESS_TOKEN",
+        accessToken: "Bearer " + accessToken,
+      });
     },
     [api.oauthController]
   );

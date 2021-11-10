@@ -124,7 +124,7 @@ export const ViewerProvider: React.FC = (props) => {
       _t: "SET_VIEWER",
       viewer: viewer,
     });
-  }, [api.userController, accessToken]);
+  }, [api.userController]);
 
   const refreshViewer = () => {
     dispatch({
