@@ -19,7 +19,7 @@ const instanceId = "initInstancId";
 // API를 만들어주는데,
 function makeApi({ accessToken }: { accessToken?: string | null }) {
   const HTTPS_BASE_PATH =
-    process.env.ENV === "production"
+    process.env.REACT_APP_ENV === "production"
       ? "https://api.daangn-ourapt.com".replace(/\/+$/, "")
       : "https://api-alpha.daangn-ourapt.com".replace(/\/+$/, "");
 
