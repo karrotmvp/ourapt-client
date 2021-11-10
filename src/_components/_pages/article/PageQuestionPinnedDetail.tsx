@@ -123,7 +123,8 @@ const PageQuestionPinnedDetail: React.FC = () => {
         <input
           className="BriefSubmitForm-input mg-bottom--16"
           type="text"
-          maxLength={255}
+          autoFocus
+          maxLength={80}
           onChange={handleChange}
           placeholder="어떻게 생각하세요?"
         />
