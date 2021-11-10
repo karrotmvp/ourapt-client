@@ -110,7 +110,7 @@ const CommentInDetailSubmitForm: React.FC<CommentInDetailSubmitFormProps> = ({
     if (textArea && textArea.scrollHeight < defaultScrollHeight) {
       setDefaultScrollHeight(textArea.scrollHeight);
     }
-  }, [state]);
+  }, [state, defaultScrollHeight]);
 
   useEffect(() => {
     if (state._t === "blank") {
@@ -124,7 +124,7 @@ const CommentInDetailSubmitForm: React.FC<CommentInDetailSubmitFormProps> = ({
     if (scrollHeight > defaultScrollHeight) {
       setShowCounter(true);
     }
-  }, [scrollHeight]);
+  }, [scrollHeight, defaultScrollHeight]);
 
   return (
     <form

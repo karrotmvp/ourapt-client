@@ -80,7 +80,6 @@ const PageArticleDetail: React.FC = () => {
     <KebabIcon
       className="mg-right--17"
       onClick={(e) => {
-        // FIXME: 여기서는 게시글 수정 | 삭제 모달이 떠야해요!
         setModal(ModifyDeleteQuestionModal);
       }}
     />

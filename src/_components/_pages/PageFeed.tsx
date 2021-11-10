@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import { QuestionDto as Question } from "../../__generated__/ourapt";
 import { useApi } from "../../api";
-import { useViewer } from "../../_providers/useViewer";
 
 import styled from "@emotion/styled";
 
@@ -33,15 +32,6 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
   const goArticleDetail = (articleId: string) => {
     push(`/article/${articleId}`);
   };
-
-  // const isMyArticle = useViewer().viewer?.id;
-  // const ArticleBackgroundColor = (question: Question) => {
-  //   if (isMyArticle === question.writer.id) {
-  //     return "#f7f7f7";
-  //   } else {
-  //     return "#ffffff";
-  //   }
-  // };
 
   const onArticleCreateBtnClick = () => {
     push("article/create");
@@ -135,9 +125,6 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
                   <ArticleWrapper
                     key={question.id}
                     className="pd--16"
-                    // style={{
-                    //   backgroundColor: ArticleBackgroundColor(question),
-                    // }}
                     onClick={() => goArticleDetail(question.id)}
                   >
                     <QuestionInFeed question={question} />

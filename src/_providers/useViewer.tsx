@@ -127,7 +127,7 @@ export const ViewerProvider: React.FC = (props) => {
       _t: "SET_VIEWER",
       viewer: viewer,
     });
-  }, [api.userController]);
+  }, [api.userController, accessToken]);
 
   const refreshViewer = () => {
     alert("리프레셔돌아가는데요");

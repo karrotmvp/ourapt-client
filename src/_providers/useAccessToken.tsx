@@ -89,7 +89,6 @@ export const AccessTokenProvider: React.FC = (props) => {
 
           if (manualCodeOnBrowser) {
             console.log(accessToken);
-            alert(accessToken);
           }
 
           dispatch({

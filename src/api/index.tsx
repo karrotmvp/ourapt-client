@@ -27,7 +27,6 @@ function makeApi({ accessToken }: { accessToken?: string | null }) {
         "Instance-Id": instanceId,
       },
     });
-    alert(`액세스토큰 있는 config, ${accessToken}`);
     const apartmentController = new ApartmentControllerApi(configuration);
     const userController = new UserControllerApi(configuration);
     const questionController = new QuestionControllerApi(configuration);
