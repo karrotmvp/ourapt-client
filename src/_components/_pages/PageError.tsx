@@ -3,21 +3,24 @@ import React from "react";
 import styled from "@emotion/styled";
 
 import { ReactComponent as PageErrorIcon } from "../../_assets/PageErrorIcon.svg";
-import { useParams } from "@karrotframe/navigator";
+import {
+  ScreenHelmet,
+  useNavigator,
+  useQueryParams,
+} from "@karrotframe/navigator";
 
-type PageErrorProps = {
-  cause: string;
-};
+const PageError: React.FC = () => {
+  const params = useQueryParams<{ cause?: string }>().cause || "";
 
-const PageError: React.FC<PageErrorProps> = ({ cause }) => {
-  const params = useParams<{ cause?: string }>().cause || "atComponent";
-  const causeParam = cause !== "" ? cause : params;
+  const { pop } = useNavigator();
 
   function onGoBackBtnClick() {
-    return;
+    pop();
   }
+  console.log(params);
   return (
     <PageErrorContainer className="Page center">
+      <ScreenHelmet />
       <PageErrorIcon />
       <PageErrorTitle>불편을 드려서 정말 죄송해요.</PageErrorTitle>
       <PageErrorInfo>
@@ -26,7 +29,7 @@ const PageError: React.FC<PageErrorProps> = ({ cause }) => {
       <button className="btn-184 btn btn--active" onClick={onGoBackBtnClick}>
         이전 페이지로 돌아가기
       </button>
-      <ErrorLog>{causeParam}</ErrorLog>
+      <ErrorLog>{params}</ErrorLog>
     </PageErrorContainer>
   );
 };
@@ -34,7 +37,7 @@ const PageError: React.FC<PageErrorProps> = ({ cause }) => {
 export default PageError;
 
 const PageErrorContainer = styled.div`
-  margin-top: 92px;
+  position: relative;
 `;
 
 const PageErrorTitle = styled.div`
@@ -53,6 +56,9 @@ const PageErrorInfo = styled.div`
 `;
 
 const ErrorLog = styled.p`
-  color: #f9f9f9;
+  position: absolute;
+  bottom: 10px;
+
+  color: #dddddd;
   font-size: 6px;
 `;

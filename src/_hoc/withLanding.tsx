@@ -9,7 +9,6 @@ import { useNavigator } from "@karrotframe/navigator";
 
 import PageLanding from "../_components/_pages/PageLanding";
 import PageFeed from "../_components/_pages/PageFeed";
-// import PageError from "../_components/_pages/PageError";
 
 import {
   getPreloadFromURLParams,
@@ -97,12 +96,12 @@ export default function WithLanding() {
     }
   }, [state._t, isMiniClosing]);
 
-  if (viewer && viewer.checkedIn) {
+  if (!isPreload && viewer && viewer.checkedIn) {
     const checkedInApartmentId = viewer.checkedIn.id;
     patchFirstlog();
     return <PageFeed apartmentId={checkedInApartmentId} />;
   }
-  if (viewer && !viewer.checkedIn) {
+  if (!isPreload && viewer && !viewer.checkedIn) {
     patchFirstlog();
     return <PageLanding />;
   }
