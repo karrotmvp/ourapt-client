@@ -43,14 +43,9 @@ const AccessTokenSetterContext =
 
 export const AccessTokenProvider: React.FC = (props) => {
   const api = useApi();
-  let code = useMemo(() => {
-    return getCodeFromURLParams();
-  }, []);
 
-  const manualCodeOnBrowser: Boolean = true;
-  if (manualCodeOnBrowser) {
-    code = "3ns7IvwPBanZLoV1jfWp";
-  }
+  const code =
+    process.env.REACT_APP_ENV === "code" ? "" : getCodeFromURLParams();
 
   const [state, dispatch] = useReducer(
     reducer,
@@ -87,7 +82,7 @@ export const AccessTokenProvider: React.FC = (props) => {
 
           const accessToken = safeBody.data.accessToken;
 
-          if (manualCodeOnBrowser) {
+          if (process.env.REACT_APP_ENV === "code") {
             console.log(accessToken);
           }
 
@@ -102,7 +97,7 @@ export const AccessTokenProvider: React.FC = (props) => {
 
       dispatchIssuedAccessToken(issueAccessTokenFromAuthorizationCode());
     }
-  }, [code, state, api.oauthController, manualCodeOnBrowser]);
+  }, [code, state, api.oauthController]);
 
   const issueAccessTokenFromAuthorizationCode = useCallback(
     async (code: string) => {
