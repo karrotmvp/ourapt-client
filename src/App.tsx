@@ -31,7 +31,9 @@ if (process.env.REACT_APP_ENV === "MSW") {
   worker.start();
 }
 
-// alert("인스펙터를 켜자!");
+if (process.env.REACT_APP_ENV === "code") {
+  alert("인스펙터를 켜자!");
+}
 
 // TODO: 프로바이더들 합치는 것도 고려해보자
 

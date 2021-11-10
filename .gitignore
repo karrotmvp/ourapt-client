@@ -16,6 +16,7 @@
 .env.local
 .env.test.local
 .env.development.local
+.env.code.local
 .env.msw.local
 .env.alpha.local
 .env.production.local
