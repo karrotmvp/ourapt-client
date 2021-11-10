@@ -47,9 +47,9 @@ export const AccessTokenProvider: React.FC = (props) => {
     return getCodeFromURLParams();
   }, []);
 
-  const manualCodeOnBrowser: Boolean = false;
+  const manualCodeOnBrowser: Boolean = true;
   if (manualCodeOnBrowser) {
-    code = "C0yi0mBbuPLQOHudncfi";
+    code = "3ns7IvwPBanZLoV1jfWp";
   }
 
   const [state, dispatch] = useReducer(
@@ -81,7 +81,7 @@ export const AccessTokenProvider: React.FC = (props) => {
             resBody: response,
             validator: (data) => data.accessToken != null,
             onFailure: () => {
-              getLogger().info(`/error?cause=karrotLoginAtUseAccessToken`);
+              getLogger().error(`/error?cause=karrotLoginAtUseAccessToken`);
             },
           });
 
@@ -96,7 +96,7 @@ export const AccessTokenProvider: React.FC = (props) => {
             accessToken: "Bearer " + accessToken,
           });
         } catch (response) {
-          getLogger().info("CATCH: " + JSON.stringify(response, null, 2));
+          getLogger().error("CATCH: " + JSON.stringify(response, null, 2));
         }
       };
 
@@ -115,7 +115,7 @@ export const AccessTokenProvider: React.FC = (props) => {
         resBody: response,
         validator: (data) => data.accessToken != null,
         onFailure: () => {
-          getLogger().info(`/error?cause=karrotLoginAtUseAccessToken`);
+          getLogger().error(`/error?cause=karrotLoginAtUseAccessToken`);
         },
       });
       const accessToken = safeBody.data.accessToken;

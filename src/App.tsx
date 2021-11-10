@@ -26,10 +26,12 @@ import { AccessTokenProvider } from "./_providers/useAccessToken";
 import { ViewerProvider } from "./_providers/useViewer";
 import { ModalProvider } from "./_providers/useModal";
 
-if (process.env.REACT_APP_TEST === "MSW_버전") {
+if (process.env.REACT_APP_ENV === "MSW") {
   const { worker } = require("./mocks/browser");
   worker.start();
 }
+
+// alert("인스펙터를 켜자!");
 
 // TODO: 프로바이더들 합치는 것도 고려해보자
 

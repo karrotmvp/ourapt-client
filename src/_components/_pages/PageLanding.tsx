@@ -12,7 +12,6 @@ import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
 
 import ApartmentInLanding from "../Apartment/ApartmentInLanding";
 import examineResBody from "../../_modules/examineResBody";
-import getLogger from "../../_modules/logger";
 
 const PageLanding: React.FC = () => {
   const api = useApi();
@@ -56,7 +55,6 @@ const PageLanding: React.FC = () => {
   };
 
   function onApartmentInLandingClick(apartmentId: string) {
-    getLogger().info(`아파트먼트클릭시 액세스토큰 ${accessToken}`);
     if (accessToken) {
       return checkedInAndGoFeed(apartmentId);
     } else {

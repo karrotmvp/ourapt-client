@@ -6,7 +6,7 @@ let urlSearchParams = new URLSearchParams(window.location.search);
 export function getRegionFromURLParams() {
   const regionId = urlSearchParams.get("region_id");
 
-  if (process.env.REACT_APP_TEST === "MSW_버전") {
+  if (process.env.REACT_APP_ENV === "MSW") {
     return "testfrombrowser";
   }
 
@@ -19,9 +19,7 @@ export function getRegionFromURLParams() {
 
 export function getCodeFromURLParams() {
   const code = urlSearchParams.get("code");
-  getLogger().info("코드 가져올게요");
   if (code) {
-    getLogger().info(code);
     return code;
   } else {
     return "NOT_AGREED";

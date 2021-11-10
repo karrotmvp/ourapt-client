@@ -96,7 +96,7 @@ export const ViewerProvider: React.FC = (props) => {
           resBody: response,
           validator: (data) => data.user != null,
           onFailure: () => {
-            getLogger().info(`/error?cause=getMyInfoAtUseViewer`);
+            getLogger().error(`/error?cause=getMyInfoAtUseViewer`);
           },
         });
 
@@ -116,7 +116,7 @@ export const ViewerProvider: React.FC = (props) => {
       resBody: response,
       validator: (data) => data.user != null,
       onFailure: () => {
-        getLogger().info(`/error?cause=getMyInfoAtUseViewerSetter`);
+        getLogger().error(`/error?cause=getMyInfoAtUseViewerSetter`);
       },
     });
     const viewer = safeBody.data.user;
