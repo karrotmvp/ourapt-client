@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
-import { KarrotProfile as Writer } from '../../__generated__/ourapt';
+import { KarrotProfile as Writer } from "../../__generated__/ourapt";
 
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 
-import getTimestamp from '../../_modules/getTimestamp';
+import getTimestamp from "../../_modules/getTimestamp";
 
 type UserAsAuthorProps = {
   writer: Writer;
@@ -25,7 +25,7 @@ const UserAsAuthor: React.FC<UserAsAuthorProps> = ({
 
     border-radius: 50%;
     /* background-color: lightgray; */
-    background-image: url('${writer.profileImageUrl}');
+    background-image: url("${writer.profileImageUrl}");
   `;
 
   return (
@@ -35,7 +35,7 @@ const UserAsAuthor: React.FC<UserAsAuthorProps> = ({
       ) : (
         <UserAsAuthorProfileImage>
           <img
-            src={require('../../_assets/defaultProfileImage.svg').default}
+            src={require("../../_assets/defaultProfileImage.svg").default}
             alt="프로필 사진"
           />
         </UserAsAuthorProfileImage>

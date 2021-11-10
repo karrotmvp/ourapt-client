@@ -6,10 +6,12 @@ import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
 
 import examineResBody from "../../../_modules/examineResBody";
 
+// FIXME: State에서 textlength 받을 필요 없음. CommentSubmit폼 참조해서 .lenght로 바로 받아버리자!
 type State =
   | {
       _t: "blank";
-      textLength: number;
+      mainText: string;
+      textLength: Number;
     }
   | {
       _t: "typed";
@@ -27,6 +29,7 @@ const reducer: React.Reducer<State, Action> = (prevState, action) => {
     case "":
       return {
         _t: "blank",
+        mainText: action.payload,
         textLength: action.payload.length,
       };
     default:
@@ -40,9 +43,13 @@ const reducer: React.Reducer<State, Action> = (prevState, action) => {
 
 const PageArticleCreate: React.FC = () => {
   const api = useApi();
-  const [state, dispatch] = useReducer(reducer, { _t: "blank", textLength: 0 });
+  const [state, dispatch] = useReducer(reducer, {
+    _t: "blank",
+    mainText: "",
+    textLength: 0,
+  });
 
-  const { push } = useNavigator();
+  const { push, replace } = useNavigator();
 
   const [submitBtnActiveState, setSubmitBtnActiveState] = useState({
     disabled: true,
@@ -58,10 +65,17 @@ const PageArticleCreate: React.FC = () => {
   }, [state]);
 
   function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    dispatch({
-      _t: "CHANGE_TEXT",
-      payload: e.target.value,
-    });
+    if (e.target.value.length > 255) {
+      dispatch({
+        _t: "CHANGE_TEXT",
+        payload: e.target.value.substring(0, 255),
+      });
+    } else {
+      dispatch({
+        _t: "CHANGE_TEXT",
+        payload: e.target.value,
+      });
+    }
   }
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -81,7 +95,7 @@ const PageArticleCreate: React.FC = () => {
       });
 
       const question = safeBody.data.question;
-      push(`/article/${question.id}`);
+      replace(`/article/${question.id}`);
     }
   }
 
@@ -92,7 +106,7 @@ const PageArticleCreate: React.FC = () => {
         <textarea
           className="QuestionCreateUpdateForm-input mg-bottom--16"
           placeholder="아파트 생활, 맛집에 대해 글을 써보세요!"
-          maxLength={255}
+          value={state.mainText}
           onChange={handleChange}
         />
         <div className="QuestionCreateUpdateForm-textCounter">

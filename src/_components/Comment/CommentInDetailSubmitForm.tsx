@@ -55,14 +55,22 @@ const CommentInDetailSubmitForm: React.FC<CommentInDetailSubmitFormProps> = ({
     className: "btn--inactive",
   });
 
+  const [defaultScrollHeight, setDefaultScrollHeight] = useState(84);
   const [scrollHeight, setScrollHeight] = useState(32);
   const [showCounter, setShowCounter] = useState(false);
 
   function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    dispatch({
-      _t: "CHANGE_TEXT",
-      payload: e.target.value,
-    });
+    if (e.target.value.length > 80) {
+      dispatch({
+        _t: "CHANGE_TEXT",
+        payload: e.target.value.substring(0, 80),
+      });
+    } else {
+      dispatch({
+        _t: "CHANGE_TEXT",
+        payload: e.target.value,
+      });
+    }
     setScrollHeight(e.target.scrollHeight);
   }
 
@@ -93,9 +101,16 @@ const CommentInDetailSubmitForm: React.FC<CommentInDetailSubmitFormProps> = ({
       _t: "CHANGE_TEXT",
       payload: "",
     });
-    setScrollHeight(32);
+    setScrollHeight(defaultScrollHeight);
     setShowCounter(false);
   }
+
+  useEffect(() => {
+    const textArea = document.getElementById("CommentSubmitForm-textarea");
+    if (textArea && textArea.scrollHeight < defaultScrollHeight) {
+      setDefaultScrollHeight(textArea.scrollHeight);
+    }
+  }, [state]);
 
   useEffect(() => {
     if (state._t === "blank") {
@@ -106,7 +121,7 @@ const CommentInDetailSubmitForm: React.FC<CommentInDetailSubmitFormProps> = ({
   }, [state]);
 
   useEffect(() => {
-    if (scrollHeight > 32) {
+    if (scrollHeight > defaultScrollHeight) {
       setShowCounter(true);
     }
   }, [scrollHeight]);
@@ -124,12 +139,11 @@ const CommentInDetailSubmitForm: React.FC<CommentInDetailSubmitFormProps> = ({
           className="CommentSubmitForm-textarea"
           rows={1}
           style={{ height: scrollHeight }}
-          maxLength={255}
           value={state.mainText}
           onChange={handleChange}
           onKeyDown={(e) => {
             if (e.key === "Backspace") {
-              setScrollHeight(32);
+              setScrollHeight(defaultScrollHeight);
               setShowCounter(false);
             }
           }}
@@ -137,7 +151,7 @@ const CommentInDetailSubmitForm: React.FC<CommentInDetailSubmitFormProps> = ({
         />
         {showCounter && (
           <div className="CommentSubmitForm-textCounter">
-            ({state.mainText.length}/255)
+            ({state.mainText.length}/80)
           </div>
         )}
       </div>

@@ -4,45 +4,64 @@
 
 import React, {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
   useReducer,
-} from 'react';
+} from "react";
 
 import {
   UserDto as User,
   CommonResponseBodyOneUserDto,
-} from '../__generated__/ourapt';
+} from "../__generated__/ourapt";
 
-import { useApi } from '../api';
-import { useAccessToken } from './useAccessToken';
-import examineResBody from '../_modules/examineResBody';
+import { useApi } from "../api";
+import { useAccessToken } from "./useAccessToken";
+import examineResBody from "../_modules/examineResBody";
+import getLogger from "../_modules/logger";
 
 type State =
   | {
-      _t: 'pending'; // 액세스토큰이 있지만 아직 뷰어 정보를 받아오지 않는 경우
+      _t: "pending"; // 액세스토큰이 있지만 아직 뷰어 정보를 받아오지 않는 경우
       viewer: User | null;
     }
   | {
-      _t: 'ready'; // 액세스토큰이 null 인 경우 - viewer도 null / 액세스토큰이 있고 viewer를 받아온 경우
+      _t: "ready"; // 액세스토큰이 null 인 경우 - viewer도 null / 액세스토큰이 있고 viewer를 받아온 경우
       viewer: User | null;
     };
 
-type Action = {
-  _t: 'SET_VIEWER';
-  viewer: User;
-};
+type Action =
+  | {
+      _t: "SET_VIEWER";
+      viewer: User;
+    }
+  | {
+      _t: "REFRESH_VIEWER";
+    };
 
 const reducer: React.Reducer<State, Action> = (prevState, action) => {
-  return {
-    ...prevState,
-    _t: 'ready',
-    viewer: action.viewer,
-  };
+  switch (action._t) {
+    case "SET_VIEWER":
+      return {
+        ...prevState,
+        _t: "ready",
+        viewer: action.viewer,
+      };
+    case "REFRESH_VIEWER":
+      return {
+        ...prevState,
+        _t: "pending",
+      };
+  }
 };
 
-const ViewerContext = createContext<State | null>(null);
+const ViewerContext = createContext<User | null>(null);
+
+const voidFC = async () => {};
+const ViewerSetterContext = createContext<() => Promise<void>>(voidFC);
+
+const ViewerRefreshContext = createContext<() => void>(voidFC);
 
 export const ViewerProvider: React.FC = (props) => {
   const api = useApi();
@@ -52,17 +71,20 @@ export const ViewerProvider: React.FC = (props) => {
     reducer,
     accessToken
       ? {
-          _t: 'pending',
+          _t: "pending",
           viewer: null,
         }
       : {
-          _t: 'ready',
+          _t: "ready",
           viewer: null,
         }
   );
 
   useEffect(() => {
-    if (accessToken && state._t === 'pending') {
+    alert(`useViewer rendering ${accessToken}`);
+    alert(`useViewer rendering ${state._t}`);
+    if (accessToken && state._t === "pending") {
+      // if (accessToken) {
       const getViewerFromAccessToken = async function () {
         const response = await api.userController.getMyInfoUsingGET();
         return response;
@@ -76,13 +98,13 @@ export const ViewerProvider: React.FC = (props) => {
           resBody: response,
           validator: (data) => data.user != null,
           onFailure: () => {
-            alert(`/error?cause=getMyInfoAtUseViewer`);
+            getLogger().info(`/error?cause=getMyInfoAtUseViewer`);
           },
         });
 
         const viewer = safeBody.data.user;
         dispatch({
-          _t: 'SET_VIEWER',
+          _t: "SET_VIEWER",
           viewer: viewer,
         });
       };
@@ -90,20 +112,53 @@ export const ViewerProvider: React.FC = (props) => {
     }
   }, [state._t, accessToken, api.userController]); // AT가 재설정될 경우에만 새로 돌도록 합니다.
 
-  if (state._t === 'pending') {
+  const setViewerWithAccessToken = useCallback(async () => {
+    alert(`액세스토큰세터 다시 돌아볼게요 ${accessToken}`);
+    const response = await api.userController.getMyInfoUsingGET();
+    const safeBody = examineResBody({
+      resBody: response,
+      validator: (data) => data.user != null,
+      onFailure: () => {
+        getLogger().info(`/error?cause=getMyInfoAtUseViewerSetter`);
+      },
+    });
+    const viewer = safeBody.data.user;
+    dispatch({
+      _t: "SET_VIEWER",
+      viewer: viewer,
+    });
+  }, [api.userController]);
+
+  const refreshViewer = () => {
+    alert("리프레셔돌아가는데요");
+    alert(accessToken);
+    dispatch({
+      _t: "REFRESH_VIEWER",
+    });
+  };
+
+  if (state._t === "pending") {
     return null;
   }
 
   return (
-    <ViewerContext.Provider value={state}>
-      {props.children}
+    <ViewerContext.Provider value={state.viewer}>
+      <ViewerSetterContext.Provider value={setViewerWithAccessToken}>
+        <ViewerRefreshContext.Provider value={refreshViewer}>
+          {props.children}
+        </ViewerRefreshContext.Provider>
+      </ViewerSetterContext.Provider>
     </ViewerContext.Provider>
   );
 };
 
 export function useViewer() {
-  const myInfoContext = useContext(ViewerContext);
-  const viewer = myInfoContext?.viewer;
+  const viewer = useContext(ViewerContext);
+  const setViewerWithAccessToken = useContext(ViewerSetterContext);
+  const refreshViewer = useContext(ViewerRefreshContext);
 
-  return useMemo(() => ({ viewer }), [viewer]);
+  return useMemo(
+    () => ({ viewer, setViewerWithAccessToken, refreshViewer }),
+    [viewer, setViewerWithAccessToken, refreshViewer]
+  );
 }

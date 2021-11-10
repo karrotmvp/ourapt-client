@@ -3,13 +3,12 @@ import { rest } from "msw";
 export const handlers = [
   // 캐럿 가져오기 : 해결!
   rest.post(
-    "http://api-alpha.daangn-ourapt.com/api/v1/oauth/karrot",
+    "https://api-alpha.daangn-ourapt.com/api/v1/oauth/karrot",
     async (req, res, ctx) => {
-      // alert("제가 돌아보겠습니다!");
       return await res(
         ctx.json({
           data: {
-            accessToken: "paVUOu59ntAqrAQP_vNU_OpdU0k",
+            accessToken: "9joua7ChMJanpw7P1gw_p6K3HHA",
             expiredIn: 0,
             scope: "string",
             tokenType: "string",

@@ -1,23 +1,24 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from "react";
 
-import { ApartmentDto as Apartment } from '../../__generated__/ourapt';
-import { useAccessToken } from '../../_providers/useAccessToken';
-import { useApi } from '../../api';
-import { useViewer } from '../../_providers/useViewer';
+import { ApartmentDto as Apartment } from "../../__generated__/ourapt";
+import { useAccessToken } from "../../_providers/useAccessToken";
+import { useApi } from "../../api";
+import { useViewer } from "../../_providers/useViewer";
 
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 
-import { mini } from '../../_Karrotmarket/KarrotmarketMini';
-import { ScreenHelmet, useNavigator } from '@karrotframe/navigator';
+import { mini } from "../../_Karrotmarket/KarrotmarketMini";
+import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
 
-import ApartmentInLanding from '../Apartment/ApartmentInLanding';
-import examineResBody from '../../_modules/examineResBody';
+import ApartmentInLanding from "../Apartment/ApartmentInLanding";
+import examineResBody from "../../_modules/examineResBody";
+import getLogger from "../../_modules/logger";
 
 const PageLanding: React.FC = () => {
   const api = useApi();
   const { accessToken, issueAccessTokenFromAuthorizationCode } =
     useAccessToken();
-  const { viewer } = useViewer();
+  const { viewer, setViewerWithAccessToken, refreshViewer } = useViewer();
 
   const { push } = useNavigator();
   const goPageApartmentRequestForm = () => {
@@ -27,12 +28,21 @@ const PageLanding: React.FC = () => {
   const [apartments, setApartments] = useState<Array<Apartment>>([]);
 
   async function checkedInAndGoFeed(apartmentId: string) {
+    alert(`체크인 되기 전의 뷰어 ${viewer}`);
+    alert(`체크인 되기 전의 뷰어 ${viewer?.checkedIn?.name}`);
     const response = await api.userController.changeMyCheckedInUsingPATCH({
       newCheckedInInfo: {
         newApartmentId: apartmentId,
       },
     });
-    if (response.status === 'SUCCESS') push(`/feed/${apartmentId}`);
+    alert("이프 돌기 전");
+    if (response.status === "SUCCESS") {
+      alert(`체크인 이후인데 리프레시 전 뷰어 ${viewer?.checkedIn?.name}}`);
+      refreshViewer();
+      // setViewerWithAccessToken();
+      alert(`체크인 이후 리프레시 이후의 뷰어 ${viewer?.checkedIn?.name}}`);
+      push(`/feed/${apartmentId}`);
+    }
   }
 
   const submitAgreement = (apartmentId: string) => {
@@ -42,17 +52,18 @@ const PageLanding: React.FC = () => {
         appId: `${process.env.REACT_APP_ID}`,
       },
       onSuccess: async function (result) {
+        alert(`석세스하였습니다 ${result.code}`);
         if (result && result.code) {
           await issueAccessTokenFromAuthorizationCode(result.code);
+          refreshViewer();
+          await checkedInAndGoFeed(apartmentId);
         }
-        // viewer가 재
-        checkedInAndGoFeed(apartmentId);
       },
     });
   };
 
   function onApartmentInLandingClick(apartmentId: string) {
-    alert(`아파트먼트클릭시 액세스토큰 ${accessToken}`);
+    getLogger().info(`아파트먼트클릭시 액세스토큰 ${accessToken}`);
     if (accessToken) {
       return checkedInAndGoFeed(apartmentId);
     } else {
