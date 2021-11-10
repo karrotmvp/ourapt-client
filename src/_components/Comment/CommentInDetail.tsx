@@ -20,7 +20,7 @@ const CommentInDetail: React.FC<CommentInDetailProps> = ({
   setIsCommentUpdate,
 }) => {
   const isMyArticle = useViewer().viewer?.id === comment.writer.id;
-  const articleBackgroundColor = isMyArticle ? "#f7f7f7" : "#ffffff";
+  const articleBackgroundColor = isMyArticle ? "#f9f9f9" : "#ffffff";
 
   const api = useApi();
   const { setModal } = useModal();
