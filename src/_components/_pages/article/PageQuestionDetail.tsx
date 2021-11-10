@@ -25,7 +25,7 @@ const PageArticleDetail: React.FC = () => {
   const api = useApi();
   const { setModal } = useModal();
 
-  const { push, replace } = useNavigator();
+  const { push, replace, pop } = useNavigator();
 
   const myInfo = useViewer().viewer?.id;
   const [isMyArticle, setIsMyArticle] = useState<Boolean>(false);
@@ -92,16 +92,13 @@ const PageArticleDetail: React.FC = () => {
     replace(`/article/${articleId}/update`);
   }
 
-  const currentApt = useViewer().viewer?.checkedIn?.id;
-
   async function onDeleteQuestionConfirm() {
     const response = await api.questionController.deleteQuestionUsingDELETE({
       questionId: articleId,
     });
     if (response.status === "SUCCESS") {
       setModal("close");
-      // FIXME : replace로 피드로 돌아온 이후 백버튼 누르면 다시 feed 반복되는 문제. 아마도 pop해줘야할거같은데 pop 잘 모르니까 일단 걸어놓자...
-      replace(`/feed/${currentApt}`);
+      pop();
     }
   }
 
