@@ -7,15 +7,15 @@ body,
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
@@ -39,10 +39,16 @@ p {
 
   /* 전역에서 자간은 일괄 -3으로 설정하기 */
   letter-spacing: -0.03em;
-  /* word-break: keep-all; */
+
+  /* 전역에서 줄바꿈 글자단위로 설정하기 */
+  word-break: break-all;
 
   /* 전역에서 터치 하이라이트 제거하기 */
   -webkit-tap-highlight-color: transparent;
+}
+
+*::placeholder {
+  letter-spacing: -0.03em;
 }
 
 *:focus {
