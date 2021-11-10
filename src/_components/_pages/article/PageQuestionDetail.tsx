@@ -146,15 +146,28 @@ const PageArticleDetail: React.FC = () => {
           <CommentsAreaTitle>
             댓글{commentsnum !== 0 && " " + commentsnum}
           </CommentsAreaTitle>
-          {comments.map((comment, idx) => {
-            return (
-              <CommentInDetail
-                key={comment.id}
-                comment={comment}
-                setIsCommentUpdate={setIsCommentUpdate}
-              />
-            );
-          })}
+          {comments.length === 0 ? (
+            <div>
+              <CommentVacantViewTitle>
+                아직 댓글이 없어요.
+              </CommentVacantViewTitle>
+              <CommentVacantViewInfo>
+                첫 댓글을 남겨보세요.
+              </CommentVacantViewInfo>
+            </div>
+          ) : (
+            <div>
+              {comments.map((comment, idx) => {
+                return (
+                  <CommentInDetail
+                    key={comment.id}
+                    comment={comment}
+                    setIsCommentUpdate={setIsCommentUpdate}
+                  />
+                );
+              })}
+            </div>
+          )}
         </CommentsArea>
       </div>
       <CommentInDetailSubmitForm
@@ -187,4 +200,20 @@ const CommentsAreaTitle = styled.div`
   text-align: left;
 
   border-bottom: 1px solid #f5f5f5;
+`;
+
+const CommentVacantViewTitle = styled.div`
+  margin-top: 80px;
+
+  color: #aaaaaa;
+  font-size: 16px;
+  font-weight: 700;
+`;
+
+const CommentVacantViewInfo = styled.div`
+  margin-top: 4px;
+
+  color: #aaaaaa;
+  font-size: 15px;
+  font-weight: 400;
 `;
