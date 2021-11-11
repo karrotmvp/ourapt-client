@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 // 당근마켓 미니앱, 캐럿프레임
 // import Mini from "@karrotmarket/mini";
 import { Navigator, Screen } from "@karrotframe/navigator";
 import { mini } from "./_Karrotmarket/KarrotmarketMini";
+
+import { useAnalytics } from "./_analytics/firebase";
 
 import { css } from "@emotion/css";
 
@@ -38,6 +40,14 @@ if (process.env.REACT_APP_ENV === "code") {
 // TODO: 프로바이더들 합치는 것도 고려해보자
 
 const App: React.FC = () => {
+  const FA = useAnalytics();
+  const initialEvent = FirebaseAnalyticsEvent("initialize App", {
+    context: "App.tsx",
+  });
+
+  useEffect(() => {
+    FA(initialEvent);
+  }, []);
   return (
     <AccessTokenProvider>
       <ApiProvider>
