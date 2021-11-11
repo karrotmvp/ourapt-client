@@ -63,6 +63,10 @@ textarea {
   word-spacing: -0.25em;
 }
 
+input {
+  border-radius: 0;
+}
+
 input::placeholder {
   font-size: 15px;
 }
