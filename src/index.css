@@ -30,14 +30,11 @@ p {
   margin: 0;
 }
 
-p {
-  line-height: 1em;
-}
-
 * {
   box-sizing: border-box;
 
   /* 전역에서 자간은 일괄 -3으로 설정하기 */
+  line-height: 1.3em;
   letter-spacing: -0.03em;
 
   /* 전역에서 줄바꿈 글자단위로 설정하기 */
