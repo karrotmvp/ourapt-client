@@ -115,7 +115,7 @@ const PageApartmentRequestForm: React.FC = () => {
           나의 지역 오픈 시에 알림을 보내드리고 있어요.
         </ApartmentRequestFormInfo>
         <input
-          className="BriefSubmitForm-input mg-bottom--16"
+          className="BriefSubmitForm-input width--288 mg-bottom--16"
           type="text"
           value={state.mainText}
           onChange={handleChange}

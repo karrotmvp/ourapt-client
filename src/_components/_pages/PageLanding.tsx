@@ -135,7 +135,7 @@ const PageLanding: React.FC = () => {
         {!apartments || apartments.length === 0 ? (
           <div></div> // loading
         ) : (
-          <div className="width--100">
+          <div className="width--full">
             <PageLandingTitle>
               현재 살고 계신 <br /> 아파트에 방문해 보세요!
             </PageLandingTitle>

@@ -121,7 +121,7 @@ const PageQuestionPinnedDetail: React.FC = () => {
       >
         <QuestionPinnedTitle>{pinnedQuestion?.mainText}</QuestionPinnedTitle>
         <input
-          className="BriefSubmitForm-input mg-bottom--16"
+          className="BriefSubmitForm-input width--full mg-bottom--16"
           type="text"
           // autoFocus
           maxLength={80}
