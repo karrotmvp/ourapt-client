@@ -106,7 +106,7 @@ const CommentInDetail: React.FC<CommentInDetailProps> = ({
           </KebabWrapper>
         )}
       </div>
-      <p className="ArticleCard-Content ArticleCardInList-Content mg-top--10">
+      <p className="ArticleCard-Content ArticleCardInList-CommentContent mg-top--10">
         {comment.mainText}
       </p>
     </div>
@@ -117,5 +117,5 @@ export default CommentInDetail;
 
 const KebabWrapper = styled.div`
   padding-left: 14px;
-  padding-right: 2px;
+  padding-right: 10px;
 `;

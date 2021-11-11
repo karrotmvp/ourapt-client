@@ -115,7 +115,7 @@ const PageQuestionPinnedDetail: React.FC = () => {
       <ScreenHelmet title={currendApt} />
       <form
         id={articleId}
-        className="BriefSubmitForm pd--24"
+        className="BriefSubmitForm pd--24 mg-top--16"
         action="submit"
         onSubmit={handleSubmit}
       >
