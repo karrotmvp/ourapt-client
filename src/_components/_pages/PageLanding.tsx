@@ -12,15 +12,22 @@ import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
 
 import ApartmentInLanding from "../Apartment/ApartmentInLanding";
 import examineResBody from "../../_modules/examineResBody";
+import { useAnalytics } from "../../_analytics/firebase";
 
 const PageLanding: React.FC = () => {
   const api = useApi();
   const { accessToken, issueAccessTokenFromAuthorizationCode } =
     useAccessToken();
   const { viewer, refreshViewer } = useViewer();
+  const Event = useAnalytics();
 
   const { push } = useNavigator();
   const goPageApartmentRequestForm = () => {
+    if (viewer?.checkedIn) {
+      Event("clickPageAPTRequest", { context: `from ${viewer.checkedIn.id}` });
+    } else {
+      Event("clickPageAPTRequest", { context: `at first time` });
+    }
     push(`/apartment/request`);
   };
 
@@ -55,6 +62,14 @@ const PageLanding: React.FC = () => {
   };
 
   function onApartmentInLandingClick(apartmentId: string) {
+    if (viewer && viewer.checkedIn) {
+      Event("clickSelectApartmentAtLanding", {
+        context: `from ${viewer.checkedIn.name}`,
+      });
+    } else if (viewer && !viewer.checkedIn) {
+      Event("clickSelectApartmentAtLanding", { context: `first choice` });
+    }
+
     if (accessToken) {
       return checkedInAndGoFeed(apartmentId);
     } else {
@@ -102,6 +117,16 @@ const PageLanding: React.FC = () => {
       setApartments(() => safeBody.data.apartments);
     })();
   }, [api.apartmentController, push]);
+
+  useEffect(() => {
+    if (viewer && viewer.checkedIn) {
+      Event("viewPageLanding", { context: `from ${viewer.checkedIn.id}` });
+    } else if (viewer && !viewer.checkedIn) {
+      Event("viewPageLanding", { context: `first choice` });
+    } else if (!viewer) {
+      Event("viewPageLanding", { context: `not our user` });
+    }
+  }, []);
 
   return (
     <div className="Page">

@@ -1,6 +1,8 @@
 import React from "react";
 
 import { CommentDto as Comment } from "../../__generated__/ourapt";
+
+import { useAnalytics } from "../../_analytics/firebase";
 import { useApi } from "../../api";
 import { useViewer } from "../../_providers/useViewer";
 import { useModal } from "../../_providers/useModal";
@@ -19,11 +21,14 @@ const CommentInDetail: React.FC<CommentInDetailProps> = ({
   comment,
   setIsCommentUpdate,
 }) => {
-  const isMyArticle = useViewer().viewer?.id === comment.writer.id;
+  const { viewer } = useViewer();
+  const isMyArticle = viewer?.id === comment.writer.id;
   const articleBackgroundColor = isMyArticle ? "#f9f9f9" : "#ffffff";
 
   const api = useApi();
   const { setModal } = useModal();
+
+  const Event = useAnalytics();
 
   async function onDeleteCommentConfirm() {
     const response = await api.commentController.deleteCommentUsingDELETE({
@@ -44,6 +49,10 @@ const CommentInDetail: React.FC<CommentInDetailProps> = ({
   };
 
   function onDeleteCommentSelect() {
+    Event("clickDeleteCommentModal", {
+      at: viewer?.checkedIn?.id,
+      article: comment.id,
+    });
     setModal(DeleteConfirmationModal);
   }
 
@@ -59,12 +68,25 @@ const CommentInDetail: React.FC<CommentInDetailProps> = ({
     ],
   };
 
+  function onUserCardClick() {
+    Event("clickUserCard", {
+      context: "atPageDetail",
+      at: viewer?.checkedIn?.id,
+      articleType: "comment",
+      article: comment.id,
+      user: comment.writer.id,
+    });
+  }
+
   return (
     <div
       className="ArticleCard ArticleCardInList pd--16"
       style={{ backgroundColor: articleBackgroundColor }}
     >
-      <div className="ArticleCardInlist-Author">
+      <div
+        className="ArticleCardInlist-Author"
+        onClick={() => onUserCardClick()}
+      >
         <UserAsAuthor
           writer={comment.writer}
           createdAt={comment.createdAt}
@@ -74,6 +96,10 @@ const CommentInDetail: React.FC<CommentInDetailProps> = ({
           <KebabWrapper>
             <KebabIcon
               onClick={(e) => {
+                Event("clickModifyCommentBtn", {
+                  at: viewer?.checkedIn?.id,
+                  article: comment.id,
+                });
                 setModal(ModifyDeleteCommentModal);
               }}
             />

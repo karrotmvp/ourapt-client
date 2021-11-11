@@ -17,10 +17,14 @@ import CommentInDetailSubmitForm from "../../Comment/CommentInDetailSubmitForm";
 import { ReactComponent as KebabIcon } from "../../../_assets/kebabIcon.svg";
 
 import examineResBody from "../../../_modules/examineResBody";
+import { useAnalytics } from "../../../_analytics/firebase";
 
 const PageArticleDetail: React.FC = () => {
   const params = useParams<{ articleId?: string }>();
   const articleId = params.articleId || "";
+
+  const { viewer } = useViewer();
+  const Event = useAnalytics();
 
   const api = useApi();
   const { setModal } = useModal();
@@ -33,6 +37,7 @@ const PageArticleDetail: React.FC = () => {
   const [question, setQuestion] = useState<Question>();
   const [comments, setComments] = useState<Array<Comment>>([]);
   const [commentsnum, setCommentsnum] = useState<Number>(0);
+
   // 새로 코멘트를 업데이트하면 새로 렌더링되도록 패치하는 flag
   const [isCommentUpdate, setIsCommentUpdate] = useState<Boolean>(false);
 
@@ -81,6 +86,10 @@ const PageArticleDetail: React.FC = () => {
       <KebabIcon
         className="mg-right--17"
         onClick={(e) => {
+          Event("clickModifyArticleBtn", {
+            at: viewer?.checkedIn?.id,
+            article: question?.id,
+          });
           setModal(ModifyDeleteQuestionModal);
         }}
       />
@@ -90,6 +99,10 @@ const PageArticleDetail: React.FC = () => {
   );
 
   function onModifyQuestionSelect() {
+    Event("clickUpdateArticleModal", {
+      at: viewer?.checkedIn?.id,
+      article: question?.id,
+    });
     setModal("close");
     replace(`/article/${articleId}/update`);
   }
@@ -113,6 +126,10 @@ const PageArticleDetail: React.FC = () => {
   };
 
   function onDeleteQuestionSelect() {
+    Event("clickDeleteArticleModal", {
+      at: viewer?.checkedIn?.id,
+      article: question?.id,
+    });
     setModal(DeleteConfirmationModal);
   }
 

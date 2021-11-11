@@ -21,6 +21,7 @@ import PageQuestionUpdate from "./_components/_pages/article/PageQuestionUpdate"
 import PageQuestionCreate from "./_components/_pages/article/PageQuestionCreate";
 import PageError from "./_components/_pages/PageError";
 
+import { FirebaseAnalyticsProvider } from "./_analytics/firebase";
 import { ApiProvider } from "./api";
 import { AccessTokenProvider } from "./_providers/useAccessToken";
 import { ViewerProvider } from "./_providers/useViewer";
@@ -39,52 +40,54 @@ if (process.env.REACT_APP_ENV === "code") {
 
 const App: React.FC = () => {
   return (
-    <AccessTokenProvider>
-      <ApiProvider>
-        <ViewerProvider>
-          <ModalProvider>
-            <div className="App">
-              <Navigator
-                className={css`
-                  --kf_navigator_navbar-height: 56px;
-                `}
-                theme="Cupertino"
-                onClose={() => {
-                  mini.close();
-                }}
-              >
-                <Screen path="/" component={WithLanding} />
-                <Screen path="/landing">
-                  <PageLanding />
-                </Screen>
-                <Screen path="/apartment/request">
-                  <PageApartmentRequestForm />
-                </Screen>
-                <Screen path="/feed/:apartmentId">
-                  <PageFeed apartmentId={""} />
-                </Screen>
-                <Screen path="/article/:articleId/pinned">
-                  <PageQuestionPinnedDetail />
-                </Screen>
-                <Screen path="/article/create">
-                  <PageQuestionCreate />
-                </Screen>
-                <Screen path="/article/:articleId">
-                  <PageQuestionDetail />
-                </Screen>
-                <Screen path="/article/:articleId/update">
-                  <PageQuestionUpdate />
-                </Screen>
-                <Screen path="/error">
-                  <PageError />
-                </Screen>
-                <WithModal />
-              </Navigator>
-            </div>
-          </ModalProvider>
-        </ViewerProvider>
-      </ApiProvider>
-    </AccessTokenProvider>
+    <FirebaseAnalyticsProvider>
+      <AccessTokenProvider>
+        <ApiProvider>
+          <ViewerProvider>
+            <ModalProvider>
+              <div className="App">
+                <Navigator
+                  className={css`
+                    --kf_navigator_navbar-height: 56px;
+                  `}
+                  theme="Cupertino"
+                  onClose={() => {
+                    mini.close();
+                  }}
+                >
+                  <Screen path="/" component={WithLanding} />
+                  <Screen path="/landing">
+                    <PageLanding />
+                  </Screen>
+                  <Screen path="/apartment/request">
+                    <PageApartmentRequestForm />
+                  </Screen>
+                  <Screen path="/feed/:apartmentId">
+                    <PageFeed apartmentId={""} />
+                  </Screen>
+                  <Screen path="/article/:articleId/pinned">
+                    <PageQuestionPinnedDetail />
+                  </Screen>
+                  <Screen path="/article/create">
+                    <PageQuestionCreate />
+                  </Screen>
+                  <Screen path="/article/:articleId">
+                    <PageQuestionDetail />
+                  </Screen>
+                  <Screen path="/article/:articleId/update">
+                    <PageQuestionUpdate />
+                  </Screen>
+                  <Screen path="/error">
+                    <PageError />
+                  </Screen>
+                  <WithModal />
+                </Navigator>
+              </div>
+            </ModalProvider>
+          </ViewerProvider>
+        </ApiProvider>
+      </AccessTokenProvider>
+    </FirebaseAnalyticsProvider>
   );
 };
 
