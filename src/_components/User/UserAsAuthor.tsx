@@ -26,6 +26,7 @@ const UserAsAuthor: React.FC<UserAsAuthorProps> = ({
     border-radius: 50%;
     /* background-color: lightgray; */
     background-image: url("${writer.profileImageUrl}");
+    background-size: cover;
   `;
 
   return (

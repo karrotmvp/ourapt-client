@@ -214,8 +214,6 @@ const FeedInfoText = styled.div`
   line-height: 32px;
 
   border-radius: 20px;
-
-  background-color: #f9f9f9;
 `;
 
 const ArticleCreateBtnFloating = styled.div`
