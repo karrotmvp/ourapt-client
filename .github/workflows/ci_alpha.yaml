@@ -70,7 +70,14 @@ jobs:
         uses: chetan/invalidate-cloudfront-action@v2
         env:
           DISTRIBUTION: ${{ secrets.ALPHA_CLOUDFRONT_DISTRIBUTION }}
-          PATHS: "/*"
-          AWS_REGION: "ap-northeast-2"
+          PATHS: '/*'
+          AWS_REGION: 'ap-northeast-2'
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Send slack webhook
+        run: |
+          curl --location --request POST 'https://hooks.slack.com/services/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' \
+            --header 'Authorization: Bearer Vp7VDNuVl4w1-nrU1oDgVSQnHI4' \
+            --header 'Content-Type: text/plain' \
+            --data-raw '{"text": "[알파] 알파 배포를 성공했어요!"}'
