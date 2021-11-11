@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 
 import { ScreenHelmet } from "@karrotframe/navigator";
 import { useApi } from "../../../api";
+import { useModal } from "../../../_providers/useModal";
 import { mini } from "../../../_Karrotmarket/KarrotmarketMini";
 
 type State =
@@ -45,6 +46,20 @@ const PageApartmentRequestForm: React.FC = () => {
     className: "btn--inactive",
   });
 
+  const { setModal } = useModal();
+
+  function onCheck() {
+    mini.close();
+  }
+
+  const ClosePageApartmentRequestFormAlertModal = {
+    _t: "AlertModal",
+    name: "ClosePageApartmentRequestForm",
+    alertTitle: "알림받기 신청 완료",
+    alertInfo: "확인을 누르면 당근마켓으로 돌아가요.",
+    alertAction: onCheck,
+  };
+
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     dispatch({
       _t: "CHANGE_TEXT",
@@ -62,7 +77,7 @@ const PageApartmentRequestForm: React.FC = () => {
           },
         });
       if (response.status === "SUCCESS") {
-        mini.close();
+        setModal(ClosePageApartmentRequestFormAlertModal);
       }
     }
     resetInput();
@@ -109,7 +124,7 @@ const PageApartmentRequestForm: React.FC = () => {
         <button
           disabled={submitBtnActiveState.disabled}
           className={
-            "BriefSubmitForm-btn btn-full btn " + submitBtnActiveState.className
+            "BriefSubmitForm-btn btn-288 btn " + submitBtnActiveState.className
           }
         >
           오픈하면 알림받기
