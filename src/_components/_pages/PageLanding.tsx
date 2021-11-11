@@ -108,8 +108,7 @@ const PageLanding: React.FC = () => {
       <ScreenHelmet title="송도 2동" />
       <div className="Page pd--24">
         {!apartments || apartments.length === 0 ? (
-          // {true ? (
-          <div>로딩</div> // loading
+          <div></div> // loading
         ) : (
           <div className="width--100">
             <PageLandingTitle>

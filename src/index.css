@@ -44,7 +44,12 @@ p {
   -webkit-tap-highlight-color: transparent;
 }
 
-*::placeholder {
+*::placeholder,
+*::-webkit-input-placeholder,
+*:-ms-input-placeholder,
+textarea::placeholder,
+textarea::-webkit-input-placeholder,
+textarea:-ms-input-placeholder {
   letter-spacing: -0.03em;
 }
 
