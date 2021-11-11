@@ -80,4 +80,4 @@ jobs:
           curl --location --request POST 'https://hooks.slack.com/services/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' \
             --header 'Authorization: Bearer Vp7VDNuVl4w1-nrU1oDgVSQnHI4' \
             --header 'Content-Type: text/plain' \
-            --data-raw '{"text": "[알파] 알파 배포를 성공했어요!"}'
+            --data-raw '{"text": "[알파] 클라이언트 배포에 성공했어요!"}'
