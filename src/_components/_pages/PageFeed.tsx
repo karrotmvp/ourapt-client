@@ -241,6 +241,8 @@ const ArticleCreateBtnFloating = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.2);
 `;
 
 const ArticleVacantViewTitle = styled.div`

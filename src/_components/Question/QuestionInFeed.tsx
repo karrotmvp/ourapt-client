@@ -25,7 +25,7 @@ const ArticleInFeed: React.FC<QuestionInFeedProps> = ({ question }) => {
   }
 
   return (
-    <div className="ArticleCard ArticleCardInList pd-16">
+    <div className="ArticleCard pd-16">
       <div
         className="ArticleCardInlist-Author"
         onClick={() => onUserCardClick()}
