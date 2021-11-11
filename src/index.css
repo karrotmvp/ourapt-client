@@ -60,7 +60,7 @@ textarea:-ms-input-placeholder {
 
 textarea {
   letter-spacing: -0.03em;
-  word-spacing: -0.25em;
+  /* word-spacing: -0.25em; */
 }
 
 input {
