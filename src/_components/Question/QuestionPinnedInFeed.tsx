@@ -77,12 +77,11 @@ const QuestionIcon = styled.div`
 `;
 
 const MainText = styled.div`
-  height: 48px;
   width: calc(100% - 36px);
   /* margin-right: auto; */
 
   margin-top: 2px;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 
   font-size: 17px;
   font-weight: 700;
