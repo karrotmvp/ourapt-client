@@ -2,6 +2,9 @@ import React from "react";
 
 import { QuestionDto as Question } from "../../__generated__/ourapt";
 
+import { useAnalytics } from "../../_analytics/firebase";
+import { useViewer } from "../../_providers/useViewer";
+
 import styled from "@emotion/styled";
 
 import { useNavigator } from "@karrotframe/navigator";
@@ -13,8 +16,15 @@ type QuestionPinnedInFeedProps = {
 const QuestionPinnedInFeed: React.FC<QuestionPinnedInFeedProps> = ({
   question,
 }) => {
+  const Event = useAnalytics();
+  const { viewer } = useViewer();
+
   const { push } = useNavigator();
   const goArticlePinnedDetail = (articleId: string) => {
+    Event("clickPinnedArticleCard", {
+      at: viewer?.checkedIn?.id,
+      article: articleId,
+    });
     push(`/article/${articleId}/pinned`);
   };
 

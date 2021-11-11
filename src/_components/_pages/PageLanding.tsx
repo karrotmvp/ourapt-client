@@ -23,6 +23,11 @@ const PageLanding: React.FC = () => {
 
   const { push } = useNavigator();
   const goPageApartmentRequestForm = () => {
+    if (viewer?.checkedIn) {
+      Event("clickPageAPTRequest", { context: `from ${viewer.checkedIn.id}` });
+    } else {
+      Event("clickPageAPTRequest", { context: `at first time` });
+    }
     push(`/apartment/request`);
   };
 
@@ -115,7 +120,7 @@ const PageLanding: React.FC = () => {
 
   useEffect(() => {
     if (viewer && viewer.checkedIn) {
-      Event("viewPageLanding", { context: `from ${viewer.checkedIn.name}` });
+      Event("viewPageLanding", { context: `from ${viewer.checkedIn.id}` });
     } else if (viewer && !viewer.checkedIn) {
       Event("viewPageLanding", { context: `first choice` });
     } else if (!viewer) {

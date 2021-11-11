@@ -1,23 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import styled from "@emotion/styled";
 
-import { ReactComponent as PageErrorIcon } from "../../_assets/PageErrorIcon.svg";
+import { useAnalytics } from "../../_analytics/firebase";
+import { useViewer } from "../../_providers/useViewer";
+
 import {
   ScreenHelmet,
   useNavigator,
   useQueryParams,
 } from "@karrotframe/navigator";
 
+import { ReactComponent as PageErrorIcon } from "../../_assets/PageErrorIcon.svg";
+
 const PageError: React.FC = () => {
   const params = useQueryParams<{ cause?: string }>().cause || "";
+
+  const { viewer } = useViewer();
+  const Event = useAnalytics();
 
   const { pop } = useNavigator();
 
   function onGoBackBtnClick() {
     pop();
   }
-  console.log(params);
+
+  useEffect(() => {
+    Event("viewPageError", {
+      at: viewer?.checkedIn?.id,
+      cause: params,
+      user: viewer?.id,
+    });
+  }, []);
+
   return (
     <PageErrorContainer className="Page center">
       <ScreenHelmet />

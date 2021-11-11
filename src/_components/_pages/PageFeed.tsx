@@ -85,6 +85,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
   }, [api.questionController, getQuestionsByCursorPerPage, params, push]);
 
   function onApartmentInNavigatorClick() {
+    Event("clickApartmentBanner", { at: params });
     push(`/landing`);
   }
 
