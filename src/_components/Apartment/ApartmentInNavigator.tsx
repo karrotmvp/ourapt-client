@@ -96,7 +96,7 @@ const ApartmentInNavigator: React.FC<ApartmentInNavigatorProps> = ({
   } else
     return (
       <ApartmentWrapper className="vertical--center" onClick={onClickAction}>
-        <ApartmentName className="mg-right--4">{apartment.name}</ApartmentName>
+        <ApartmentName className="mg-right--8">{apartment.name}</ApartmentName>
         {Logo(apartment.brandName)}
       </ApartmentWrapper>
     );
