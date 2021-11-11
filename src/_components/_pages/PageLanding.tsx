@@ -179,9 +179,8 @@ export default PageLanding;
 const PageLandingTitle = styled.div`
   margin-bottom: 24px;
 
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 700;
-  line-height: 24px;
   text-align: left;
 `;
 
@@ -191,7 +190,7 @@ const PageLandingAdditionalInfo = styled.div`
 
   margin-top: 40px;
 
-  font-size: 13px;
+  font-size: 16px;
 
   display: flex;
   justify-content: center;
@@ -223,5 +222,7 @@ const BrandHorizon = styled.hr`
 
   margin-right: 0;
 
-  background-color: #f5f5f5;
+  border: none;
+
+  background-color: #f0f0f0;
 `;
