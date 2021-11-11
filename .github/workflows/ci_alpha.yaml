@@ -33,10 +33,6 @@ jobs:
       # Build React
       - name: Build React
         run: |
-          echo "Env Checking..."
-          echo "REACT_APP_ID=${REACT_APP_ID}"
-          echo "REACT_APP_PRESET_URL=${REACT_APP_PRESET_URL}"
-          echo "NODE_VERSION is"
           node --version
           echo "NPM_VERSION is"
           npm --version
@@ -48,7 +44,7 @@ jobs:
           REACT_APP_ENV: alpha
           REACT_APP_ID: ${{ secrets.ALPHA_REACT_APP_ID }}
           REACT_APP_PRESET_URL: ${{ secrets.ALPHA_REACT_APP_PRESET_URL }}
-          REACT_APP_FA_API_KEY: ${{ secrets.ALPAH_FA_API_KEY }}
+          REACT_APP_FA_API_KEY: ${{ secrets.ALPHA_FA_API_KEY }}
           REACT_APP_FA_MESSAGING_SENDER_ID: ${{ secrets.ALPHA_FA_MESSAGING_SENDER_ID }}
           REACT_APP_FA_APP_ID: ${{ secrets.ALPHA_FA_APP_ID }}
           REACT_APP_FA_MEASUREMENT_ID: ${{ secrets.ALPHA_FA_MEASUREMENT_ID }}
@@ -74,8 +70,8 @@ jobs:
         uses: chetan/invalidate-cloudfront-action@v2
         env:
           DISTRIBUTION: ${{ secrets.ALPHA_CLOUDFRONT_DISTRIBUTION }}
-          PATHS: "/*"
-          AWS_REGION: "ap-northeast-2"
+          PATHS: '/*'
+          AWS_REGION: 'ap-northeast-2'
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
