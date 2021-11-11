@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import { QuestionDto as Question } from "../../__generated__/ourapt";
 import { useApi } from "../../api";
+import { useAnalytics } from "../../_analytics/firebase";
 
 import styled from "@emotion/styled";
 
@@ -25,6 +26,8 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
 
   const api = useApi();
 
+  const Event = useAnalytics();
+
   const [pinnedQuestion, setPinnedQuestion] = useState<Question>();
   const [questions, setQuestions] = useState<Array<Question>>([]);
 
@@ -33,7 +36,8 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
     push(`/article/${articleId}`);
   };
 
-  const onArticleCreateBtnClick = () => {
+  const onArticleCreateBtnClick = (context: number) => {
+    Event("clickCreateArticleBtn", { at: params, when: `${context}` });
     push("article/create");
   };
 
@@ -84,6 +88,10 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
     push(`/landing`);
   }
 
+  useEffect(() => {
+    Event("viewPageFeed", { at: `${params}` });
+  }, []);
+
   return (
     <div className="Page">
       <div className="PageFeed-inner">
@@ -113,7 +121,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
               </ArticleVacantViewInfo>
               <button
                 className="btn-160 btn btn--active mg-top--48"
-                onClick={onArticleCreateBtnClick}
+                onClick={() => onArticleCreateBtnClick(0)}
               >
                 게시글 작성
               </button>
@@ -154,7 +162,9 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
       </div>
       {questions.length !== 0 && (
         <div className="btn--floating">
-          <ArticleCreateBtnFloating onClick={onArticleCreateBtnClick}>
+          <ArticleCreateBtnFloating
+            onClick={() => onArticleCreateBtnClick(questions.length)}
+          >
             <img
               src={require("../../_assets/ArticleCreateBtnIcon.svg").default}
               alt="게시글 쓰기"

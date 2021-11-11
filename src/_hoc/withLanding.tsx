@@ -15,6 +15,7 @@ import {
   getRefFromURLParams,
 } from "../_modules/getQueryFromURLParams";
 import { useCallback, useEffect, useReducer } from "react";
+import { useAnalytics } from "../_analytics/firebase";
 
 type State =
   | {
@@ -46,6 +47,7 @@ export default function WithLanding() {
   const isPreload = getPreloadFromURLParams();
   const { issueAccessTokenFromAuthorizationCode } = useAccessToken();
   const { viewer, refreshViewer } = useViewer();
+  const Event = useAnalytics();
 
   const [state, dispatch] = useReducer(
     reducer,
@@ -64,12 +66,14 @@ export default function WithLanding() {
   }, [api.logController, push, ref]);
 
   const submitAgreement = useCallback(() => {
+    Event("viewKarrotOAUTHAgreement", { action: "view" });
     mini.startPreset({
       preset: `${process.env.REACT_APP_PRESET_URL}`,
       params: {
         appId: `${process.env.REACT_APP_ID}`,
       },
       onSuccess: function (result) {
+        Event("clickKarrotOAUTHAgreement", { action: "click" });
         if (result && result.code) {
           issueAccessTokenFromAuthorizationCode(result.code);
           refreshViewer();
@@ -95,6 +99,10 @@ export default function WithLanding() {
       mini.close();
     }
   }, [state._t, isMiniClosing]);
+
+  useEffect(() => {
+    if (!isPreload) Event("initializeApp", { action: "load" });
+  }, []);
 
   if (!isPreload && viewer && viewer.checkedIn) {
     const checkedInApartmentId = viewer.checkedIn.id;

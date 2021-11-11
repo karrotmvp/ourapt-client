@@ -3,6 +3,7 @@ import { Children, createContext, useContext } from "react";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics, logEvent } from "firebase/analytics";
+import getLogger from "../_modules/logger";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -44,21 +45,15 @@ const FirebaseAnalyticsEvent = (
   eventName: string,
   params?: FirebaseAnalyticsEventParams
 ) => {
-  return logEvent(analytics, eventName, params);
+  logEvent(analytics, eventName, params);
+  getLogger().log(`${eventName}, ${params}`);
 };
 
-const initialEvent = FirebaseAnalyticsEvent(
-  "initialize FirebaseAnalyticsContext",
-  {
-    context: "firebase.tsx",
-  }
-);
+const FirebaseAnalyticsContext = createContext(FirebaseAnalyticsEvent);
 
-const FirebaseAnalyticsContext = createContext(initialEvent);
-
-const FirebaseAnalyticsProvider: React.FC = (props) => {
+export const FirebaseAnalyticsProvider: React.FC = (props) => {
   return (
-    <FirebaseAnalyticsContext.Provider value={"????"}>
+    <FirebaseAnalyticsContext.Provider value={FirebaseAnalyticsEvent}>
       {props.children}
     </FirebaseAnalyticsContext.Provider>
   );
