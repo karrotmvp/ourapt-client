@@ -105,7 +105,7 @@ const PageArticleCreate: React.FC = () => {
       <form className="QuestionCreateUpdateForm pd--16" onSubmit={handleSubmit}>
         <textarea
           className="QuestionCreateUpdateForm-input mg-bottom--16"
-          autoFocus
+          // autoFocus
           placeholder="아파트 생활, 맛집에 대해 글을 써보세요!"
           value={state.mainText}
           onChange={handleChange}
