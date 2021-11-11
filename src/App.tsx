@@ -1,11 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // 당근마켓 미니앱, 캐럿프레임
 // import Mini from "@karrotmarket/mini";
 import { Navigator, Screen } from "@karrotframe/navigator";
 import { mini } from "./_Karrotmarket/KarrotmarketMini";
-
-import { useAnalytics } from "./_analytics/firebase";
 
 import { css } from "@emotion/css";
 

@@ -6,8 +6,6 @@ import { ScreenHelmet } from "@karrotframe/navigator";
 import { useApi } from "../../../api";
 import { useModal } from "../../../_providers/useModal";
 import { mini } from "../../../_Karrotmarket/KarrotmarketMini";
-import { useViewer } from "../../../_providers/useViewer";
-import { useAnalytics } from "../../../_analytics/firebase";
 
 type State =
   | {

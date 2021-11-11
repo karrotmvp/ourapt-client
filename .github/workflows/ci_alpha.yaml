@@ -42,6 +42,7 @@ jobs:
           npm run build
         env:
           REACT_APP_ENV: alpha
+          CI: false
           REACT_APP_ID: ${{ secrets.ALPHA_REACT_APP_ID }}
           REACT_APP_PRESET_URL: ${{ secrets.ALPHA_REACT_APP_PRESET_URL }}
           REACT_APP_FA_API_KEY: ${{ secrets.ALPHA_FA_API_KEY }}
@@ -70,8 +71,8 @@ jobs:
         uses: chetan/invalidate-cloudfront-action@v2
         env:
           DISTRIBUTION: ${{ secrets.ALPHA_CLOUDFRONT_DISTRIBUTION }}
-          PATHS: '/*'
-          AWS_REGION: 'ap-northeast-2'
+          PATHS: "/*"
+          AWS_REGION: "ap-northeast-2"
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
