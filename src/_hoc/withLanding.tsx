@@ -16,6 +16,7 @@ import {
 } from "../_modules/getQueryFromURLParams";
 import { useCallback, useEffect, useReducer } from "react";
 import { useAnalytics } from "../_analytics/firebase";
+import LoadPageLanding from "../_components/_loaders/LoadPageLanding";
 
 type State =
   | {
@@ -116,7 +117,7 @@ export default function WithLanding() {
 
   return (
     <div>
-      <PageLanding />
+      <LoadPageLanding />
     </div>
   );
 }
