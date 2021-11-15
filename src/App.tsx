@@ -49,9 +49,9 @@ const App: React.FC = () => {
               <div className="App">
                 <PullToRefresh
                   onPull={(dispose) => {
-                    refresh().then(() => {
-                      dispose();
-                    });
+                    // refresh().then(() => {
+                    //   dispose();
+                    // });
                   }}
                 >
                   <Navigator
