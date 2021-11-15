@@ -94,10 +94,10 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
     getQuestionsByCursorPerPage(params, Date.now(), 100);
   }, [getPinnedQuestion, getQuestionsByCursorPerPage, params]);
 
-  async function handleDispose() {
-    getPinnedQuestion();
-    getQuestionsByCursorPerPage(params, Date.now(), 100);
-  }
+  // async function handleDispose() {
+  //   getPinnedQuestion();
+  //   getQuestionsByCursorPerPage(params, Date.now(), 100);
+  // }
 
   useEffect(() => {
     Event("viewPageFeed", { at: `${params}` });
@@ -115,7 +115,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
             />
           }
         />
-        <PullToRefresh
+        {/* <PullToRefresh
           className={css`
             background-color: #ffffff;
           `}
@@ -124,64 +124,63 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
               dispose();
             });
           }}
-        >
-          {pinnedQuestion && pinnedQuestion.id && (
-            <PinnedArea className="pd--16">
-              <QuestionPinnedInFeed question={pinnedQuestion} />
-            </PinnedArea>
+        > */}
+        {pinnedQuestion && pinnedQuestion.id && (
+          <PinnedArea className="pd--16">
+            <QuestionPinnedInFeed question={pinnedQuestion} />
+          </PinnedArea>
+        )}
+        <ArticleArea>
+          <AreaTitle className="pd--16">아파트 주민 라운지</AreaTitle>
+          {questions.length === 0 ? (
+            <div>
+              <ArticleVacantViewTitle>
+                우리아파트에 오신 것을 환영해요!
+              </ArticleVacantViewTitle>
+              <ArticleVacantViewInfo>
+                아파트 생활, 맛집에 대해 글을 써보세요.
+              </ArticleVacantViewInfo>
+              <button
+                className="btn-160 btn btn--active mg-top--48"
+                onClick={() => onArticleCreateBtnClick(0)}
+              >
+                게시글 작성
+              </button>
+            </div>
+          ) : (
+            <div>
+              {questions.map((question) => {
+                return (
+                  <ArticleWrapper
+                    key={question.id}
+                    className="pd--16"
+                    onClick={() => goArticleDetail(question.id)}
+                  >
+                    <QuestionInFeed question={question} />
+                    <CommentThumbnail>
+                      <img
+                        className="mg-right--6"
+                        src={
+                          require("../../_assets/CommentInFeedIcon.svg").default
+                        }
+                        alt="댓글 수"
+                      />
+                      <div className="font-size--15 font-weight--400 font-color--11">
+                        {question.countOfComments}
+                      </div>
+                    </CommentThumbnail>
+                  </ArticleWrapper>
+                );
+              })}
+              <FeedInfoWrapper>
+                <FeedInfoText>
+                  이웃과 나누고 싶은 이야기를 등록해 보세요!
+                </FeedInfoText>
+              </FeedInfoWrapper>
+            </div>
           )}
-          <ArticleArea>
-            <AreaTitle className="pd--16">아파트 주민 라운지</AreaTitle>
-            {questions.length === 0 ? (
-              <div>
-                <ArticleVacantViewTitle>
-                  우리아파트에 오신 것을 환영해요!
-                </ArticleVacantViewTitle>
-                <ArticleVacantViewInfo>
-                  아파트 생활, 맛집에 대해 글을 써보세요.
-                </ArticleVacantViewInfo>
-                <button
-                  className="btn-160 btn btn--active mg-top--48"
-                  onClick={() => onArticleCreateBtnClick(0)}
-                >
-                  게시글 작성
-                </button>
-              </div>
-            ) : (
-              <div>
-                {questions.map((question) => {
-                  return (
-                    <ArticleWrapper
-                      key={question.id}
-                      className="pd--16"
-                      onClick={() => goArticleDetail(question.id)}
-                    >
-                      <QuestionInFeed question={question} />
-                      <CommentThumbnail>
-                        <img
-                          className="mg-right--6"
-                          src={
-                            require("../../_assets/CommentInFeedIcon.svg")
-                              .default
-                          }
-                          alt="댓글 수"
-                        />
-                        <div className="font-size--15 font-weight--400 font-color--11">
-                          {question.countOfComments}
-                        </div>
-                      </CommentThumbnail>
-                    </ArticleWrapper>
-                  );
-                })}
-                <FeedInfoWrapper>
-                  <FeedInfoText>
-                    이웃과 나누고 싶은 이야기를 등록해 보세요!
-                  </FeedInfoText>
-                </FeedInfoWrapper>
-              </div>
-            )}
-          </ArticleArea>
-        </PullToRefresh>
+        </ArticleArea>
+        {/* </PullToRefresh> */}
       </div>
       {questions.length !== 0 && (
         <div className="btn--floating">
