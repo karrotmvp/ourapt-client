@@ -1,5 +1,7 @@
 const logOptions =
-  process.env.REACT_APP_ENV === "alpha" || process.env.REACT_APP_ENV === "MSW";
+  process.env.REACT_APP_ENV === "alpha" ||
+  process.env.REACT_APP_ENV === "MSW" ||
+  process.env.REACT_APP_ENV === "code";
 
 const voidFC = (message: string) => {};
 

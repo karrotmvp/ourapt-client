@@ -46,7 +46,7 @@ export const AccessTokenProvider: React.FC = (props) => {
 
   const code =
     process.env.REACT_APP_ENV === "code"
-      ? "giBm4yqJovhHfbyIzkx6"
+      ? "Pm7xkoURkvNlldI6U66A"
       : getCodeFromURLParams();
 
   const [state, dispatch] = useReducer(

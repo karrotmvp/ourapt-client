@@ -5,8 +5,10 @@ import { useApi } from "../../api";
 import { useAnalytics } from "../../_analytics/firebase";
 
 import styled from "@emotion/styled";
+import { css } from "@emotion/css";
 
 import { ScreenHelmet, useNavigator, useParams } from "@karrotframe/navigator";
+import { PullToRefresh } from "@karrotframe/pulltorefresh";
 
 import ApartmentInNavigator from "../Apartment/ApartmentInNavigator";
 import QuestionPinnedInFeed from "../Question/QuestionPinnedInFeed";
@@ -62,7 +64,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
     [api.questionController, push]
   );
 
-  useEffect(() => {
+  const getPinnedQuestion = useCallback(() => {
     (async () => {
       const response =
         await api.questionController.getPinnedQuestionOfApartmentUsingGET({
@@ -80,13 +82,21 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
         setPinnedQuestion(safeBody.data.question);
       }
     })();
-    // TODO: 페이지당 몇 개 확인하기
-    getQuestionsByCursorPerPage(params, Date.now(), 100);
-  }, [api.questionController, getQuestionsByCursorPerPage, params, push]);
+  }, [api.questionController, params, push]);
 
   function onApartmentInNavigatorClick() {
     Event("clickApartmentBanner", { at: params });
     push(`/landing`);
+  }
+
+  useEffect(() => {
+    getPinnedQuestion();
+    getQuestionsByCursorPerPage(params, Date.now(), 100);
+  }, [getPinnedQuestion, getQuestionsByCursorPerPage, params]);
+
+  async function handleDispose() {
+    getPinnedQuestion();
+    getQuestionsByCursorPerPage(params, Date.now(), 100);
   }
 
   useEffect(() => {
@@ -105,61 +115,73 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
             />
           }
         />
-        {pinnedQuestion && pinnedQuestion.id && (
-          <PinnedArea className="pd--16">
-            <QuestionPinnedInFeed question={pinnedQuestion} />
-          </PinnedArea>
-        )}
-        <ArticleArea>
-          <AreaTitle className="pd--16">아파트 주민 라운지</AreaTitle>
-          {questions.length === 0 ? (
-            <div>
-              <ArticleVacantViewTitle>
-                우리아파트에 오신 것을 환영해요!
-              </ArticleVacantViewTitle>
-              <ArticleVacantViewInfo>
-                아파트 생활, 맛집에 대해 글을 써보세요.
-              </ArticleVacantViewInfo>
-              <button
-                className="btn-160 btn btn--active mg-top--48"
-                onClick={() => onArticleCreateBtnClick(0)}
-              >
-                게시글 작성
-              </button>
-            </div>
-          ) : (
-            <div>
-              {questions.map((question) => {
-                return (
-                  <ArticleWrapper
-                    key={question.id}
-                    className="pd--16"
-                    onClick={() => goArticleDetail(question.id)}
-                  >
-                    <QuestionInFeed question={question} />
-                    <CommentThumbnail>
-                      <img
-                        className="mg-right--6"
-                        src={
-                          require("../../_assets/CommentInFeedIcon.svg").default
-                        }
-                        alt="댓글 수"
-                      />
-                      <div className="font-size--15 font-weight--400 font-color--11">
-                        {question.countOfComments}
-                      </div>
-                    </CommentThumbnail>
-                  </ArticleWrapper>
-                );
-              })}
-              <FeedInfoWrapper>
-                <FeedInfoText>
-                  이웃과 나누고 싶은 이야기를 등록해 보세요!
-                </FeedInfoText>
-              </FeedInfoWrapper>
-            </div>
+        <PullToRefresh
+          className={css`
+            background-color: #ffffff;
+          `}
+          onPull={(dispose) => {
+            handleDispose().then(() => {
+              dispose();
+            });
+          }}
+        >
+          {pinnedQuestion && pinnedQuestion.id && (
+            <PinnedArea className="pd--16">
+              <QuestionPinnedInFeed question={pinnedQuestion} />
+            </PinnedArea>
           )}
-        </ArticleArea>
+          <ArticleArea>
+            <AreaTitle className="pd--16">아파트 주민 라운지</AreaTitle>
+            {questions.length === 0 ? (
+              <div>
+                <ArticleVacantViewTitle>
+                  우리아파트에 오신 것을 환영해요!
+                </ArticleVacantViewTitle>
+                <ArticleVacantViewInfo>
+                  아파트 생활, 맛집에 대해 글을 써보세요.
+                </ArticleVacantViewInfo>
+                <button
+                  className="btn-160 btn btn--active mg-top--48"
+                  onClick={() => onArticleCreateBtnClick(0)}
+                >
+                  게시글 작성
+                </button>
+              </div>
+            ) : (
+              <div>
+                {questions.map((question) => {
+                  return (
+                    <ArticleWrapper
+                      key={question.id}
+                      className="pd--16"
+                      onClick={() => goArticleDetail(question.id)}
+                    >
+                      <QuestionInFeed question={question} />
+                      <CommentThumbnail>
+                        <img
+                          className="mg-right--6"
+                          src={
+                            require("../../_assets/CommentInFeedIcon.svg")
+                              .default
+                          }
+                          alt="댓글 수"
+                        />
+                        <div className="font-size--15 font-weight--400 font-color--11">
+                          {question.countOfComments}
+                        </div>
+                      </CommentThumbnail>
+                    </ArticleWrapper>
+                  );
+                })}
+                <FeedInfoWrapper>
+                  <FeedInfoText>
+                    이웃과 나누고 싶은 이야기를 등록해 보세요!
+                  </FeedInfoText>
+                </FeedInfoWrapper>
+              </div>
+            )}
+          </ArticleArea>
+        </PullToRefresh>
       </div>
       {questions.length !== 0 && (
         <div className="btn--floating">
