@@ -75,6 +75,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
 
   const { push } = useNavigator();
   const goArticleDetail = (articleId: string) => {
+    Event("clickArticleDetail", { at: params, article: articleId });
     push(`/article/${articleId}`);
   };
 
