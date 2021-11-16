@@ -17,6 +17,7 @@
 .env.code
 .env.msw
 .env.alpha
+.env.ALPHA
 .env.production
 
 npm-debug.log*
