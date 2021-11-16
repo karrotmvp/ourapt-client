@@ -5,13 +5,13 @@ import styled from "@emotion/styled";
 const LoadPageLanding: React.FC = () => {
   return (
     <div className="Page">
-      <LoadScreenHelmet></LoadScreenHelmet>
+      <div className="loader--ScreenHelmet"></div>
       <div className="pd--24">
-        <LoadLandingTitle_FirstLine />
-        <LoadLandingTitle_SecondLine />
+        <LoadLandingTitle_FirstLine className="loader" />
+        <LoadLandingTitle_SecondLine className="loader" />
         <LoadBrandWrapper>
-          <LoadBrandTitle />
-          <LoadBrandHorizon />
+          <LoadBrandTitle className="loader" />
+          <LoadBrandHorizon className="loader" />
         </LoadBrandWrapper>
         <LoadApartmentInLanding className="loaderItem-first" />
         <LoadApartmentInLanding className="loaderItem-second" />
@@ -24,26 +24,17 @@ const LoadPageLanding: React.FC = () => {
 
 export default LoadPageLanding;
 
-const LoadScreenHelmet = styled.div`
-  width: 100%;
-  height: 56px;
-  border-bottom: 1px solid #f5f5f5;
-`;
-
 const LoadLandingTitle_FirstLine = styled.div`
   height: 24px;
   width: 130px;
 
   margin-bottom: 12px;
-
-  background-color: #f5f5f5;
 `;
 const LoadLandingTitle_SecondLine = styled.div`
   height: 24px;
   width: 240px;
 
   margin-bottom: 24px;
-  background-color: #f5f5f5;
 `;
 
 const LoadBrandWrapper = styled.div`
@@ -58,8 +49,6 @@ const LoadBrandWrapper = styled.div`
 const LoadBrandTitle = styled.div`
   width: 30px;
   height: 15px;
-
-  background-color: #f5f5f5;
 `;
 
 const LoadBrandHorizon = styled.div`
@@ -69,8 +58,6 @@ const LoadBrandHorizon = styled.div`
   margin-right: 0;
 
   border: none;
-
-  background-color: #f5f5f5;
 `;
 
 const LoadApartmentInLanding = styled.div`

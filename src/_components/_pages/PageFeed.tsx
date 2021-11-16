@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useReducer, useState } from "react";
 
 import { QuestionDto as Question } from "../../__generated__/ourapt";
 import { useApi } from "../../api";
@@ -17,12 +17,52 @@ import QuestionInFeed from "../Question/QuestionInFeed";
 import examineResBody from "../../_modules/examineResBody";
 
 import { ReactComponent as OuraptLogo } from "../../_assets/ouraptLogo.svg";
+import LoadPageFeed from "../_loaders/LoadPageFeed";
+
+type State = {
+  _t: "loading";
+  pinnedArticle: Question | null;
+  articles: Array<Question> | null;
+};
+
+type Action =
+  | {
+      _t: "PATCH_PINNED_ARTICLE";
+      pinnedArticle: Question;
+    }
+  | {
+      _t: "PATCH_ARTICLES";
+      articles: Array<Question>;
+    };
+
+const reducer: React.Reducer<State, Action> = (prevState, action) => {
+  switch (action._t) {
+    case "PATCH_PINNED_ARTICLE":
+      return {
+        ...prevState,
+        _t: "loading",
+        pinnedArticle: action.pinnedArticle,
+      };
+    case "PATCH_ARTICLES":
+      return {
+        ...prevState,
+        _t: "loading",
+        articles: action.articles,
+      };
+  }
+};
 
 type PageFeedProps = {
   apartmentId: string;
 };
 
 const PageFeed: React.FC<PageFeedProps> = (props) => {
+  const [state, dispatch] = useReducer(reducer, {
+    _t: "loading",
+    pinnedArticle: null,
+    articles: null,
+  });
+
   const params =
     useParams<{ apartmentId?: string }>().apartmentId || props.apartmentId;
 
@@ -59,6 +99,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
           },
         });
         setQuestions(safeBody.data.questions);
+        dispatch({ _t: "PATCH_ARTICLES", articles: safeBody.data.questions });
       })();
     },
     [api.questionController, push]
@@ -80,6 +121,10 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
           },
         });
         setPinnedQuestion(safeBody.data.question);
+        dispatch({
+          _t: "PATCH_PINNED_ARTICLE",
+          pinnedArticle: safeBody.data.question,
+        });
       }
     })();
   }, [api.questionController, params]);
@@ -91,11 +136,8 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
 
   useEffect(() => {
     getPinnedQuestion();
-  }, [getPinnedQuestion]);
-
-  useEffect(() => {
     getQuestionsByCursorPerPage(params, Date.now(), 100);
-  }, [getQuestionsByCursorPerPage, params]);
+  }, [getPinnedQuestion, getQuestionsByCursorPerPage, params]);
 
   async function handleDispose() {
     getPinnedQuestion();
@@ -106,100 +148,104 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
     Event("viewPageFeed", { at: `${params}` });
   }, []);
 
-  return (
-    <div className="Page">
-      <div className="PageFeed-inner">
-        <ScreenHelmet
-          appendLeft={<OuraptLogo />}
-          appendRight={
-            <ApartmentInNavigator
-              apartmentId={params}
-              onClickAction={onApartmentInNavigatorClick}
-            />
-          }
-        />
-        <PullToRefresh
-          className={css`
-            position: absolute;
-          `}
-          onPull={(dispose) => {
-            handleDispose().then(() => {
-              dispose();
-            });
-          }}
-        >
-          {pinnedQuestion && pinnedQuestion.id && (
-            <PinnedArea className="pd--16">
-              <QuestionPinnedInFeed question={pinnedQuestion} />
-            </PinnedArea>
-          )}
-          <ArticleArea>
-            <AreaTitle className="pd--16">아파트 주민 라운지</AreaTitle>
-            {questions.length === 0 ? (
-              <div>
-                <ArticleVacantViewTitle>
-                  우리아파트에 오신 것을 환영해요!
-                </ArticleVacantViewTitle>
-                <ArticleVacantViewInfo>
-                  아파트 생활, 맛집에 대해 글을 써보세요.
-                </ArticleVacantViewInfo>
-                <button
-                  className="btn-160 btn btn--active mg-top--48"
-                  onClick={() => onArticleCreateBtnClick(0)}
-                >
-                  게시글 작성
-                </button>
-              </div>
-            ) : (
-              <div>
-                {questions.map((question) => {
-                  return (
-                    <ArticleWrapper
-                      key={question.id}
-                      className="pd--16"
-                      onClick={() => goArticleDetail(question.id)}
-                    >
-                      <QuestionInFeed question={question} />
-                      <CommentThumbnail>
-                        <img
-                          className="mg-right--6"
-                          src={
-                            require("../../_assets/CommentInFeedIcon.svg")
-                              .default
-                          }
-                          alt="댓글 수"
-                        />
-                        <div className="font-size--15 font-weight--400 font-color--11">
-                          {question.countOfComments}
-                        </div>
-                      </CommentThumbnail>
-                    </ArticleWrapper>
-                  );
-                })}
-                <FeedInfoWrapper>
-                  <FeedInfoText>
-                    이웃과 나누고 싶은 이야기를 등록해 보세요!
-                  </FeedInfoText>
-                </FeedInfoWrapper>
-              </div>
-            )}
-          </ArticleArea>
-        </PullToRefresh>
-      </div>
-      {questions.length !== 0 && (
-        <div className="btn--floating">
-          <ArticleCreateBtnFloating
-            onClick={() => onArticleCreateBtnClick(questions.length)}
+  if (state.articles) {
+    return (
+      <div className="Page">
+        <div className="PageFeed-inner">
+          <ScreenHelmet
+            appendLeft={<OuraptLogo />}
+            appendRight={
+              <ApartmentInNavigator
+                apartmentId={params}
+                onClickAction={onApartmentInNavigatorClick}
+              />
+            }
+          />
+          <PullToRefresh
+            className={css`
+              position: absolute;
+            `}
+            onPull={(dispose) => {
+              handleDispose().then(() => {
+                dispose();
+              });
+            }}
           >
-            <img
-              src={require("../../_assets/ArticleCreateBtnIcon.svg").default}
-              alt="게시글 쓰기"
-            />
-          </ArticleCreateBtnFloating>
+            {pinnedQuestion && pinnedQuestion.id && (
+              <PinnedArea className="pd--16">
+                <QuestionPinnedInFeed question={pinnedQuestion} />
+              </PinnedArea>
+            )}
+            <ArticleArea>
+              <AreaTitle className="pd--16">아파트 주민 라운지</AreaTitle>
+              {questions.length === 0 ? (
+                <div>
+                  <ArticleVacantViewTitle>
+                    우리아파트에 오신 것을 환영해요!
+                  </ArticleVacantViewTitle>
+                  <ArticleVacantViewInfo>
+                    아파트 생활, 맛집에 대해 글을 써보세요.
+                  </ArticleVacantViewInfo>
+                  <button
+                    className="btn-160 btn btn--active mg-top--48"
+                    onClick={() => onArticleCreateBtnClick(0)}
+                  >
+                    게시글 작성
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  {questions.map((question) => {
+                    return (
+                      <ArticleWrapper
+                        key={question.id}
+                        className="pd--16"
+                        onClick={() => goArticleDetail(question.id)}
+                      >
+                        <QuestionInFeed question={question} />
+                        <CommentThumbnail>
+                          <img
+                            className="mg-right--6"
+                            src={
+                              require("../../_assets/CommentInFeedIcon.svg")
+                                .default
+                            }
+                            alt="댓글 수"
+                          />
+                          <div className="font-size--15 font-weight--400 font-color--11">
+                            {question.countOfComments}
+                          </div>
+                        </CommentThumbnail>
+                      </ArticleWrapper>
+                    );
+                  })}
+                  <FeedInfoWrapper>
+                    <FeedInfoText>
+                      이웃과 나누고 싶은 이야기를 등록해 보세요!
+                    </FeedInfoText>
+                  </FeedInfoWrapper>
+                </div>
+              )}
+            </ArticleArea>
+          </PullToRefresh>
         </div>
-      )}
-    </div>
-  );
+        {questions.length !== 0 && (
+          <div className="btn--floating">
+            <ArticleCreateBtnFloating
+              onClick={() => onArticleCreateBtnClick(questions.length)}
+            >
+              <img
+                src={require("../../_assets/ArticleCreateBtnIcon.svg").default}
+                alt="게시글 쓰기"
+              />
+            </ArticleCreateBtnFloating>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  return <LoadPageFeed />;
 };
 
 export default PageFeed;
