@@ -127,7 +127,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
         });
       }
     })();
-  }, [api.questionController, params]);
+  }, [api.questionController, params, push]);
 
   function onApartmentInNavigatorClick() {
     Event("clickApartmentBanner", { at: params });
@@ -136,8 +136,11 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
 
   useEffect(() => {
     getPinnedQuestion();
+  }, []);
+
+  useEffect(() => {
     getQuestionsByCursorPerPage(params, Date.now(), 100);
-  }, [getPinnedQuestion, getQuestionsByCursorPerPage, params]);
+  }, [getQuestionsByCursorPerPage, params]);
 
   async function handleDispose() {
     getPinnedQuestion();
