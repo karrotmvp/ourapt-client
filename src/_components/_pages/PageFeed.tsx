@@ -70,9 +70,6 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
 
   const Event = useAnalytics();
 
-  const [pinnedQuestion, setPinnedQuestion] = useState<Question>();
-  const [questions, setQuestions] = useState<Array<Question>>([]);
-
   const { push } = useNavigator();
   const goArticleDetail = (articleId: string) => {
     Event("clickArticleDetail", { at: params, article: articleId });
@@ -99,7 +96,6 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
             push(`/error?cause=getQuestionsByCursorPerPageAtPageFeed`);
           },
         });
-        setQuestions(safeBody.data.questions);
         dispatch({ _t: "PATCH_ARTICLES", articles: safeBody.data.questions });
       })();
     },
@@ -121,7 +117,6 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
             push(`/error?cause=getPinnedQuestionAtPageFeed`);
           },
         });
-        setPinnedQuestion(safeBody.data.question);
         dispatch({
           _t: "PATCH_PINNED_ARTICLE",
           pinnedArticle: safeBody.data.question,
@@ -176,14 +171,14 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
               });
             }}
           >
-            {pinnedQuestion && pinnedQuestion.id && (
+            {state.pinnedArticle && state.pinnedArticle.id && (
               <PinnedArea className="pd--16">
-                <QuestionPinnedInFeed question={pinnedQuestion} />
+                <QuestionPinnedInFeed question={state.pinnedArticle} />
               </PinnedArea>
             )}
             <ArticleArea>
               <AreaTitle className="pd--16">아파트 주민 라운지</AreaTitle>
-              {questions.length === 0 ? (
+              {state.articles.length === 0 ? (
                 <div>
                   <ArticleVacantViewTitle>
                     우리아파트에 오신 것을 환영해요!
@@ -200,7 +195,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
                 </div>
               ) : (
                 <div>
-                  {questions.map((question) => {
+                  {state.articles.map((question) => {
                     return (
                       <ArticleWrapper
                         key={question.id}
@@ -234,10 +229,12 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
             </ArticleArea>
           </PullToRefresh>
         </div>
-        {questions.length !== 0 && (
+        {state.articles.length !== 0 && (
           <div className="btn--floating">
             <ArticleCreateBtnFloating
-              onClick={() => onArticleCreateBtnClick(questions.length)}
+              onClick={() =>
+                onArticleCreateBtnClick(state.articles?.length || 0)
+              }
             >
               <img
                 src={require("../../_assets/ArticleCreateBtnIcon.svg").default}
