@@ -167,6 +167,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
           />
           <PullToRefresh
             className={css`
+              width: 100%;
               position: absolute;
             `}
             onPull={(dispose) => {
