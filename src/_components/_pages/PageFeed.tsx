@@ -13,6 +13,7 @@ import { PullToRefresh } from "@karrotframe/pulltorefresh";
 import ApartmentInNavigator from "../Apartment/ApartmentInNavigator";
 import QuestionPinnedInFeed from "../Question/QuestionPinnedInFeed";
 import QuestionInFeed from "../Question/QuestionInFeed";
+import VoteInFeed from "../Vote/VoteInFeed";
 
 import examineResBody from "../../_modules/examineResBody";
 
@@ -147,6 +148,46 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
     Event("viewPageFeed", { at: `${params}` });
   }, []);
 
+  const tempVote = {
+    id: "vote01", // 객관식질문 ID
+    writer: {
+      id: "writer01",
+      nickname: "닉네임",
+    }, // 작성자
+    mainText: "임시로 투표를 만들어볼게요", // 질문내용
+    createdAt: new Date(), // 생성일
+    updatedAt: new Date(), // 최근 수정일
+    isPinned: false, // 상단 노출 여부
+    byAdmin: true, // 관리자가 작성한 글인지 여부
+    items: [
+      {
+        id: "voteItem01", // 객관식질문 ID
+        mainText: "보기 1번", // 질문내용
+        votedCount: 3,
+        isMyVote: false,
+      },
+      {
+        id: "voteItem02", // 객관식질문 ID
+        mainText: "보기 2번", // 질문내용
+        votedCount: 8,
+        isMyVote: false,
+      },
+      {
+        id: "voteItem03", // 객관식질문 ID
+        mainText: "보기 3번", // 질문내용
+        votedCount: 0,
+        isMyVote: false,
+      },
+      {
+        id: "voteItem03", // 객관식질문 ID
+        mainText: "보기 3번", // 질문내용
+        votedCount: 0,
+        isMyVote: false,
+      },
+    ],
+    countOfComments: 100,
+  };
+
   if (state.articles) {
     return (
       <div className="Page">
@@ -195,6 +236,27 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
                 </div>
               ) : (
                 <div>
+                  {/* 임시 투표 영역 */}
+                  <ArticleWrapper
+                    key={tempVote.id}
+                    className="pd--16"
+                    // onClick={() => goArticleDetail(tempVote.id)}
+                  >
+                    <VoteInFeed vote={tempVote} />
+                    <CommentThumbnail>
+                      <img
+                        className="mg-right--6"
+                        src={
+                          require("../../_assets/CommentInFeedIcon.svg").default
+                        }
+                        alt="댓글 수"
+                      />
+                      <div className="font-size--15 font-weight--400 font-color--11">
+                        {tempVote.countOfComments}
+                      </div>
+                    </CommentThumbnail>
+                  </ArticleWrapper>
+                  {/* 임시 투표 영역 */}
                   {state.articles.map((question) => {
                     return (
                       <ArticleWrapper

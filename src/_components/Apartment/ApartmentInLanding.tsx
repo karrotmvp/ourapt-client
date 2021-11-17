@@ -7,7 +7,7 @@ import styled from "@emotion/styled";
 import { ReactComponent as TheSharp } from "../../_assets/1_1_a.svg";
 import { ReactComponent as Xi } from "../../_assets/1_1_b.svg";
 import { ReactComponent as Prugio } from "../../_assets/1_1_c.svg";
-import { ReactComponent as ApartmentInLandingCheckIcon } from "../../_assets/ApartmentInLandingCheckIcon.svg";
+import { ReactComponent as CheckIcon } from "../../_assets/CheckIcon.svg";
 
 type ApartmentInPageLandingProps = {
   apartment: Apartment;
@@ -41,7 +41,7 @@ const ApartmentInPageLanding: React.FC<ApartmentInPageLandingProps> = ({
         {Logo(apartment.brandName)}
       </div>
       <ApartmentName>{apartment.name}</ApartmentName>
-      {isCheckedIn && <ApartmentInLandingCheckIcon />}
+      {isCheckedIn && <CheckIcon width="16" height="14" stroke="#E95454" />}
     </ApartmentCard>
   );
 };
