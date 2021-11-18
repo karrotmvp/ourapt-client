@@ -17,6 +17,14 @@ const UserAsAuthor: React.FC<UserAsAuthorProps> = ({
   createdAt,
   updatedAt,
 }) => {
+  const userReplacement = {
+    id: "userNotExist",
+    nickname: "존재하지 않는 사용자",
+    profileImageUrl: null,
+  };
+
+  const author = writer || userReplacement;
+
   const UserAsAuthorProfileImage = styled.div`
     width: 32px;
     height: 32px;
@@ -24,14 +32,13 @@ const UserAsAuthor: React.FC<UserAsAuthorProps> = ({
     margin-right: 12px;
 
     border-radius: 50%;
-    /* background-color: lightgray; */
-    background-image: url("${writer.profileImageUrl}");
+    background-image: url("${author.profileImageUrl}");
     background-size: cover;
   `;
 
   return (
     <UserAsAuthorContainer>
-      {writer.profileImageUrl ? (
+      {author.profileImageUrl ? (
         <UserAsAuthorProfileImage></UserAsAuthorProfileImage>
       ) : (
         <UserAsAuthorProfileImage>
@@ -42,7 +49,7 @@ const UserAsAuthor: React.FC<UserAsAuthorProps> = ({
         </UserAsAuthorProfileImage>
       )}
       <div>
-        <UserAsAuthorNickname>{writer.nickname}</UserAsAuthorNickname>
+        <UserAsAuthorNickname>{author.nickname}</UserAsAuthorNickname>
         <UserAsAuthorTimestamp>
           {getTimestamp(createdAt, updatedAt)}
         </UserAsAuthorTimestamp>
