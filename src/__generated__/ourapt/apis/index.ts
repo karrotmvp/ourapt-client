@@ -8,3 +8,4 @@ export * from './Class5Api';
 export * from './Class6Api';
 export * from './Class7Api';
 export * from './Class99Api';
+export * from './ControllerApi';

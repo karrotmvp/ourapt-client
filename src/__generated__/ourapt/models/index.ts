@@ -26,5 +26,6 @@ export * from './OneUserDto';
 export * from './QuestionContentDto';
 export * from './QuestionDto';
 export * from './RegionDto';
+export * from './SurveyDto';
 export * from './UserDto';
 export * from './WriteNewCommentDto';

@@ -97,6 +97,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
             push(`/error?cause=getQuestionsByCursorPerPageAtPageFeed`);
           },
         });
+        console.log(safeBody.data.questions);
         dispatch({ _t: "PATCH_ARTICLES", articles: safeBody.data.questions });
       })();
     },
@@ -153,6 +154,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
     writer: {
       id: "writer01",
       nickname: "닉네임",
+      profileImageUrl: "",
     }, // 작성자
     mainText: "임시로 투표를 만들어볼게요", // 질문내용
     createdAt: new Date(), // 생성일
@@ -179,7 +181,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
         isMyVote: false,
       },
       {
-        id: "voteItem03", // 객관식질문 ID
+        id: "voteItem04", // 객관식질문 ID
         mainText: "보기 3번", // 질문내용
         votedCount: 0,
         isMyVote: false,
@@ -242,7 +244,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
                     className="pd--16"
                     // onClick={() => goArticleDetail(tempVote.id)}
                   >
-                    <VoteInFeed vote={tempVote} />
+                    {/* <VoteInFeed vote={tempVote} /> */}
                     <CommentThumbnail>
                       <img
                         className="mg-right--6"

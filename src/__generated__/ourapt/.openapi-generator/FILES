@@ -7,6 +7,7 @@ apis/Class5Api.ts
 apis/Class6Api.ts
 apis/Class7Api.ts
 apis/Class99Api.ts
+apis/ControllerApi.ts
 apis/index.ts
 index.ts
 models/ApartmentDto.ts
@@ -35,6 +36,7 @@ models/OneUserDto.ts
 models/QuestionContentDto.ts
 models/QuestionDto.ts
 models/RegionDto.ts
+models/SurveyDto.ts
 models/UserDto.ts
 models/WriteNewCommentDto.ts
 models/index.ts

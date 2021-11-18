@@ -14,8 +14,9 @@
 @import "./_components/_lib/loaders.scss";
 
 // 디자인 프리미티브 - 카드
-@import "./_components/_lib/_cards/AuthorCard.scss";
-@import "./_components/_lib/_cards/ArticleCard.scss";
+@import "./_components/_lib/_views/Article.scss";
+@import "./_components/_lib/_views/Vote.scss";
+@import "./_components/_lib/_views/Author.scss";
 
 // 디자인 프리미티브 - 폼
 @import "./_components/_lib/_forms/BriefSubmitForm.scss";
