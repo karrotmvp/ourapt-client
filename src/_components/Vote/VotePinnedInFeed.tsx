@@ -59,7 +59,7 @@ const reducer: React.Reducer<State, Action> = (prevState, action) => {
   }
 };
 
-const VoteInFeed: React.FC<VoteInFeedProps> = ({ vote }) => {
+const VotePinnedInFeed: React.FC<VoteInFeedProps> = ({ vote }) => {
   const votedItem: tempVoteItem | undefined = vote.items.find(
     (item) => item.isMyVote === true
   );
@@ -121,7 +121,12 @@ const VoteInFeed: React.FC<VoteInFeedProps> = ({ vote }) => {
                     onClick={() => onItemClick(item)}
                   >
                     <div className="VoteItem-label">
-                      <CheckIcon className="VoteItem-checkIcon" />
+                      <CheckIcon
+                        // width="14"
+                        // height="12"
+                        // stroke="#cccccc"
+                        className="VoteItem-checkIcon"
+                      />
                       {item.mainText}
                     </div>
                   </li>
@@ -149,19 +154,18 @@ const VoteInFeed: React.FC<VoteInFeedProps> = ({ vote }) => {
                     ></div>
                     <div className="VoteItem-label">
                       <CheckIcon
-                        className={
-                          "VoteItem-checkIcon " +
-                          (state.voted === item &&
-                            "VoteItem-checkIcon--checked")
-                        }
+                        // width="14"
+                        // height="12"
+                        // stroke="#cccccc"
+                        className="VoteItem-checkIcon"
                       />
                       {item.mainText}
-                    </div>
-                    <div className="VoteItem-count">
-                      {state.voted === item
-                        ? item.votedCount + 1
-                        : item.votedCount}
-                      명
+                      <p className="VoteItem-poll">
+                        {state.voted === item
+                          ? item.votedCount + 1
+                          : item.votedCount}
+                        명
+                      </p>
                     </div>
                   </li>
                 );
@@ -172,4 +176,4 @@ const VoteInFeed: React.FC<VoteInFeedProps> = ({ vote }) => {
   );
 };
 
-export default VoteInFeed;
+export default VotePinnedInFeed;
