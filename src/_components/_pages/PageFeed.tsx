@@ -107,9 +107,11 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
   const getPinnedQuestion = useCallback(() => {
     (async () => {
       const response =
-        await api.questionController.getPinnedQuestionOfApartmentUsingGET({
-          apartmentId: params,
-        });
+        await api.questionController.getRandomPinnedQuestionOfApartmentUsingGET(
+          {
+            apartmentId: params,
+          }
+        );
       if (response && response.status === "DATA_NOT_FOUND_FROM_DB") {
       } else {
         const safeBody = examineResBody({
