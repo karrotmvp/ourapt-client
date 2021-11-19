@@ -132,9 +132,9 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
     push(`/landing`);
   }
 
-  useEffect(() => {
-    getPinnedQuestion();
-  }, []);
+  // useEffect(() => {
+  //   getPinnedQuestion();
+  // }, []);
 
   useEffect(() => {
     getQuestionsByCursorPerPage(params, Date.now(), 100);

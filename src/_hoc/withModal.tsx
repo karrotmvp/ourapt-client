@@ -89,6 +89,21 @@ export default function WithModal() {
           </div>
         </div>
       );
+    case "onboarding-opened":
+      return (
+        <div className="Page">
+          온보딩 모달을 만들어볼게요!
+          <div>{modalState.modal.apartmentName}</div>
+          <button
+            onClick={() => {
+              modalState.modal.action();
+              // setModal("close");
+            }}
+          >
+            이웃들과 이야기하러 가기
+          </button>
+        </div>
+      );
   }
 
   return <div />;

@@ -4,6 +4,7 @@ import { ApartmentDto as Apartment } from "../../__generated__/ourapt";
 import { useAccessToken } from "../../_providers/useAccessToken";
 import { useApi } from "../../api";
 import { useViewer } from "../../_providers/useViewer";
+import { useModal } from "../../_providers/useModal";
 
 import styled from "@emotion/styled";
 
@@ -20,6 +21,9 @@ const PageLanding: React.FC = () => {
     useAccessToken();
   const { viewer, refreshViewer } = useViewer();
   const Event = useAnalytics();
+
+  const { setModal } = useModal();
+  const isOnboarded = window.localStorage.getItem("onboarded");
 
   const { push } = useNavigator();
   const goPageApartmentRequestForm = () => {
@@ -41,7 +45,19 @@ const PageLanding: React.FC = () => {
     });
     if (response.status === "SUCCESS") {
       refreshViewer();
-      push(`/feed/${apartmentId}`);
+
+      const Onboarding = {
+        _t: "Onboarding",
+        name: "Onboarding",
+        apartmentName: viewer?.checkedIn?.name,
+        action: push(`/feed/${apartmentId}`),
+      };
+
+      if (isOnboarded) {
+        push(`/feed/${apartmentId}`);
+      } else {
+        setModal(Onboarding);
+      }
     }
   }
 
