@@ -92,7 +92,7 @@ const PageQuestionPinnedDetail: React.FC = () => {
     e.preventDefault();
     if (state._t === "typed") {
       const response = await api.commentController.writeNewCommentUsingPOST({
-        questionId: articleId,
+        articleId: articleId,
         commentContent: {
           mainText: state.mainText || "",
         },
