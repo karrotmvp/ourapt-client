@@ -244,7 +244,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
                     className="pd--16"
                     // onClick={() => goArticleDetail(tempVote.id)}
                   >
-                    {/* <VoteInFeed vote={tempVote} /> */}
+                    <VoteInFeed vote={tempVote} />
                     <CommentThumbnail>
                       <img
                         className="mg-right--6"
