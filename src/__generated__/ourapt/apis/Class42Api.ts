@@ -34,6 +34,10 @@ export interface GetRandomPinnedVoteOfApartmentUsingGETRequest {
     apartmentId: string;
 }
 
+export interface GetVoteByIdUsingGETRequest {
+    voteId: string;
+}
+
 export interface SubmitVotingUsingPOSTRequest {
     itemId: string;
 }
@@ -45,7 +49,7 @@ export interface WriteNewVoteUsingPOSTRequest {
 /**
  * 
  */
-export class DefaultApi extends runtime.BaseAPI {
+export class Class42Api extends runtime.BaseAPI {
 
     /**
      * 투표 취소하기
@@ -112,6 +116,40 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getRandomPinnedVoteOfApartmentUsingGET(requestParameters: GetRandomPinnedVoteOfApartmentUsingGETRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyOneVoteDto> {
         const response = await this.getRandomPinnedVoteOfApartmentUsingGETRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * ID로 투표 게시글 조회
+     */
+    async getVoteByIdUsingGETRaw(requestParameters: GetVoteByIdUsingGETRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyOneVoteDto>> {
+        if (requestParameters.voteId === null || requestParameters.voteId === undefined) {
+            throw new runtime.RequiredError('voteId','Required parameter requestParameters.voteId was null or undefined when calling getVoteByIdUsingGET.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // KarrotAccessToken authentication
+        }
+
+        const response = await this.request({
+            path: `/api/v1/vote/{voteId}`.replace(`{${"voteId"}}`, encodeURIComponent(String(requestParameters.voteId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyOneVoteDtoFromJSON(jsonValue));
+    }
+
+    /**
+     * ID로 투표 게시글 조회
+     */
+    async getVoteByIdUsingGET(requestParameters: GetVoteByIdUsingGETRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyOneVoteDto> {
+        const response = await this.getVoteByIdUsingGETRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

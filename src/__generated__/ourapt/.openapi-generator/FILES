@@ -2,14 +2,13 @@
 apis/Class1APIApi.ts
 apis/Class2Api.ts
 apis/Class3Api.ts
-apis/Class4Api.ts
-apis/Class4ArticleApi.ts
+apis/Class41Api.ts
+apis/Class42Api.ts
 apis/Class5Api.ts
 apis/Class6Api.ts
 apis/Class7Api.ts
 apis/Class99Api.ts
 apis/ControllerApi.ts
-apis/DefaultApi.ts
 apis/index.ts
 index.ts
 models/ApartmentDto.ts
@@ -20,7 +19,6 @@ models/CommonResponseBodyGetCommentsOfQuestionDto.ts
 models/CommonResponseBodyGetQuestionsDto.ts
 models/CommonResponseBodyKarrotAccessTokenDto.ts
 models/CommonResponseBodyOneApartmentDto.ts
-models/CommonResponseBodyOneArticleDto.ts
 models/CommonResponseBodyOneCommentDto.ts
 models/CommonResponseBodyOneQuestionDto.ts
 models/CommonResponseBodyOneUserDto.ts
@@ -34,7 +32,6 @@ models/KarrotLoginDto.ts
 models/KarrotProfile.ts
 models/NoApartmentAnswerDto.ts
 models/OneApartmentDto.ts
-models/OneArticleDto.ts
 models/OneCommentDto.ts
 models/OneQuestionDto.ts
 models/OneUserDto.ts
