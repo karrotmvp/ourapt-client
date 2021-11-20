@@ -1,0 +1,66 @@
+.Onboarding-Wrapper {
+  width: 100vw;
+  height: 100vh;
+
+  padding: 16px;
+
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+  background-color: #ffffff;
+}
+
+.Onboarding-CloseIcon {
+  margin: 21px;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.Onboarding-Title {
+  padding-top: 96px;
+  padding-bottom: 48px;
+
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 32px;
+}
+
+.Onboarding-Info {
+  color: #555555;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.Onboarding-InfoItem {
+  margin: 16px 8px;
+  padding: 8px 14px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  border: 1px solid #f5f5f5;
+  border-radius: 8px;
+
+  background-color: #f9f9f9;
+}
+
+.Onboarding-InfoItem span {
+  font-size: 20px;
+}
+
+.Onboarding-InfoItem p {
+  color: #333333;
+  font-size: 14px;
+  line-height: 1em;
+  vertical-align: middle;
+}
+
+.Onboarding-Btn {
+  margin-top: auto;
+  margin-bottom: 24px;
+}

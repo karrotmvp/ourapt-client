@@ -6,7 +6,7 @@ import React, {
   useMemo,
 } from "react";
 
-type Modal = MultiSelectModal | ConfirmationModal | AlertModal;
+type Modal = MultiSelectModal | ConfirmationModal | AlertModal | Onboarding;
 
 type MultiSelectModal = {
   _t: string;
@@ -36,7 +36,17 @@ type AlertModal = {
   alertAction?: any;
 };
 
+type Onboarding = {
+  _t: string;
+  name: string;
+  apartmentName?: string;
+  action?: any;
+};
+
 type State =
+  | {
+      _t: "why?";
+    }
   | {
       _t: "modal-closed";
     }
@@ -51,6 +61,10 @@ type State =
   | {
       _t: "alertModal-opened";
       modal: AlertModal;
+    }
+  | {
+      _t: "onboarding-opened";
+      modal: Onboarding;
     };
 
 type Action =
@@ -67,6 +81,10 @@ type Action =
       payload: AlertModal;
     }
   | {
+      _t: "OPEN_ONBOARDING";
+      payload: Onboarding;
+    }
+  | {
       _t: "CLOSE_MODAL";
     };
 
@@ -78,6 +96,8 @@ const reducer: React.Reducer<State, Action> = (prevState, action) => {
       return { _t: "confirmationModal-opened", modal: action.payload };
     case "OPEN_ALERT_MODAL":
       return { _t: "alertModal-opened", modal: action.payload };
+    case "OPEN_ONBOARDING":
+      return { _t: "onboarding-opened", modal: action.payload };
     default:
       return { _t: "modal-closed" };
   }
@@ -94,7 +114,6 @@ export const ModalProvider: React.FC = (props) => {
 
   const setModal = useCallback((modal: Modal | "close") => {
     if (modal === "close") {
-      console.log(`셋모달 ${modal}`);
       dispatch({ _t: "CLOSE_MODAL" });
       return;
     }
@@ -107,6 +126,9 @@ export const ModalProvider: React.FC = (props) => {
         return;
       case "AlertModal":
         dispatch({ _t: "OPEN_ALERT_MODAL", payload: modal });
+        return;
+      case "Onboarding":
+        dispatch({ _t: "OPEN_ONBOARDING", payload: modal });
         return;
       default:
         dispatch({ _t: "CLOSE_MODAL" });

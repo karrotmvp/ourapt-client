@@ -1,4 +1,5 @@
 import { useModal } from "../_providers/useModal";
+import { ReactComponent as CloseIcon } from "../_assets/iconClose.svg";
 
 export default function WithModal() {
   const { modalState, setModal } = useModal();
@@ -87,6 +88,50 @@ export default function WithModal() {
               확인
             </button>
           </div>
+        </div>
+      );
+    case "onboarding-opened":
+      return (
+        <div id="Modal" className="Onboarding-Wrapper vertical-centered">
+          <CloseIcon
+            className="Onboarding-CloseIcon"
+            onClick={(e) => {
+              window.localStorage.setItem("onboarded", "true");
+              setModal("close");
+            }}
+          />
+
+          <div className="Onboarding-Title">
+            {modalState.modal.apartmentName}
+            <br />
+            이웃들과 이야기를 나눠보세요!
+          </div>
+          <p className="Onboarding-Info">
+            아래의 주제로 이웃들과 이야기할 수 있어요
+          </p>
+          <ul>
+            <li className="Onboarding-InfoItem">
+              <span className="mg-right--8">🏥</span>
+              <p>병원 가야 하는데 집 근처 괜찮은 병원이 궁금할 때</p>
+            </li>
+            <li className="Onboarding-InfoItem">
+              <span className="mg-right--8">🍴</span>
+              <p>우리 아파트 근처 새로 생긴 음식점이 궁금할 때</p>
+            </li>
+            <li className="Onboarding-InfoItem">
+              <span className="mg-right--8">⏰</span>
+              <p>단지 내 피트니스의 운영시간을 알고 싶을 때</p>
+            </li>
+          </ul>
+          <button
+            className="Onboarding-Btn btn btn-full btn--active"
+            onClick={(e) => {
+              window.localStorage.setItem("onboarded", "true");
+              setModal("close");
+            }}
+          >
+            이웃들과 이야기하러 가기
+          </button>
         </div>
       );
   }

@@ -2,6 +2,9 @@ import React, { useCallback, useEffect, useReducer, useState } from "react";
 
 import { QuestionDto as Question } from "../../__generated__/ourapt";
 import { useApi } from "../../api";
+import { useViewer } from "../../_providers/useViewer";
+import { useModal } from "../../_providers/useModal";
+
 import { useAnalytics } from "../../_analytics/firebase";
 
 import styled from "@emotion/styled";
@@ -69,7 +72,10 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
 
   const api = useApi();
 
+  const { viewer } = useViewer();
   const Event = useAnalytics();
+
+  const { setModal } = useModal();
 
   const { push } = useNavigator();
   const goArticleDetail = (articleId: string) => {
@@ -134,8 +140,22 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
     push(`/landing`);
   }
 
+  // useEffect(() => {
+  //   getPinnedQuestion();
+  // }, []);
+
+  const isOnboarded = window.localStorage.getItem("onboarded");
+
+  const Onboarding = {
+    _t: "Onboarding",
+    name: "Onboarding",
+    apartmentName: viewer?.checkedIn?.name,
+  };
+
   useEffect(() => {
-    getPinnedQuestion();
+    if (!isOnboarded) {
+      setModal(Onboarding);
+    }
   }, []);
 
   useEffect(() => {
