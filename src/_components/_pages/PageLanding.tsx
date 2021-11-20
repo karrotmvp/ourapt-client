@@ -45,19 +45,7 @@ const PageLanding: React.FC = () => {
     });
     if (response.status === "SUCCESS") {
       refreshViewer();
-
-      const Onboarding = {
-        _t: "Onboarding",
-        name: "Onboarding",
-        apartmentName: viewer?.checkedIn?.name,
-        action: push(`/feed/${apartmentId}`),
-      };
-
-      if (isOnboarded) {
-        push(`/feed/${apartmentId}`);
-      } else {
-        setModal(Onboarding);
-      }
+      push(`/feed/${apartmentId}`);
     }
   }
 
