@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useReducer, useState } from "react";
 
 import { QuestionDto as Question } from "../../__generated__/ourapt";
+import { VoteDto as Vote } from "../../__generated__/ourapt";
 import { useApi } from "../../api";
 import { useViewer } from "../../_providers/useViewer";
 import { useModal } from "../../_providers/useModal";
@@ -16,7 +17,6 @@ import { PullToRefresh } from "@karrotframe/pulltorefresh";
 import ApartmentInNavigator from "../Apartment/ApartmentInNavigator";
 import QuestionPinnedInFeed from "../Question/QuestionPinnedInFeed";
 import QuestionInFeed from "../Question/QuestionInFeed";
-import VoteInFeed from "../Vote/VoteInFeed";
 
 import examineResBody from "../../_modules/examineResBody";
 
@@ -32,7 +32,7 @@ type State = {
 type Action =
   | {
       _t: "PATCH_PINNED_ARTICLE";
-      pinnedArticle: Question;
+      pinnedArticle: Question | Vote;
     }
   | {
       _t: "PATCH_ARTICLES";
@@ -135,14 +135,37 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
     })();
   }, [api.questionController, params, push]);
 
+  const getPinnedVote = useCallback(() => {
+    (async () => {
+      const response =
+        await api.voteController.getRandomPinnedVoteOfApartmentUsingGET({
+          apartmentId: params,
+        });
+      if (response && response.status === "DATA_NOT_FOUND_FROM_DB") {
+      } else {
+        const safeBody = examineResBody({
+          resBody: response,
+          validator: (data) => data.vote != null,
+          onFailure: () => {
+            push(`/error?cause=getPinnedVoteAtPageFeed`);
+          },
+        });
+        dispatch({
+          _t: "PATCH_PINNED_ARTICLE",
+          pinnedArticle: safeBody.data.vote,
+        });
+      }
+    })();
+  }, [api.voteController, params, push]);
+
   function onApartmentInNavigatorClick() {
     Event("clickApartmentBanner", { at: params });
     push(`/landing`);
   }
 
-  // useEffect(() => {
-  //   getPinnedQuestion();
-  // }, []);
+  useEffect(() => {
+    getPinnedVote();
+  }, []);
 
   const isOnboarded = window.localStorage.getItem("onboarded");
 
@@ -238,7 +261,8 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
           >
             {state.pinnedArticle && state.pinnedArticle.id && (
               <PinnedArea className="pd--16">
-                <QuestionPinnedInFeed question={state.pinnedArticle} />
+                {typeof state.pinnedArticle}
+                {/* <QuestionPinnedInFeed question={state.pinnedArticle} /> */}
               </PinnedArea>
             )}
             <ArticleArea>
@@ -260,27 +284,6 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
                 </div>
               ) : (
                 <div>
-                  {/* 임시 투표 영역 */}
-                  <ArticleWrapper
-                    key={tempVote.id}
-                    className="pd--16"
-                    // onClick={() => goArticleDetail(tempVote.id)}
-                  >
-                    <VoteInFeed vote={tempVote} />
-                    <CommentThumbnail>
-                      <img
-                        className="mg-right--6"
-                        src={
-                          require("../../_assets/CommentInFeedIcon.svg").default
-                        }
-                        alt="댓글 수"
-                      />
-                      <div className="font-size--15 font-weight--400 font-color--11">
-                        {tempVote.countOfComments}
-                      </div>
-                    </CommentThumbnail>
-                  </ArticleWrapper>
-                  {/* 임시 투표 영역 */}
                   {state.articles.map((question) => {
                     return (
                       <ArticleWrapper

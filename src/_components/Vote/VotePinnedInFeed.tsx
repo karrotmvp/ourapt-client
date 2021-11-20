@@ -1,7 +1,5 @@
 import React, { useReducer } from "react";
 
-import styled from "@emotion/styled";
-
 import { useAnalytics } from "../../_analytics/firebase";
 import { useViewer } from "../../_providers/useViewer";
 
@@ -30,7 +28,7 @@ type tempVote = {
   countOfComments: number;
 };
 
-type VoteInFeedProps = {
+type VotePinnedInFeedProps = {
   vote: tempVote;
 };
 
@@ -59,7 +57,7 @@ const reducer: React.Reducer<State, Action> = (prevState, action) => {
   }
 };
 
-const VotePinnedInFeed: React.FC<VoteInFeedProps> = ({ vote }) => {
+const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
   const votedItem: tempVoteItem | undefined = vote.items.find(
     (item) => item.isMyVote === true
   );
@@ -121,12 +119,7 @@ const VotePinnedInFeed: React.FC<VoteInFeedProps> = ({ vote }) => {
                     onClick={() => onItemClick(item)}
                   >
                     <div className="VoteItem-label">
-                      <CheckIcon
-                        // width="14"
-                        // height="12"
-                        // stroke="#cccccc"
-                        className="VoteItem-checkIcon"
-                      />
+                      <CheckIcon className="VoteItem-checkIcon" />
                       {item.mainText}
                     </div>
                   </li>
@@ -153,12 +146,7 @@ const VotePinnedInFeed: React.FC<VoteInFeedProps> = ({ vote }) => {
                       }}
                     ></div>
                     <div className="VoteItem-label">
-                      <CheckIcon
-                        // width="14"
-                        // height="12"
-                        // stroke="#cccccc"
-                        className="VoteItem-checkIcon"
-                      />
+                      <CheckIcon className="VoteItem-checkIcon" />
                       {item.mainText}
                       <p className="VoteItem-poll">
                         {state.voted === item
