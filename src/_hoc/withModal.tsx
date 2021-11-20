@@ -93,7 +93,13 @@ export default function WithModal() {
     case "onboarding-opened":
       return (
         <div id="Modal" className="Onboarding-Wrapper vertical-centered">
-          <CloseIcon className="Onboarding-CloseIcon" />
+          <CloseIcon
+            className="Onboarding-CloseIcon"
+            onClick={(e) => {
+              window.localStorage.setItem("onboarded", "true");
+              setModal("close");
+            }}
+          />
 
           <div className="Onboarding-Title">
             {modalState.modal.apartmentName}
