@@ -70,17 +70,6 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
   );
 
   const Event = useAnalytics();
-  const { viewer } = useViewer();
-
-  function onUserCardClick() {
-    Event("clickUserCard", {
-      context: "atPageFeed",
-      at: viewer?.checkedIn?.id,
-      articleType: "question",
-      article: vote.id,
-      user: vote.writer.id,
-    });
-  }
 
   function onItemClick(item: VoteItem) {
     if (state._t === "voted" && state.voted === item) {
@@ -104,17 +93,8 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
 
   return (
     <div className="ArticleCard pd-16">
-      <div
-        className="ArticleCardInlist-Author"
-        onClick={() => onUserCardClick()}
-      >
-        <UserAsAuthor
-          writer={vote.writer}
-          createdAt={vote.createdAt}
-          updatedAt={vote.updatedAt}
-        />
-      </div>
       <form className="VoteForm">
+        <p className="ArticleCard-Title">title 대신 임시로 받아올게요</p>
         <p className="ArticleCard-Content ArticleCardInList-Content mg-top--10 mg-bottom--16">
           {vote.mainText}
         </p>
@@ -183,6 +163,9 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
                 );
               })}
         </ul>
+        <p className="ArticleCard-Info mg-top--12">
+          이웃들의 의견이 모이면 알림을 보내드려요
+        </p>
       </form>
     </div>
   );
