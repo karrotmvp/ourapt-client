@@ -22,17 +22,23 @@ import examineResBody from "../../_modules/examineResBody";
 
 import { ReactComponent as OuraptLogo } from "../../_assets/ouraptLogo.svg";
 import LoadPageFeed from "../_loaders/LoadPageFeed";
+import VotePinnedInFeed from "../Vote/VotePinnedInFeed";
 
 type State = {
   _t: "loading";
-  pinnedArticle: Question | null;
+  pinned:
+    | { _t: "question"; article: Question }
+    | { _t: "vote"; article: Vote }
+    | null;
   articles: Array<Question> | null;
 };
 
 type Action =
   | {
       _t: "PATCH_PINNED_ARTICLE";
-      pinnedArticle: Question | Vote;
+      pinned:
+        | { _t: "question"; article: Question }
+        | { _t: "vote"; article: Vote };
     }
   | {
       _t: "PATCH_ARTICLES";
@@ -45,7 +51,7 @@ const reducer: React.Reducer<State, Action> = (prevState, action) => {
       return {
         ...prevState,
         _t: "loading",
-        pinnedArticle: action.pinnedArticle,
+        pinned: action.pinned,
       };
     case "PATCH_ARTICLES":
       return {
@@ -63,7 +69,7 @@ type PageFeedProps = {
 const PageFeed: React.FC<PageFeedProps> = (props) => {
   const [state, dispatch] = useReducer(reducer, {
     _t: "loading",
-    pinnedArticle: null,
+    pinned: null,
     articles: null,
   });
 
@@ -103,7 +109,6 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
             push(`/error?cause=getQuestionsByCursorPerPageAtPageFeed`);
           },
         });
-        console.log(safeBody.data.questions);
         dispatch({ _t: "PATCH_ARTICLES", articles: safeBody.data.questions });
       })();
     },
@@ -129,7 +134,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
         });
         dispatch({
           _t: "PATCH_PINNED_ARTICLE",
-          pinnedArticle: safeBody.data.question,
+          pinned: { _t: "question", article: safeBody.data.question },
         });
       }
     })();
@@ -152,7 +157,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
         });
         dispatch({
           _t: "PATCH_PINNED_ARTICLE",
-          pinnedArticle: safeBody.data.vote,
+          pinned: { _t: "vote", article: safeBody.data.vote },
         });
       }
     })();
@@ -186,7 +191,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
   }, [getQuestionsByCursorPerPage, params]);
 
   async function handleDispose() {
-    getPinnedQuestion();
+    getPinnedVote();
     getQuestionsByCursorPerPage(params, Date.now(), 100);
   }
 
@@ -194,46 +199,33 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
     Event("viewPageFeed", { at: `${params}` });
   }, []);
 
-  const tempVote = {
-    id: "vote01", // 객관식질문 ID
-    writer: {
-      id: "writer01",
-      nickname: "닉네임",
-      profileImageUrl: "",
-    }, // 작성자
-    mainText: "임시로 투표를 만들어볼게요", // 질문내용
-    createdAt: new Date(), // 생성일
-    updatedAt: new Date(), // 최근 수정일
-    isPinned: false, // 상단 노출 여부
-    byAdmin: true, // 관리자가 작성한 글인지 여부
-    items: [
-      {
-        id: "voteItem01", // 객관식질문 ID
-        mainText: "보기 1번", // 질문내용
-        votedCount: 3,
-        isMyVote: false,
-      },
-      {
-        id: "voteItem02", // 객관식질문 ID
-        mainText: "보기 2번", // 질문내용
-        votedCount: 8,
-        isMyVote: false,
-      },
-      {
-        id: "voteItem03", // 객관식질문 ID
-        mainText: "보기 3번", // 질문내용
-        votedCount: 0,
-        isMyVote: false,
-      },
-      {
-        id: "voteItem04", // 객관식질문 ID
-        mainText: "보기 3번", // 질문내용
-        votedCount: 0,
-        isMyVote: false,
-      },
-    ],
-    countOfComments: 100,
-  };
+  // 임시 영역 시작
+
+  function tempVoteCreate() {
+    (async () => {
+      const response = await api.voteController.writeNewVoteUsingPOST({
+        voteContent: {
+          mainText: "어드민이라서 따로 안 보내주시는건가?",
+          items: [
+            { mainText: "첫 번째" },
+            { mainText: "두 번째" },
+            { mainText: "세 번째" },
+            { mainText: "네 번째" },
+          ],
+        },
+      });
+      const safeBody = examineResBody({
+        resBody: response,
+        validator: (data) => data.vote != null,
+        onFailure: () => {
+          push(`/error?cause=writeNewVoteUsingPost`);
+        },
+      });
+      alert(safeBody.data.vote.mainText);
+    })();
+  }
+
+  // 임시 영역 끝
 
   if (state.articles) {
     return (
@@ -259,10 +251,14 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
               });
             }}
           >
-            {state.pinnedArticle && state.pinnedArticle.id && (
+            {state.pinned && (
               <PinnedArea className="pd--16">
-                {typeof state.pinnedArticle}
-                {/* <QuestionPinnedInFeed question={state.pinnedArticle} /> */}
+                {state.pinned._t === "vote" && (
+                  <VotePinnedInFeed vote={state.pinned.article} />
+                )}
+                {state.pinned._t === "question" && (
+                  <QuestionPinnedInFeed question={state.pinned.article} />
+                )}
               </PinnedArea>
             )}
             <ArticleArea>
@@ -320,6 +316,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
         </div>
         {state.articles.length !== 0 && (
           <div className="btn--floating">
+            <button onClick={tempVoteCreate}>무시해주세요</button>
             <ArticleCreateBtnFloating
               onClick={() =>
                 onArticleCreateBtnClick(state.articles?.length || 0)

@@ -45,9 +45,6 @@ type Onboarding = {
 
 type State =
   | {
-      _t: "why?";
-    }
-  | {
       _t: "modal-closed";
     }
   | {
