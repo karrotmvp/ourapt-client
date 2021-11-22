@@ -34,11 +34,11 @@ export interface DeleteCommentUsingDELETERequest {
 }
 
 export interface GetCommentsOfQuestionUsingGETRequest {
-    questionId: string;
+    articleId: string;
 }
 
 export interface WriteNewCommentUsingPOSTRequest {
-    questionId: string;
+    articleId: string;
     commentContent: WriteNewCommentDto;
 }
 
@@ -85,8 +85,8 @@ export class Class5Api extends runtime.BaseAPI {
      * 질문에 달린 게시글 보기
      */
     async getCommentsOfQuestionUsingGETRaw(requestParameters: GetCommentsOfQuestionUsingGETRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyGetCommentsOfQuestionDto>> {
-        if (requestParameters.questionId === null || requestParameters.questionId === undefined) {
-            throw new runtime.RequiredError('questionId','Required parameter requestParameters.questionId was null or undefined when calling getCommentsOfQuestionUsingGET.');
+        if (requestParameters.articleId === null || requestParameters.articleId === undefined) {
+            throw new runtime.RequiredError('articleId','Required parameter requestParameters.articleId was null or undefined when calling getCommentsOfQuestionUsingGET.');
         }
 
         const queryParameters: any = {};
@@ -98,7 +98,7 @@ export class Class5Api extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/api/v1/question/{questionId}/comments`.replace(`{${"questionId"}}`, encodeURIComponent(String(requestParameters.questionId))),
+            path: `/api/v1/article/{articleId}/comments`.replace(`{${"articleId"}}`, encodeURIComponent(String(requestParameters.articleId))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -119,8 +119,8 @@ export class Class5Api extends runtime.BaseAPI {
      * 새로운 댓글 작성
      */
     async writeNewCommentUsingPOSTRaw(requestParameters: WriteNewCommentUsingPOSTRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyOneCommentDto>> {
-        if (requestParameters.questionId === null || requestParameters.questionId === undefined) {
-            throw new runtime.RequiredError('questionId','Required parameter requestParameters.questionId was null or undefined when calling writeNewCommentUsingPOST.');
+        if (requestParameters.articleId === null || requestParameters.articleId === undefined) {
+            throw new runtime.RequiredError('articleId','Required parameter requestParameters.articleId was null or undefined when calling writeNewCommentUsingPOST.');
         }
 
         if (requestParameters.commentContent === null || requestParameters.commentContent === undefined) {
@@ -138,7 +138,7 @@ export class Class5Api extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/api/v1/question/{questionId}/comment`.replace(`{${"questionId"}}`, encodeURIComponent(String(requestParameters.questionId))),
+            path: `/api/v1/article/{articleId}/comment`.replace(`{${"articleId"}}`, encodeURIComponent(String(requestParameters.articleId))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
