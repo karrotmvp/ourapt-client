@@ -43,6 +43,10 @@ export interface GetQuestionsUsingGETRequest {
     perPage: number;
 }
 
+export interface GetRandomPinnedQuestionOfApartmentDeprecatedUsingGETRequest {
+    apartmentId: string;
+}
+
 export interface GetRandomPinnedQuestionOfApartmentUsingGETRequest {
     apartmentId: string;
 }
@@ -176,6 +180,40 @@ export class Class41Api extends runtime.BaseAPI {
      */
     async getQuestionsUsingGET(requestParameters: GetQuestionsUsingGETRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyGetQuestionsDto> {
         const response = await this.getQuestionsUsingGETRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 사용자에게 보여질 핀 질문 랜덤 조회 (deprecated) 
+     */
+    async getRandomPinnedQuestionOfApartmentDeprecatedUsingGETRaw(requestParameters: GetRandomPinnedQuestionOfApartmentDeprecatedUsingGETRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyOneQuestionDto>> {
+        if (requestParameters.apartmentId === null || requestParameters.apartmentId === undefined) {
+            throw new runtime.RequiredError('apartmentId','Required parameter requestParameters.apartmentId was null or undefined when calling getRandomPinnedQuestionOfApartmentDeprecatedUsingGET.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // KarrotAccessToken authentication
+        }
+
+        const response = await this.request({
+            path: `/api/v1/apartment/{apartmentId}/questions/pinned`.replace(`{${"apartmentId"}}`, encodeURIComponent(String(requestParameters.apartmentId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyOneQuestionDtoFromJSON(jsonValue));
+    }
+
+    /**
+     * 사용자에게 보여질 핀 질문 랜덤 조회 (deprecated) 
+     */
+    async getRandomPinnedQuestionOfApartmentDeprecatedUsingGET(requestParameters: GetRandomPinnedQuestionOfApartmentDeprecatedUsingGETRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyOneQuestionDto> {
+        const response = await this.getRandomPinnedQuestionOfApartmentDeprecatedUsingGETRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

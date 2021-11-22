@@ -2,10 +2,10 @@ import React, { useReducer } from "react";
 
 import { useAnalytics } from "../../_analytics/firebase";
 import { useViewer } from "../../_providers/useViewer";
+import { useApi } from "../../api";
 
 import { VoteDto as Vote } from "../../__generated__/ourapt";
 import { VoteItemDto as VoteItem } from "../../__generated__/ourapt";
-import { KarrotProfile } from "../../__generated__/ourapt";
 
 import UserAsAuthor from "../User/UserAsAuthor";
 
@@ -18,9 +18,11 @@ type VotePinnedInFeedProps = {
 type State =
   | {
       _t: "not-voted";
+      vote: Vote;
     }
   | {
       _t: "voted";
+      vote: Vote;
       voted: VoteItem;
     };
 
@@ -34,25 +36,36 @@ type Action =
 const reducer: React.Reducer<State, Action> = (prevState, action) => {
   switch (action._t) {
     case "RETRIEVE":
-      return { _t: "not-voted" };
+      return { ...prevState, _t: "not-voted" };
     case "CASTING":
-      return { _t: "voted", voted: action.payload };
+      return { ...prevState, _t: "voted", voted: action.payload };
   }
 };
 
 const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
+  const api = useApi();
+
   const votedItem: VoteItem | undefined = vote.items.find(
     (item) => item.myVote === true
   );
 
-  const totalVote: number = vote.items.reduce(
+  let votedStatusByothers: Vote = vote;
+  for (let item of votedStatusByothers.items) {
+    if (item.myVote && item.votedCount) {
+      item.votedCount -= 1;
+    }
+  }
+
+  const totalVote: number = votedStatusByothers.items.reduce(
     (acc, cur) => acc + (cur.votedCount || 0),
     0
   );
 
   const [state, dispatch] = useReducer(
     reducer,
-    votedItem ? { _t: "voted", voted: votedItem } : { _t: "not-voted" }
+    votedItem
+      ? { _t: "voted", vote: votedStatusByothers, voted: votedItem }
+      : { _t: "not-voted", vote: votedStatusByothers }
   );
 
   const Event = useAnalytics();
@@ -65,6 +78,12 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
       articleType: "question",
       article: vote.id,
       user: vote.writer.id,
+    });
+  }
+
+  async function castVote(item: VoteItem) {
+    api.voteController.submitVotingUsingPOST({
+      itemId: item.id,
     });
   }
 
@@ -94,7 +113,7 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
         </p>
         <ul className="VoteItemList">
           {state._t === "not-voted"
-            ? vote.items.map((item, idx) => {
+            ? votedStatusByothers.items.map((item, idx) => {
                 return (
                   <li
                     className="VoteItem"
@@ -108,7 +127,7 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
                   </li>
                 );
               })
-            : vote.items.map((item, idx) => {
+            : votedStatusByothers.items.map((item, idx) => {
                 return (
                   <li
                     className="VoteItem"

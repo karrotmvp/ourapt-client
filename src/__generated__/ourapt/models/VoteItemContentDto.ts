@@ -24,7 +24,7 @@ export interface VoteItemContentDto {
      * @type {string}
      * @memberof VoteItemContentDto
      */
-    mainText?: string;
+    mainText: string;
 }
 
 export function VoteItemContentDtoFromJSON(json: any): VoteItemContentDto {
@@ -37,7 +37,7 @@ export function VoteItemContentDtoFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
-        'mainText': !exists(json, 'mainText') ? undefined : json['mainText'],
+        'mainText': json['mainText'],
     };
 }
 
