@@ -78,7 +78,7 @@ const CommentInDetailSubmitForm: React.FC<CommentInDetailSubmitFormProps> = ({
     e.preventDefault();
     if (state._t === "typed") {
       const response = await api.commentController.writeNewCommentUsingPOST({
-        articleId: articleId,
+        articleId,
         commentContent: {
           mainText: state.mainText || "",
         },

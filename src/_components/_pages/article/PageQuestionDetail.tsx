@@ -64,7 +64,7 @@ const PageArticleDetail: React.FC = () => {
     (async () => {
       const response =
         await api.commentController.getCommentsOfQuestionUsingGET({
-          articleId: articleId,
+          articleId,
         });
 
       const safeBody = examineResBody({
