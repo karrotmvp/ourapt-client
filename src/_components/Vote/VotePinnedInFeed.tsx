@@ -10,6 +10,7 @@ import { VoteItemDto as VoteItem } from "../../__generated__/ourapt";
 import UserAsAuthor from "../User/UserAsAuthor";
 
 import { ReactComponent as CheckIcon } from "../../_assets/CheckIcon.svg";
+import { stat } from "fs";
 
 type VotePinnedInFeedProps = {
   vote: Vote;
@@ -81,16 +82,22 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
     });
   }
 
-  async function castVote(item: VoteItem) {
-    api.voteController.submitVotingUsingPOST({
-      itemId: item.id,
-    });
-  }
-
   function onItemClick(item: VoteItem) {
     if (state._t === "voted" && state.voted === item) {
+      const response = api.voteController.cancelVotingUsingDELETE({
+        itemId: item.id,
+      });
+      response.catch((err) => {
+        alert("다시 시도해주세요.");
+      });
       dispatch({ _t: "RETRIEVE" });
     } else {
+      const response = api.voteController.submitVotingUsingPOST({
+        itemId: item.id,
+      });
+      response.catch((err) => {
+        alert("다시 시도해주세요.");
+      });
       dispatch({ _t: "CASTING", payload: item });
     }
   }
@@ -133,12 +140,18 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
                     className="VoteItem"
                     key={item.id}
                     onClick={() => onItemClick(item)}
+                    style={{
+                      border:
+                        state.voted === item
+                          ? "1.5px solid #398287"
+                          : "1px solid #DBDBDB",
+                    }}
                   >
                     <div
                       className="VoteItem-poll"
                       style={{
-                        backgroundColor:
-                          state.voted === item ? "purple" : "aliceblue",
+                        borderColor:
+                          state.voted === item ? "#398287" : "#DBDBDB",
                         width:
                           state.voted === item
                             ? `${
@@ -148,20 +161,18 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
                             : `${
                                 (item.votedCount || 0 / (totalVote + 1)) * 100
                               }%`,
-                        borderTopRightRadius:
-                          state.voted === item && item.votedCount === totalVote
-                            ? "8px"
-                            : "0",
-                        borderBottomRightRadius:
-                          state.voted === item && item.votedCount === totalVote
-                            ? "8px"
-                            : "0",
                       }}
                     ></div>
                     <div className="VoteItem-label">
                       <CheckIcon className="VoteItem-checkIcon" />
                       {item.mainText}
-                      <p className="VoteItem-count">
+                      <p
+                        className="VoteItem-count"
+                        style={{
+                          color: state.voted === item ? "#398287" : "#000000",
+                          fontWeight: state.voted === item ? 700 : 400,
+                        }}
+                      >
                         {state.voted === item
                           ? item.votedCount || 0 + 1
                           : item.votedCount}
