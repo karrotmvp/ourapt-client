@@ -11,6 +11,7 @@ type VoteItemAsArticleProps = {
   voteItem: VoteItem;
   isSelected: boolean;
   action: () => void;
+  itemCount: number;
   totalCount: number;
 };
 
@@ -28,6 +29,7 @@ type State =
 const VoteItemAsArticle: React.FC<VoteItemAsArticleProps> = ({
   displayed,
   voteItem,
+  itemCount,
   isSelected,
   action,
   totalCount,
@@ -58,14 +60,13 @@ const VoteItemAsArticle: React.FC<VoteItemAsArticleProps> = ({
           style={{
             borderColor:
               state._t === "displayed-selected" ? "#398287" : "#DBDBDB",
-            width: `${(voteItem.voterIds.length / totalCount) * 100}%`,
+            width: `${(itemCount / totalCount) * 100}%`,
           }}
         ></div>
       )}
       <div className="VoteItem-label">
         <CheckIcon className="VoteItem-checkIcon" />
         {voteItem.mainText}
-        {voteItem.voterIds}
         {state._t !== "not-displayed" && (
           <p
             className="VoteItem-count"
@@ -74,7 +75,7 @@ const VoteItemAsArticle: React.FC<VoteItemAsArticleProps> = ({
               fontWeight: state._t === "displayed-selected" ? 700 : 400,
             }}
           >
-            {(voteItem.voterIds.length / totalCount) * 100}%
+            {(itemCount / totalCount) * 100}%
           </p>
         )}
       </div>
