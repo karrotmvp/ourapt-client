@@ -33,16 +33,10 @@ export interface VoteItemDto {
     mainText: string;
     /**
      * 
-     * @type {boolean}
+     * @type {Array<string>}
      * @memberof VoteItemDto
      */
-    myVote?: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof VoteItemDto
-     */
-    votedCount: number;
+    voterIds: Array<string>;
 }
 
 export function VoteItemDtoFromJSON(json: any): VoteItemDto {
@@ -57,8 +51,7 @@ export function VoteItemDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean
         
         'id': json['id'],
         'mainText': json['mainText'],
-        'myVote': !exists(json, 'myVote') ? undefined : json['myVote'],
-        'votedCount': json['votedCount'],
+        'voterIds': json['voterIds'],
     };
 }
 
@@ -73,8 +66,7 @@ export function VoteItemDtoToJSON(value?: VoteItemDto | null): any {
         
         'id': value.id,
         'mainText': value.mainText,
-        'myVote': value.myVote,
-        'votedCount': value.votedCount,
+        'voterIds': value.voterIds,
     };
 }
 

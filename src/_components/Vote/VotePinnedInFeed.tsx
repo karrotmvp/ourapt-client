@@ -1,16 +1,13 @@
-import React, { useReducer } from "react";
+import React, { useCallback, useEffect, useReducer } from "react";
 
 import { useAnalytics } from "../../_analytics/firebase";
 import { useViewer } from "../../_providers/useViewer";
 import { useApi } from "../../api";
 
-import { VoteDto as Vote } from "../../__generated__/ourapt";
+import { VoteDto as Vote, VoteItemDtoToJSON } from "../../__generated__/ourapt";
 import { VoteItemDto as VoteItem } from "../../__generated__/ourapt";
 
-import UserAsAuthor from "../User/UserAsAuthor";
-
-import { ReactComponent as CheckIcon } from "../../_assets/CheckIcon.svg";
-import { stat } from "fs";
+import VoteItemAsArticle from "./VoteItemAsArticle";
 
 type VotePinnedInFeedProps = {
   vote: Vote;
@@ -19,77 +16,134 @@ type VotePinnedInFeedProps = {
 type State =
   | {
       _t: "not-voted";
-      vote: Vote;
+      voteStatus: {
+        index: number;
+        item: VoteItem;
+        itemCount: number;
+      }[];
+      votedIndex: number;
+      totalCount: number;
     }
   | {
       _t: "voted";
-      vote: Vote;
-      voted: VoteItem;
+      voteStatus: {
+        index: number;
+        item: VoteItem;
+        itemCount: number;
+      }[];
+      votedIndex: number;
+      totalCount: number;
     };
 
 type Action =
   | { _t: "RETRIEVE" }
   | {
       _t: "CASTING";
-      payload: VoteItem;
+      payload: number;
     };
 
-const reducer: React.Reducer<State, Action> = (prevState, action) => {
-  switch (action._t) {
-    case "RETRIEVE":
-      return { ...prevState, _t: "not-voted" };
-    case "CASTING":
-      return { ...prevState, _t: "voted", voted: action.payload };
-  }
-};
-
 const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
+  const { viewer } = useViewer();
+  const viewerId = viewer?.id || "";
+
+  const reducer: React.Reducer<State, Action> = (prevState, action) => {
+    let newVoteStatus = prevState.voteStatus;
+    let newTotalCount = prevState.totalCount;
+    switch (action._t) {
+      case "RETRIEVE":
+        newVoteStatus[prevState.votedIndex].item.voterIds.splice(
+          newVoteStatus[prevState.votedIndex].item.voterIds.indexOf(viewerId),
+          1
+        );
+        newTotalCount -= 1;
+        return {
+          ...prevState,
+          _t: "not-voted",
+          votedIndex: -1,
+          totalCount: newTotalCount,
+        };
+      case "CASTING":
+        if (prevState._t === "voted") {
+          newVoteStatus[prevState.votedIndex].item.voterIds.splice(
+            newVoteStatus[prevState.votedIndex].item.voterIds.indexOf(viewerId),
+            1
+          );
+        } else {
+          newTotalCount += 1;
+        }
+        console.log("몇 번 찍히나요?");
+        newVoteStatus[action.payload].item.voterIds.push(viewerId);
+        return {
+          _t: "voted",
+          voteStatus: newVoteStatus,
+          votedIndex: action.payload,
+          totalCount: newTotalCount,
+        };
+    }
+  };
   const api = useApi();
 
-  const votedItem: VoteItem | undefined = vote.items.find(
-    (item) => item.myVote === true
-  );
+  let voteStatus = vote.items.map((item, idx) => {
+    return {
+      index: idx,
+      item,
+      itemCount: item.voterIds.length,
+    };
+  });
 
-  let votedStatusByothers: Vote = vote;
-  for (let item of votedStatusByothers.items) {
-    if (item.myVote && item.votedCount) {
-      item.votedCount -= 1;
+  let votedIndex: number = -1;
+
+  for (let voteItem of voteStatus) {
+    if (voteItem.item.voterIds.indexOf(viewerId) !== -1) {
+      votedIndex = voteItem.index;
+      console.log(`${voteItem.index}`);
+      continue;
     }
   }
 
-  const totalVote: number = votedStatusByothers.items.reduce(
-    (acc, cur) => acc + (cur.votedCount || 0),
-    0
-  );
+  const totalCount = voteStatus.reduce((acc, cur) => {
+    return acc + cur.itemCount;
+  }, 0);
 
   const [state, dispatch] = useReducer(
     reducer,
-    votedItem
-      ? { _t: "voted", vote: votedStatusByothers, voted: votedItem }
-      : { _t: "not-voted", vote: votedStatusByothers }
+    votedIndex !== -1
+      ? { _t: "voted", voteStatus, votedIndex, totalCount }
+      : { _t: "not-voted", voteStatus, votedIndex, totalCount }
   );
 
   const Event = useAnalytics();
 
-  function onItemClick(item: VoteItem) {
-    if (state._t === "voted" && state.voted === item) {
-      const response = api.voteController.cancelVotingUsingDELETE({
-        itemId: item.id,
-      });
-      response.catch((err) => {
-        alert("다시 시도해주세요.");
-      });
-      dispatch({ _t: "RETRIEVE" });
-    } else {
-      const response = api.voteController.submitVotingUsingPOST({
-        itemId: item.id,
-      });
-      response.catch((err) => {
-        alert("다시 시도해주세요.");
-      });
-      dispatch({ _t: "CASTING", payload: item });
-    }
-  }
+  useEffect(() => {
+    console.log(`현재 스테이트 ${JSON.stringify(state.voteStatus, null, 2)}`);
+    console.log(`그래서 지금은 ${state._t}`);
+  }, [state]);
+
+  const onItemClick = useCallback(
+    (voteItem: { item: VoteItem; index: number }) => {
+      if (state._t === "voted" && state.votedIndex === voteItem.index) {
+        console.log("일단 취소 됩니다!");
+        const response = api.voteController.cancelVotingUsingDELETE({
+          itemId: voteItem.item.id,
+        });
+        response.catch((err) => {
+          alert("다시 시도해주세요.");
+        });
+        dispatch({ _t: "RETRIEVE" });
+        console.log(state.voteStatus);
+      } else {
+        console.log("일단 됩니다!");
+        const response = api.voteController.submitVotingUsingPOST({
+          itemId: voteItem.item.id,
+        });
+        response.catch((err) => {
+          alert("다시 시도해주세요.");
+        });
+        dispatch({ _t: "CASTING", payload: voteItem.index });
+      }
+    },
+    []
+  );
 
   return (
     <div className="ArticleCard pd-16">
@@ -97,71 +151,23 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
         <p className="ArticleCard-Title">title 대신 임시로 받아올게요</p>
         <p className="ArticleCard-Content ArticleCardInList-Content mg-top--10 mg-bottom--16">
           {vote.mainText}
+          {viewerId}
+          {vote.items[0].voterIds}
         </p>
         <ul className="VoteItemList">
-          {state._t === "not-voted"
-            ? votedStatusByothers.items.map((item, idx) => {
-                return (
-                  <li
-                    className="VoteItem"
-                    key={item.id}
-                    onClick={() => onItemClick(item)}
-                  >
-                    <div className="VoteItem-label">
-                      <CheckIcon className="VoteItem-checkIcon" />
-                      {item.mainText}
-                    </div>
-                  </li>
-                );
-              })
-            : votedStatusByothers.items.map((item, idx) => {
-                return (
-                  <li
-                    className="VoteItem"
-                    key={item.id}
-                    onClick={() => onItemClick(item)}
-                    style={{
-                      border:
-                        state.voted === item
-                          ? "1.5px solid #398287"
-                          : "1px solid #DBDBDB",
-                    }}
-                  >
-                    <div
-                      className="VoteItem-poll"
-                      style={{
-                        borderColor:
-                          state.voted === item ? "#398287" : "#DBDBDB",
-                        width:
-                          state.voted === item
-                            ? `${
-                                ((item.votedCount || 0 + 1) / (totalVote + 1)) *
-                                100
-                              }%`
-                            : `${
-                                (item.votedCount || 0 / (totalVote + 1)) * 100
-                              }%`,
-                      }}
-                    ></div>
-                    <div className="VoteItem-label">
-                      <CheckIcon className="VoteItem-checkIcon" />
-                      {item.mainText}
-                      <p
-                        className="VoteItem-count"
-                        style={{
-                          color: state.voted === item ? "#398287" : "#000000",
-                          fontWeight: state.voted === item ? 700 : 400,
-                        }}
-                      >
-                        {state.voted === item
-                          ? item.votedCount || 0 + 1
-                          : item.votedCount}
-                        명
-                      </p>
-                    </div>
-                  </li>
-                );
-              })}
+          {state.voteStatus.map((voteItem, idx) => {
+            return (
+              <VoteItemAsArticle
+                displayed={state._t === "not-voted" ? false : true}
+                voteItem={voteItem.item}
+                isSelected={Boolean(state.votedIndex === voteItem.index)}
+                action={() => {
+                  onItemClick(voteItem);
+                }}
+                totalCount={totalCount}
+              />
+            );
+          })}
         </ul>
         <p className="ArticleCard-Info mg-top--12">
           이웃들의 의견이 모이면 알림을 보내드려요
