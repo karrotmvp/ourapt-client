@@ -182,11 +182,11 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
     apartmentName: viewer?.checkedIn?.name,
   };
 
-  useEffect(() => {
-    if (!isOnboarded) {
-      setModal(Onboarding);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!isOnboarded) {
+  //     setModal(Onboarding);
+  //   }
+  // }, []);
 
   useEffect(() => {
     getQuestionsByCursorPerPage(params, Date.now(), 100);
