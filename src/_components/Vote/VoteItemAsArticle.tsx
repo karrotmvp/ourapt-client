@@ -81,7 +81,7 @@ const VoteItemAsArticle: React.FC<VoteItemAsArticleProps> = ({
               fontWeight: state._t === "displayed-selected" ? 700 : 400,
             }}
           >
-            {(itemCount / totalCount) * 100}%
+            {Math.floor((itemCount / totalCount) * 100)}%
           </p>
         )}
       </div>
