@@ -9,6 +9,9 @@ import { VoteItemDto as VoteItem } from "../../__generated__/ourapt";
 
 import VoteItemAsArticle from "./VoteItemAsArticle";
 
+import { ReactComponent as VoteCountIcon } from "./../../_assets/VoteCountIcon.svg";
+import styled from "@emotion/styled";
+
 type VotePinnedInFeedProps = {
   vote: Vote;
 };
@@ -200,10 +203,13 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
   return (
     <div className="ArticleCard pd-16">
       <form className="VoteForm">
-        <p className="ArticleCard-Title">title 대신 임시로 받아올게요</p>
-        <p className="ArticleCard-Content ArticleCardInList-Content mg-top--10 mg-bottom--16">
+        <p className="ArticleCard-Content ArticleCardInList-Content">
           {vote.mainText}
         </p>
+        <VoteTotalCount className="VoteTotalCount mg-top--4 mg-bottom--12">
+          <VoteCountIcon className="mg-right--8" />
+          {state.totalCount}명 참여
+        </VoteTotalCount>
         <ul className="VoteItemList">
           {state.voteStatus.map((voteItem, idx) => {
             return (
@@ -229,3 +235,8 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
 };
 
 export default VotePinnedInFeed;
+
+const VoteTotalCount = styled.div`
+  color: #777777;
+  font-size: 13px;
+`;

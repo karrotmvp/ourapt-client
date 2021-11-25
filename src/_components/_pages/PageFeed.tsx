@@ -24,6 +24,8 @@ import { ReactComponent as OuraptLogo } from "../../_assets/ouraptLogo.svg";
 import LoadPageFeed from "../_loaders/LoadPageFeed";
 import VotePinnedInFeed from "../Vote/VotePinnedInFeed";
 
+import ReactComponent from "./../../_assets/tempPRT.png";
+
 type State = {
   _t: "loading";
   pinned:
@@ -216,6 +218,8 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
             className={css`
               width: 100%;
               position: absolute;
+              /* background: url("./../../_assets/tempPRT.png") repeat !important; */
+              /* --kf_pulltorefresh_fallbackSpinner-color: transparent; */
             `}
             onPull={(dispose) => {
               handleDispose().then(() => {
@@ -223,6 +227,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
               });
             }}
           >
+            <AreaTitle className="pd--16">우리아파트 투표</AreaTitle>
             {state.pinned && (
               <PinnedArea className="pd--16">
                 {state.pinned._t === "vote" && (
