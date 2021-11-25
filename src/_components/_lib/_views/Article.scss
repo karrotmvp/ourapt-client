@@ -21,6 +21,10 @@
   align-items: center;
 }
 
+.ArticleCard-Title {
+  font-size: 18px;
+  font-weight: 700;
+}
 .ArticleCard-Content {
   color: #111111;
 
@@ -35,4 +39,10 @@
 .ArticleCardInList-CommentContent {
   font-size: 15px;
   line-height: 24px;
+}
+
+.ArticleCard-Info {
+  color: #555555;
+  font-size: 14px;
+  font-weight: 400;
 }

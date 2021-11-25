@@ -4,6 +4,7 @@ import { Configuration } from "../__generated__/ourapt";
 import { Class2Api as ApartmentControllerApi } from "../__generated__/ourapt";
 import { Class3Api as OAuthControllerApi } from "../__generated__/ourapt";
 import { Class41Api as QuestionControllerApi } from "../__generated__/ourapt";
+import { Class42Api as VoteControllerApi } from "../__generated__/ourapt";
 import { Class5Api as CommentControllerApi } from "../__generated__/ourapt";
 import { Class6Api as UserControllerApi } from "../__generated__/ourapt";
 import { Class7Api as LogControllerApi } from "../__generated__/ourapt";
@@ -35,6 +36,7 @@ function makeApi({ accessToken }: { accessToken?: string | null }) {
     const apartmentController = new ApartmentControllerApi(configuration);
     const userController = new UserControllerApi(configuration);
     const questionController = new QuestionControllerApi(configuration);
+    const voteController = new VoteControllerApi(configuration);
     const commentController = new CommentControllerApi(configuration);
     const oauthController = new OAuthControllerApi(configuration);
     const logController = new LogControllerApi(configuration);
@@ -44,6 +46,7 @@ function makeApi({ accessToken }: { accessToken?: string | null }) {
       apartmentController,
       oauthController,
       questionController,
+      voteController,
       commentController,
       userController,
       logController,
@@ -60,6 +63,7 @@ function makeApi({ accessToken }: { accessToken?: string | null }) {
     const apartmentController = new ApartmentControllerApi(configuration);
     const userController = new UserControllerApi(configuration);
     const questionController = new QuestionControllerApi(configuration);
+    const voteController = new VoteControllerApi(configuration);
     const commentController = new CommentControllerApi(configuration);
     const oauthController = new OAuthControllerApi(configuration);
     const logController = new LogControllerApi(configuration);
@@ -69,6 +73,7 @@ function makeApi({ accessToken }: { accessToken?: string | null }) {
       apartmentController,
       oauthController,
       questionController,
+      voteController,
       commentController,
       userController,
       logController,

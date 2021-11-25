@@ -1,7 +1,11 @@
 import React, { useCallback, useEffect, useReducer, useState } from "react";
 
 import { QuestionDto as Question } from "../../__generated__/ourapt";
+import { VoteDto as Vote } from "../../__generated__/ourapt";
 import { useApi } from "../../api";
+import { useViewer } from "../../_providers/useViewer";
+import { useModal } from "../../_providers/useModal";
+
 import { useAnalytics } from "../../_analytics/firebase";
 
 import styled from "@emotion/styled";
@@ -18,17 +22,25 @@ import examineResBody from "../../_modules/examineResBody";
 
 import { ReactComponent as OuraptLogo } from "../../_assets/ouraptLogo.svg";
 import LoadPageFeed from "../_loaders/LoadPageFeed";
+import VotePinnedInFeed from "../Vote/VotePinnedInFeed";
+
+import ReactComponent from "./../../_assets/tempPRT.png";
 
 type State = {
   _t: "loading";
-  pinnedArticle: Question | null;
+  pinned:
+    | { _t: "question"; article: Question }
+    | { _t: "vote"; article: Vote }
+    | null;
   articles: Array<Question> | null;
 };
 
 type Action =
   | {
       _t: "PATCH_PINNED_ARTICLE";
-      pinnedArticle: Question;
+      pinned:
+        | { _t: "question"; article: Question }
+        | { _t: "vote"; article: Vote };
     }
   | {
       _t: "PATCH_ARTICLES";
@@ -41,7 +53,7 @@ const reducer: React.Reducer<State, Action> = (prevState, action) => {
       return {
         ...prevState,
         _t: "loading",
-        pinnedArticle: action.pinnedArticle,
+        pinned: action.pinned,
       };
     case "PATCH_ARTICLES":
       return {
@@ -59,7 +71,7 @@ type PageFeedProps = {
 const PageFeed: React.FC<PageFeedProps> = (props) => {
   const [state, dispatch] = useReducer(reducer, {
     _t: "loading",
-    pinnedArticle: null,
+    pinned: null,
     articles: null,
   });
 
@@ -68,10 +80,10 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
 
   const api = useApi();
 
+  const { viewer } = useViewer();
   const Event = useAnalytics();
 
-  const [pinnedQuestion, setPinnedQuestion] = useState<Question>();
-  const [questions, setQuestions] = useState<Array<Question>>([]);
+  const { setModal } = useModal();
 
   const { push } = useNavigator();
   const goArticleDetail = (articleId: string) => {
@@ -99,7 +111,6 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
             push(`/error?cause=getQuestionsByCursorPerPageAtPageFeed`);
           },
         });
-        setQuestions(safeBody.data.questions);
         dispatch({ _t: "PATCH_ARTICLES", articles: safeBody.data.questions });
       })();
     },
@@ -123,14 +134,36 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
             push(`/error?cause=getPinnedQuestionAtPageFeed`);
           },
         });
-        setPinnedQuestion(safeBody.data.question);
         dispatch({
           _t: "PATCH_PINNED_ARTICLE",
-          pinnedArticle: safeBody.data.question,
+          pinned: { _t: "question", article: safeBody.data.question },
         });
       }
     })();
   }, [api.questionController, params, push]);
+
+  const getPinnedVote = useCallback(() => {
+    (async () => {
+      const response =
+        await api.voteController.getRandomPinnedVoteOfApartmentUsingGET({
+          apartmentId: params,
+        });
+      if (response && response.status === "DATA_NOT_FOUND_FROM_DB") {
+      } else {
+        const safeBody = examineResBody({
+          resBody: response,
+          validator: (data) => data.vote != null,
+          onFailure: () => {
+            push(`/error?cause=getPinnedVoteAtPageFeed`);
+          },
+        });
+        dispatch({
+          _t: "PATCH_PINNED_ARTICLE",
+          pinned: { _t: "vote", article: safeBody.data.vote },
+        });
+      }
+    })();
+  }, [api.voteController, params, push]);
 
   function onApartmentInNavigatorClick() {
     Event("clickApartmentBanner", { at: params });
@@ -138,7 +171,21 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
   }
 
   useEffect(() => {
-    getPinnedQuestion();
+    getPinnedVote();
+  }, []);
+
+  const isOnboarded = window.localStorage.getItem("onboarded");
+
+  const Onboarding = {
+    _t: "Onboarding",
+    name: "Onboarding",
+    apartmentName: viewer?.checkedIn?.name,
+  };
+
+  useEffect(() => {
+    if (!isOnboarded) {
+      setModal(Onboarding);
+    }
   }, []);
 
   useEffect(() => {
@@ -146,13 +193,18 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
   }, [getQuestionsByCursorPerPage, params]);
 
   async function handleDispose() {
-    getPinnedQuestion();
+    getPinnedVote();
     getQuestionsByCursorPerPage(params, Date.now(), 100);
   }
 
   useEffect(() => {
     Event("viewPageFeed", { at: `${params}` });
   }, []);
+
+  const ArticleAreaTitleApartmentName = viewer?.checkedIn?.name.replace(
+    "송도 ",
+    ""
+  );
 
   if (state.articles) {
     return (
@@ -171,6 +223,8 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
             className={css`
               width: 100%;
               position: absolute;
+              /* background: url("./../../_assets/tempPRT.png") repeat !important; */
+              /* --kf_pulltorefresh_fallbackSpinner-color: transparent; */
             `}
             onPull={(dispose) => {
               handleDispose().then(() => {
@@ -178,14 +232,22 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
               });
             }}
           >
-            {pinnedQuestion && pinnedQuestion.id && (
-              <PinnedArea className="pd--16">
-                <QuestionPinnedInFeed question={pinnedQuestion} />
+            <AreaTitle className="pd--16">우리아파트 투표</AreaTitle>
+            {state.pinned && (
+              <PinnedArea className="pd--16 pd-bottom--0">
+                {state.pinned._t === "vote" && (
+                  <VotePinnedInFeed vote={state.pinned.article} />
+                )}
+                {state.pinned._t === "question" && (
+                  <QuestionPinnedInFeed question={state.pinned.article} />
+                )}
               </PinnedArea>
             )}
             <ArticleArea>
-              <AreaTitle className="pd--16">아파트 주민 라운지</AreaTitle>
-              {questions.length === 0 ? (
+              <AreaTitle className="pd--16">
+                {ArticleAreaTitleApartmentName} 라운지
+              </AreaTitle>
+              {state.articles.length === 0 ? (
                 <div>
                   <ArticleVacantViewTitle>
                     우리아파트에 오신 것을 환영해요!
@@ -202,7 +264,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
                 </div>
               ) : (
                 <div>
-                  {questions.map((question) => {
+                  {state.articles.map((question) => {
                     return (
                       <ArticleWrapper
                         key={question.id}
@@ -236,10 +298,12 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
             </ArticleArea>
           </PullToRefresh>
         </div>
-        {questions.length !== 0 && (
+        {state.articles.length !== 0 && (
           <div className="btn--floating">
             <ArticleCreateBtnFloating
-              onClick={() => onArticleCreateBtnClick(questions.length)}
+              onClick={() =>
+                onArticleCreateBtnClick(state.articles?.length || 0)
+              }
             >
               <img
                 src={require("../../_assets/ArticleCreateBtnIcon.svg").default}

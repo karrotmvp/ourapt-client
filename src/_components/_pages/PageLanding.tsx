@@ -4,6 +4,7 @@ import { ApartmentDto as Apartment } from "../../__generated__/ourapt";
 import { useAccessToken } from "../../_providers/useAccessToken";
 import { useApi } from "../../api";
 import { useViewer } from "../../_providers/useViewer";
+import { useModal } from "../../_providers/useModal";
 
 import styled from "@emotion/styled";
 
@@ -20,6 +21,9 @@ const PageLanding: React.FC = () => {
     useAccessToken();
   const { viewer, refreshViewer } = useViewer();
   const Event = useAnalytics();
+
+  const { setModal } = useModal();
+  const isOnboarded = window.localStorage.getItem("onboarded");
 
   const { push } = useNavigator();
   const goPageApartmentRequestForm = () => {
