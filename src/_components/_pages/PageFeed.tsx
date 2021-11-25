@@ -201,6 +201,11 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
     Event("viewPageFeed", { at: `${params}` });
   }, []);
 
+  const ArticleAreaTitleApartmentName = viewer?.checkedIn?.name.replace(
+    "송도 ",
+    ""
+  );
+
   if (state.articles) {
     return (
       <div className="Page">
@@ -239,7 +244,9 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
               </PinnedArea>
             )}
             <ArticleArea>
-              <AreaTitle className="pd--16">아파트 주민 라운지</AreaTitle>
+              <AreaTitle className="pd--16">
+                {ArticleAreaTitleApartmentName} 라운지
+              </AreaTitle>
               {state.articles.length === 0 ? (
                 <div>
                   <ArticleVacantViewTitle>
