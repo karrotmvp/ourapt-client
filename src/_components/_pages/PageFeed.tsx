@@ -199,34 +199,6 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
     Event("viewPageFeed", { at: `${params}` });
   }, []);
 
-  // 임시 영역 시작
-
-  function tempVoteCreate() {
-    (async () => {
-      const response = await api.voteController.writeNewVoteUsingPOST({
-        voteContent: {
-          mainText: "어드민이라서 따로 안 보내주시는건가?",
-          items: [
-            { mainText: "첫 번째" },
-            { mainText: "두 번째" },
-            { mainText: "세 번째" },
-            { mainText: "네 번째" },
-          ],
-        },
-      });
-      const safeBody = examineResBody({
-        resBody: response,
-        validator: (data) => data.vote != null,
-        onFailure: () => {
-          push(`/error?cause=writeNewVoteUsingPost`);
-        },
-      });
-      alert(safeBody.data.vote.mainText);
-    })();
-  }
-
-  // 임시 영역 끝
-
   if (state.articles) {
     return (
       <div className="Page">
@@ -316,7 +288,6 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
         </div>
         {state.articles.length !== 0 && (
           <div className="btn--floating">
-            <button onClick={tempVoteCreate}>무시해주세요</button>
             <ArticleCreateBtnFloating
               onClick={() =>
                 onArticleCreateBtnClick(state.articles?.length || 0)
