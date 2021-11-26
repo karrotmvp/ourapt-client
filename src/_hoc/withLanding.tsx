@@ -26,9 +26,11 @@ type State =
     }
   | {
       _t: "leave-preset"; // 동의하지 않았고, 프리셋 진입 이후 동의 없이 프리셋을 닫은 상태
+      isOnboarded: boolean;
     }
   | {
       _t: "agreed"; // 이미 동의한 상태
+      isOnboarded: boolean;
     };
 
 type Action =
@@ -43,11 +45,11 @@ const reducer: React.Reducer<State, Action> = (prevState, action) => {
   switch (action._t) {
     case "CLOSE_ONBOARDING":
       return {
-        _t: "before-preset",
+        ...prevState,
         isOnboarded: true,
       };
     case "CLOSE_PRESET":
-      return { _t: "leave-preset" };
+      return { ...prevState, _t: "leave-preset" };
   }
 };
 
@@ -63,9 +65,16 @@ export default function WithLanding() {
 
   const Event = useAnalytics();
 
+  const isOnboarded = window.localStorage.getItem("isOnboarded");
+
   const [state, dispatch] = useReducer(
     reducer,
-    viewer ? { _t: "agreed" } : { _t: "before-preset", isOnboarded: false }
+    viewer
+      ? { _t: "agreed", isOnboarded: isOnboarded === "true" ? true : false }
+      : {
+          _t: "before-preset",
+          isOnboarded: isOnboarded === "true" ? true : false,
+        }
   );
 
   const patchFirstlog = useCallback(() => {
@@ -110,10 +119,8 @@ export default function WithLanding() {
     },
   };
 
-  const isOnboarded = window.localStorage.getItem("isOnboarded");
-
   useEffect(() => {
-    if (!isOnboarded) {
+    if (!state.isOnboarded) {
       setModal(Onboarding);
     }
   }, []);
