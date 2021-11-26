@@ -68,8 +68,6 @@ export default function WithLanding() {
     viewer ? { _t: "agreed" } : { _t: "before-preset", isOnboarded: false }
   );
 
-  const isOnboarded = window.localStorage.getItem("viewOnnboarding");
-
   const patchFirstlog = useCallback(() => {
     (async () => {
       const response = await api.logController.logFirstRequestUsingGET({
@@ -104,6 +102,22 @@ export default function WithLanding() {
 
   const [isMiniClosing, setIsMiniClosing] = useState(true);
 
+  const Onboarding = {
+    _t: "Onboarding",
+    name: "Onboarding",
+    action: () => {
+      dispatch({ _t: "CLOSE_ONBOARDING" });
+    },
+  };
+
+  const isOnboarded = window.localStorage.getItem("isOnboarded");
+
+  useEffect(() => {
+    if (!isOnboarded) {
+      setModal(Onboarding);
+    }
+  }, []);
+
   useEffect(() => {
     if (!isPreload && state._t === "before-preset" && state.isOnboarded) {
       submitAgreement();
@@ -118,20 +132,6 @@ export default function WithLanding() {
 
   useEffect(() => {
     if (!isPreload) Event("initializeApp", { action: "load" });
-  }, []);
-
-  const Onboarding = {
-    _t: "Onboarding",
-    name: "Onboarding",
-    action: () => {
-      dispatch({ _t: "CLOSE_ONBOARDING" });
-    },
-  };
-
-  useEffect(() => {
-    if (!isOnboarded) {
-      setModal(Onboarding);
-    }
   }, []);
 
   if (!isPreload && viewer && viewer.checkedIn) {

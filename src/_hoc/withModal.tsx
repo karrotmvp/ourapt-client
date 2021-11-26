@@ -122,7 +122,7 @@ export default function WithModal() {
               Event("closeOnboarding", {
                 context: "withCloseBtn",
               });
-              window.localStorage.setItem("viewOnboarding", "true");
+              window.localStorage.setItem("isOnboarded", "true");
               modalState.modal.action();
               setModal("close");
             }}
@@ -162,12 +162,12 @@ export default function WithModal() {
               Event("closeOnboarding", {
                 context: "withBottomBtn",
               });
-              window.localStorage.setItem("viewOnboarding", "true");
+              window.localStorage.setItem("isOnboarded", "true");
               setModal("close");
               modalState.modal.action();
             }}
           >
-            이웃들과 이야기하러 가기
+            우리아파트 시작하기
           </button>
         </div>
       );
