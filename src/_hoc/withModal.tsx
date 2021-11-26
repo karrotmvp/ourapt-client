@@ -122,11 +122,11 @@ export default function WithModal() {
               Event("closeOnboarding", {
                 context: "withCloseBtn",
               });
-              window.localStorage.setItem("onboarded", "true");
+              window.localStorage.setItem("viewOnboarding", "true");
+              modalState.modal.action();
               setModal("close");
             }}
           />
-
           <div className="Onboarding-Carousel">
             <Slider {...onboardingCarouselSettings}>
               <div>
@@ -162,8 +162,9 @@ export default function WithModal() {
               Event("closeOnboarding", {
                 context: "withBottomBtn",
               });
-              window.localStorage.setItem("onboarded", "true");
+              window.localStorage.setItem("viewOnboarding", "true");
               setModal("close");
+              modalState.modal.action();
             }}
           >
             이웃들과 이야기하러 가기

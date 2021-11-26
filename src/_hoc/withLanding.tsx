@@ -22,6 +22,7 @@ import LoadPageLanding from "../_components/_loaders/LoadPageLanding";
 type State =
   | {
       _t: "before-preset"; // 동의하지 않았고, 프리셋에 진입하기 전이거나 진입하기까지의 상태
+      isOnboarded: boolean;
     }
   | {
       _t: "leave-preset"; // 동의하지 않았고, 프리셋 진입 이후 동의 없이 프리셋을 닫은 상태
@@ -30,12 +31,21 @@ type State =
       _t: "agreed"; // 이미 동의한 상태
     };
 
-type Action = {
-  _t: "CLOSE_PRESET";
-};
+type Action =
+  | {
+      _t: "CLOSE_ONBOARDING";
+    }
+  | {
+      _t: "CLOSE_PRESET";
+    };
 
 const reducer: React.Reducer<State, Action> = (prevState, action) => {
   switch (action._t) {
+    case "CLOSE_ONBOARDING":
+      return {
+        _t: "before-preset",
+        isOnboarded: true,
+      };
     case "CLOSE_PRESET":
       return { _t: "leave-preset" };
   }
@@ -55,8 +65,10 @@ export default function WithLanding() {
 
   const [state, dispatch] = useReducer(
     reducer,
-    viewer ? { _t: "agreed" } : { _t: "before-preset" }
+    viewer ? { _t: "agreed" } : { _t: "before-preset", isOnboarded: false }
   );
+
+  const isOnboarded = window.localStorage.getItem("viewOnnboarding");
 
   const patchFirstlog = useCallback(() => {
     (async () => {
@@ -93,7 +105,7 @@ export default function WithLanding() {
   const [isMiniClosing, setIsMiniClosing] = useState(true);
 
   useEffect(() => {
-    if (!isPreload && state._t === "before-preset") {
+    if (!isPreload && state._t === "before-preset" && state.isOnboarded) {
       submitAgreement();
     }
   }, [state, submitAgreement, isPreload]);
@@ -108,12 +120,12 @@ export default function WithLanding() {
     if (!isPreload) Event("initializeApp", { action: "load" });
   }, []);
 
-  const isOnboarded = window.localStorage.getItem("onboarded");
-
   const Onboarding = {
     _t: "Onboarding",
     name: "Onboarding",
-    apartmentName: viewer?.checkedIn?.name,
+    action: () => {
+      dispatch({ _t: "CLOSE_ONBOARDING" });
+    },
   };
 
   useEffect(() => {

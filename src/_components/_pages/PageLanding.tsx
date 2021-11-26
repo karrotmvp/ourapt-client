@@ -22,9 +22,6 @@ const PageLanding: React.FC = () => {
   const { viewer, refreshViewer } = useViewer();
   const Event = useAnalytics();
 
-  const { setModal } = useModal();
-  const isOnboarded = window.localStorage.getItem("onboarded");
-
   const { push } = useNavigator();
   const goPageApartmentRequestForm = () => {
     if (viewer?.checkedIn) {

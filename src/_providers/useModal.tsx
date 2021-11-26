@@ -39,7 +39,6 @@ type AlertModal = {
 type Onboarding = {
   _t: string;
   name: string;
-  apartmentName?: string;
   action?: any;
 };
 
