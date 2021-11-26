@@ -244,16 +244,14 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
               </PinnedArea>
             )}
             <ArticleArea>
-              <AreaTitle className="pd--16">
-                {ArticleAreaTitleApartmentName} 라운지
-              </AreaTitle>
+              <AreaTitle className="pd--16">투표 자유게시판</AreaTitle>
               {state.articles.length === 0 ? (
                 <div>
                   <ArticleVacantViewTitle>
                     우리아파트에 오신 것을 환영해요!
                   </ArticleVacantViewTitle>
                   <ArticleVacantViewInfo>
-                    아파트 생활, 맛집에 대해 글을 써보세요.
+                    투표 주제에 대해 이야기를 나눠보세요.
                   </ArticleVacantViewInfo>
                   <button
                     className="btn-160 btn btn--active mg-top--48"
