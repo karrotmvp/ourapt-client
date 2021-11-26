@@ -21,8 +21,8 @@
 }
 
 .Onboarding-Title {
-  padding-top: 96px;
-  padding-bottom: 48px;
+  padding-top: 60px;
+  padding-bottom: 12px;
 
   font-size: 26px;
   font-weight: 700;
@@ -61,6 +61,41 @@
 }
 
 .Onboarding-Btn {
-  margin-top: auto;
+  margin-top: 0;
   margin-bottom: 24px;
+}
+
+.Onboarding-Carousel {
+  position: relative;
+  margin-top: 40px;
+}
+
+.Onboarding-Carousel .slick-dots {
+  height: 20px;
+  position: absolute;
+  top: 0;
+}
+
+.Onboarding-Carousel .slick-dots button::before {
+  font-size: 12px;
+  color: #dbdbdb;
+}
+
+.Onboarding-Carousel .slick-dots .slick-active button::before {
+  color: $prime-color;
+}
+
+.Onboarding-Carousel .slick-track {
+  height: 80vh;
+}
+.Onboarding-imgWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.Onboarding-imgWrapper img {
+  width: 80vw;
+  position: absolute;
+  bottom: 0;
 }
