@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useAccessToken } from "../_providers/useAccessToken";
 import { useApi } from "../api";
 import { useViewer } from "../_providers/useViewer";
+import { useModal } from "../_providers/useModal";
 
 import { mini } from "../_Karrotmarket/KarrotmarketMini";
 import { useNavigator } from "@karrotframe/navigator";
@@ -48,6 +49,8 @@ export default function WithLanding() {
   const isPreload = getPreloadFromURLParams();
   const { issueAccessTokenFromAuthorizationCode } = useAccessToken();
   const { viewer, refreshViewer } = useViewer();
+  const { setModal } = useModal();
+
   const Event = useAnalytics();
 
   const [state, dispatch] = useReducer(
@@ -103,6 +106,20 @@ export default function WithLanding() {
 
   useEffect(() => {
     if (!isPreload) Event("initializeApp", { action: "load" });
+  }, []);
+
+  const isOnboarded = window.localStorage.getItem("onboarded");
+
+  const Onboarding = {
+    _t: "Onboarding",
+    name: "Onboarding",
+    apartmentName: viewer?.checkedIn?.name,
+  };
+
+  useEffect(() => {
+    if (!isOnboarded) {
+      setModal(Onboarding);
+    }
   }, []);
 
   if (!isPreload && viewer && viewer.checkedIn) {

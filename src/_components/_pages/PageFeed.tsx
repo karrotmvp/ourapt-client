@@ -83,8 +83,6 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
   const { viewer } = useViewer();
   const Event = useAnalytics();
 
-  const { setModal } = useModal();
-
   const { push } = useNavigator();
   const goArticleDetail = (articleId: string) => {
     Event("clickArticleDetail", { at: params, article: articleId });
@@ -172,21 +170,6 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
 
   useEffect(() => {
     getPinnedVote();
-  }, []);
-
-  const isOnboarded = window.localStorage.getItem("onboarded");
-
-  const Onboarding = {
-    _t: "Onboarding",
-    name: "Onboarding",
-    apartmentName: viewer?.checkedIn?.name,
-  };
-
-  useEffect(() => {
-    // if (!isOnboarded) {
-    //   setModal(Onboarding);
-    // }
-    setModal(Onboarding);
   }, []);
 
   useEffect(() => {
