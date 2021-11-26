@@ -131,7 +131,7 @@ export default function WithModal() {
             <Slider {...onboardingCarouselSettings}>
               <div>
                 <div className="Onboarding-Title">
-                  이웃들과 함께 만드는 재미
+                  이웃들과 함께 만드는 결과
                 </div>
                 <p className="Onboarding-Info">
                   반가워요! 우리아파트는 이웃들과 주제에 대해 <br />
@@ -145,8 +145,8 @@ export default function WithModal() {
               </div>
               <div>
                 <div className="Onboarding-Title">
-                  이젠 검색하지 말고 <br />
-                  이웃들과 만들어보세요!
+                  지금 바로 우리아파트에 오셔서 <br />
+                  이웃들과 함께 결과를 만들어보세요!
                 </div>
                 <div className="Onboarding-imgWrapper">
                   <img
