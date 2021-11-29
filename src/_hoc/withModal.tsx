@@ -131,25 +131,28 @@ export default function WithModal() {
             <Slider {...onboardingCarouselSettings}>
               <div>
                 <div className="Onboarding-Title">
-                  이웃들과 함께 만드는 결과
+                  우리 아파트 이웃들과 투표해 보세요!
                 </div>
                 <p className="Onboarding-Info">
-                  반가워요! 우리아파트는 이웃들과 주제에 대해 <br />
+                  환영해요! 우리아파트는 이웃들과 주제에 대해 <br />
                   투표하고 이야기 나눌 수 있는 곳이에요
                 </p>
                 <div className="Onboarding-imgWrapper">
                   <img
+                    className="Onboarding-img--first"
                     src={require("../_assets/Onboarding01.svg").default}
                   ></img>
                 </div>
               </div>
               <div>
                 <div className="Onboarding-Title">
-                  지금 바로 우리아파트에 오셔서 <br />
+                  살고 계신 아파트를 선택하고
+                  <br />
                   이웃들과 함께 결과를 만들어보세요!
                 </div>
                 <div className="Onboarding-imgWrapper">
                   <img
+                    className="Onboarding-img--second"
                     src={require("../_assets/Onboarding02.svg").default}
                   ></img>
                 </div>

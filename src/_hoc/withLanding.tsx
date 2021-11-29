@@ -65,6 +65,7 @@ export default function WithLanding() {
 
   const Event = useAnalytics();
 
+  window.localStorage.setItem("isOnboarded", "false");
   const isOnboarded = window.localStorage.getItem("isOnboarded");
 
   const [state, dispatch] = useReducer(
