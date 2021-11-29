@@ -37,7 +37,27 @@ export function getRefFromURLParams() {
 
 export function getPreloadFromURLParams() {
   const isPreload = urlSearchParams.get("preload");
+  alert(window.location);
   if (isPreload) {
+    alert(
+      `트루일 때 ${isPreload} 이며 이 때의 타입은 ${typeof isPreload} 그렇기에 ${Boolean(
+        isPreload
+      )}`
+    );
+    return true;
+  } else {
+    alert(
+      `폴스일 때 ${isPreload} 이며 이 때의 타입은 ${typeof isPreload} 그렇기에 ${Boolean(
+        isPreload
+      )}`
+    );
+    return false;
+  }
+}
+
+export function getInstalledFromURLParams() {
+  const isInstalled = urlSearchParams.get("installed");
+  if (isInstalled === "true") {
     return true;
   } else {
     return false;

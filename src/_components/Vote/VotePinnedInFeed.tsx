@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useReducer } from "react";
 
+import { mini } from "../../_Karrotmarket/KarrotmarketMini";
+
 import { useAnalytics } from "../../_analytics/firebase";
 import { useViewer } from "../../_providers/useViewer";
 import { useApi } from "../../api";
@@ -9,8 +11,10 @@ import { VoteItemDto as VoteItem } from "../../__generated__/ourapt";
 
 import VoteItemAsArticle from "./VoteItemAsArticle";
 
-import { ReactComponent as VoteCountIcon } from "./../../_assets/VoteCountIcon.svg";
 import styled from "@emotion/styled";
+
+import { ReactComponent as VoteCountIcon } from "./../../_assets/VoteCountIcon.svg";
+import { getInstalledFromURLParams } from "../../_modules/getQueryFromURLParams";
 
 type VotePinnedInFeedProps = {
   vote: Vote;
@@ -115,6 +119,7 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
   const viewerId = viewer?.id || "";
 
   const api = useApi();
+  const isInstalled = getInstalledFromURLParams();
 
   let voteStatus = vote.items.map((item, idx) => {
     return {
@@ -166,17 +171,6 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
 
   const Event = useAnalytics();
 
-  useEffect(() => {
-    console.log(vote.mainText);
-    console.log(
-      `현재 스테이트 ${JSON.stringify(
-        state.voteStatus,
-        null,
-        2
-      )} 이때 총 투표 값 ${state.totalCount}`
-    );
-  }, [state]);
-
   const onItemClick = useCallback(
     (voteItem: { item: VoteItem; index: number }) => {
       if (state._t === "voted" && state.votedIndex === voteItem.index) {
@@ -187,6 +181,7 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
           alert("다시 시도해주세요.");
         });
         dispatch({ _t: "RETRIEVE" });
+        handleInstallPreset();
       } else {
         const response = api.voteController.submitVotingUsingPOST({
           itemId: voteItem.item.id,
@@ -195,10 +190,35 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
           alert("다시 시도해주세요.");
         });
         dispatch({ _t: "CASTING", payload: voteItem.index });
+        handleInstallPreset();
       }
     },
     [api.voteController, state._t, state.voteStatus, state.votedIndex]
   );
+
+  const submitInstall = useCallback(() => {
+    Event("viewKarrotInstallation", { action: "view" });
+    mini.startPreset({
+      preset: `${process.env.REACT_APP_INSTALL_PRESET_URL}`,
+      params: {
+        appId: `${process.env.REACT_APP_ID}`,
+      },
+      onSuccess: function (result) {
+        Event("clickKarrotInstallation", { action: "click" });
+      },
+      onClose: () => {},
+    });
+  }, []);
+
+  function handleInstallPreset() {
+    const viewInstallPreset = Boolean(
+      window.localStorage.getItem("viewInstallPreset")
+    );
+    const showInstallPreset = !isInstalled && !viewInstallPreset;
+    if (showInstallPreset) {
+      setTimeout(() => alert("프리셋 띄워주기"), 3000);
+    }
+  }
 
   return (
     <div className="ArticleCard pd-16">
