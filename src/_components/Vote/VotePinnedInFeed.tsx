@@ -218,6 +218,7 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
       window.localStorage.getItem("viewInstallPreset")
     );
     const showInstallPreset = !isInstalled && !viewInstallPreset;
+    alert(showInstallPreset);
     if (showInstallPreset) {
       // window.localStorage.setItem("viewInstallPreset", "true");
       setTimeout(() => submitInstall, 3000);
