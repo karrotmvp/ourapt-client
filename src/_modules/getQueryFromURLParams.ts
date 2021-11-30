@@ -37,7 +37,6 @@ export function getRefFromURLParams() {
 
 export function getPreloadFromURLParams() {
   const isPreload = urlSearchParams.get("preload");
-  alert(window.location);
   if (isPreload) {
     return true;
   } else {
