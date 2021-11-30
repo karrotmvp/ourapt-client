@@ -88,14 +88,26 @@
 .Onboarding-Carousel .slick-track {
   height: 75vh;
 }
+
 .Onboarding-imgWrapper {
   width: 100%;
+
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .Onboarding-imgWrapper img {
-  height: 50vh;
+}
+
+.Onboarding-img--first {
+  width: 220px;
   position: absolute;
-  bottom: 0;
+  bottom: calc(12.5vh - 20px);
+}
+
+.Onboarding-img--second {
+  height: 220px;
+  position: absolute;
+  bottom: 12.5vh;
 }
