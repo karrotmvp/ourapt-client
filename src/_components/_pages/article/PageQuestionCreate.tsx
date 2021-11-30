@@ -103,9 +103,9 @@ const PageArticleCreate: React.FC = () => {
     <div className="Page">
       <ScreenHelmet
         title="게시글 작성"
-        onTopClick={() => {
-          alert("얏호!");
-        }}
+        // onTopClick={() => {
+        //   alert("얏호!");
+        // }}
       />
       <form className="QuestionCreateUpdateForm pd--16" onSubmit={handleSubmit}>
         <textarea
