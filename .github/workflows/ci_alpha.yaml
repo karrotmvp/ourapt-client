@@ -45,6 +45,7 @@ jobs:
           CI: false
           REACT_APP_ID: ${{ secrets.ALPHA_REACT_APP_ID }}
           REACT_APP_PRESET_URL: ${{ secrets.ALPHA_REACT_APP_PRESET_URL }}
+          REACT_APP_INSTALL_URL: ${{ secrets.ALPHA_REACT_APP_INSTALL_URL }}
           REACT_APP_FA_API_KEY: ${{ secrets.ALPHA_FA_API_KEY }}
           REACT_APP_FA_MESSAGING_SENDER_ID: ${{ secrets.ALPHA_FA_MESSAGING_SENDER_ID }}
           REACT_APP_FA_APP_ID: ${{ secrets.ALPHA_FA_APP_ID }}

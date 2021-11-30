@@ -199,14 +199,17 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
   const submitInstall = useCallback(() => {
     Event("viewKarrotInstallation", { action: "view" });
     mini.startPreset({
-      preset: `${process.env.REACT_APP_INSTALL_PRESET_URL}`,
+      preset: `${process.env.REACT_APP_INSTALL_URL}`,
       params: {
         appId: `${process.env.REACT_APP_ID}`,
       },
       onSuccess: function (result) {
+        alert("성공!");
         Event("clickKarrotInstallation", { action: "click" });
       },
-      onClose: () => {},
+      onFailure: () => {
+        alert("실패!");
+      },
     });
   }, []);
 
@@ -216,7 +219,8 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
     );
     const showInstallPreset = !isInstalled && !viewInstallPreset;
     if (showInstallPreset) {
-      setTimeout(() => alert("프리셋 띄워주기"), 3000);
+      // window.localStorage.setItem("viewInstallPreset", "true");
+      setTimeout(() => submitInstall, 3000);
     }
   }
 

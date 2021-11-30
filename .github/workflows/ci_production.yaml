@@ -43,6 +43,7 @@ jobs:
           CI: false
           REACT_APP_ID: ${{ secrets.PROD_REACT_APP_ID }}
           REACT_APP_PRESET_URL: ${{ secrets.PROD_REACT_APP_PRESET_URL }}
+          REACT_APP_INSTALL_URL: ${{ secrets.PROD_REACT_APP_INSTALL_URL }}
           REACT_APP_FA_API_KEY: ${{ secrets.PROD_FA_API_KEY }}
           REACT_APP_FA_MESSAGING_SENDER_ID: ${{ secrets.PROD_FA_MESSAGING_SENDER_ID }}
           REACT_APP_FA_APP_ID: ${{ secrets.PROD_FA_APP_ID }}
