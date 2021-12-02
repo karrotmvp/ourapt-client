@@ -221,7 +221,10 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
                 </Slider>
               </ClosedArea>
             )}
-            <AreaTitle className="pd--16">우리아파트 투표</AreaTitle>
+            <AreaTitle className="pd--16">
+              우리아파트 투표
+              <OpenedInfo>진행 중</OpenedInfo>
+            </AreaTitle>
             {state.pinned && (
               <PinnedArea className="pd--16 pd-bottom--0">
                 <VotePinnedInFeed vote={state.pinned.article} />
@@ -315,12 +318,27 @@ const PinnedArea = styled.div`
   border-bottom: 12px solid #f5f5f5;
 `;
 
+const OpenedInfo = styled.p`
+  margin-left: 8px;
+  padding: 3px 5px;
+
+  color: #e95454;
+  font-size: 12px;
+  font-weight: 500;
+
+  border: 1px solid #f4aaaa;
+  border-radius: 8px;
+`;
+
 const AreaTitle = styled.div`
   padding-bottom: 8px;
   text-align: left;
 
   font-size: 18px;
   font-weight: bold;
+
+  display: flex;
+  flex-direction: row;
 `;
 
 const ArticleArea = styled.div`

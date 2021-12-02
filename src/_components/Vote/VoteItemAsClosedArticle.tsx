@@ -31,7 +31,6 @@ const VoteItemAsClosedArticle: React.FC<VoteItemAsClosedArticleProps> = ({
       <div
         className="VoteItem-poll"
         style={{
-          //   color: isMostVoted ? "#96C5C5" : "#F0F0F0",
           backgroundColor: isMostVoted ? "#96C5C5" : "#F0F0F0",
           width: `${(itemCount / totalCount) * 100}%`,
         }}

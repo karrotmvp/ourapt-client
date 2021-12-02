@@ -65,13 +65,13 @@ const VoteItemAsArticle: React.FC<VoteItemAsArticleProps> = ({
         ></div>
       )}
       <div className="VoteItem-label">
-        <CheckIcon
+        {/* <CheckIcon
           className="mg-right--8"
           style={{
             fill: state._t === "displayed-selected" ? "#398287" : "",
             stroke: state._t === "displayed-selected" ? "white" : "#AAAAAA",
           }}
-        />
+        /> */}
         {voteItem.mainText}
         {state._t !== "not-displayed" && (
           <p
