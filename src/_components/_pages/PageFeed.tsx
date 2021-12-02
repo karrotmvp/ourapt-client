@@ -4,7 +4,6 @@ import { QuestionDto as Question } from "../../__generated__/ourapt";
 import { VoteDto as Vote } from "../../__generated__/ourapt";
 import { useApi } from "../../api";
 import { useViewer } from "../../_providers/useViewer";
-import { useModal } from "../../_providers/useModal";
 
 import { useAnalytics } from "../../_analytics/firebase";
 
@@ -14,8 +13,9 @@ import { css } from "@emotion/css";
 import { ScreenHelmet, useNavigator, useParams } from "@karrotframe/navigator";
 import { PullToRefresh } from "@karrotframe/pulltorefresh";
 
+import Slider from "react-slick";
+
 import ApartmentInNavigator from "../Apartment/ApartmentInNavigator";
-import QuestionPinnedInFeed from "../Question/QuestionPinnedInFeed";
 import QuestionInFeed from "../Question/QuestionInFeed";
 
 import examineResBody from "../../_modules/examineResBody";
@@ -23,24 +23,23 @@ import examineResBody from "../../_modules/examineResBody";
 import { ReactComponent as OuraptLogo } from "../../_assets/ouraptLogo.svg";
 import LoadPageFeed from "../_loaders/LoadPageFeed";
 import VotePinnedInFeed from "../Vote/VotePinnedInFeed";
-
-import ReactComponent from "./../../_assets/tempPRT.png";
+import VoteClosedInFeed from "../Vote/VoteClosedInFeed";
 
 type State = {
   _t: "loading";
-  pinned:
-    | { _t: "question"; article: Question }
-    | { _t: "vote"; article: Vote }
-    | null;
+  closed: Array<Vote> | null;
+  pinned: { _t: "vote"; article: Vote } | null;
   articles: Array<Question> | null;
 };
 
 type Action =
   | {
+      _t: "PATCH_CLOSED_VOTES";
+      closed: Array<Vote>;
+    }
+  | {
       _t: "PATCH_PINNED_ARTICLE";
-      pinned:
-        | { _t: "question"; article: Question }
-        | { _t: "vote"; article: Vote };
+      pinned: { _t: "vote"; article: Vote };
     }
   | {
       _t: "PATCH_ARTICLES";
@@ -49,6 +48,12 @@ type Action =
 
 const reducer: React.Reducer<State, Action> = (prevState, action) => {
   switch (action._t) {
+    case "PATCH_CLOSED_VOTES":
+      return {
+        ...prevState,
+        _t: "loading",
+        closed: action.closed,
+      };
     case "PATCH_PINNED_ARTICLE":
       return {
         ...prevState,
@@ -71,6 +76,7 @@ type PageFeedProps = {
 const PageFeed: React.FC<PageFeedProps> = (props) => {
   const [state, dispatch] = useReducer(reducer, {
     _t: "loading",
+    closed: null,
     pinned: null,
     articles: null,
   });
@@ -94,51 +100,26 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
     push("article/create");
   };
 
-  const getQuestionsByCursorPerPage = useCallback(
+  const getClosedVotesByCursorPerPage = useCallback(
     (params: string, cursor: number, perPage: number) => {
       (async () => {
-        const resBody = await api.questionController.getQuestionsUsingGET({
+        const resBody = await api.voteController.getVoteByIdUsingGET1({
           apartmentId: params,
           cursor,
           perPage,
         });
         const safeBody = examineResBody({
           resBody,
-          validator: (data) => data.questions != null,
+          validator: (data) => data.votes != null,
           onFailure: () => {
-            push(`/error?cause=getQuestionsByCursorPerPageAtPageFeed`);
+            push(`/error?cause=getClosedVotesByCursorPerPageAtPageFeed`);
           },
         });
-        dispatch({ _t: "PATCH_ARTICLES", articles: safeBody.data.questions });
+        dispatch({ _t: "PATCH_CLOSED_VOTES", closed: safeBody.data.votes });
       })();
     },
     [api.questionController, push]
   );
-
-  const getPinnedQuestion = useCallback(() => {
-    (async () => {
-      const response =
-        await api.questionController.getRandomPinnedQuestionOfApartmentUsingGET(
-          {
-            apartmentId: params,
-          }
-        );
-      if (response && response.status === "DATA_NOT_FOUND_FROM_DB") {
-      } else {
-        const safeBody = examineResBody({
-          resBody: response,
-          validator: (data) => data.question != null,
-          onFailure: () => {
-            push(`/error?cause=getPinnedQuestionAtPageFeed`);
-          },
-        });
-        dispatch({
-          _t: "PATCH_PINNED_ARTICLE",
-          pinned: { _t: "question", article: safeBody.data.question },
-        });
-      }
-    })();
-  }, [api.questionController, params, push]);
 
   const getPinnedVote = useCallback(() => {
     (async () => {
@@ -150,7 +131,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
       } else {
         const safeBody = examineResBody({
           resBody: response,
-          validator: (data) => data.vote != null,
+          validator: (data) => data.vote != null && data.questions != null,
           onFailure: () => {
             push(`/error?cause=getPinnedVoteAtPageFeed`);
           },
@@ -158,6 +139,10 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
         dispatch({
           _t: "PATCH_PINNED_ARTICLE",
           pinned: { _t: "vote", article: safeBody.data.vote },
+        });
+        dispatch({
+          _t: "PATCH_ARTICLES",
+          articles: safeBody.data.questions,
         });
       }
     })();
@@ -173,12 +158,12 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    getQuestionsByCursorPerPage(params, Date.now(), 100);
-  }, [getQuestionsByCursorPerPage, params]);
+    getClosedVotesByCursorPerPage(params, Date.now(), 100);
+  }, [getClosedVotesByCursorPerPage, params]);
 
   async function handleDispose() {
     getPinnedVote();
-    getQuestionsByCursorPerPage(params, Date.now(), 100);
+    getClosedVotesByCursorPerPage(params, Date.now(), 100);
   }
 
   useEffect(() => {
@@ -190,6 +175,14 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
     ""
   );
 
+  const closedVotesSettings = {
+    centerMode: true,
+    infinite: false,
+    centerPadding: "0px",
+    slidesToShow: 1,
+  };
+
+  console.log(state);
   if (state.articles) {
     return (
       <div className="Page">
@@ -216,15 +209,22 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
               });
             }}
           >
+            {state.closed && (
+              <ClosedArea>
+                <AreaTitle className="pd--16">종료된 투표</AreaTitle>
+                <Slider {...closedVotesSettings}>
+                  {state.closed.map((vote, idx) => {
+                    if (idx === 0) {
+                      return <VoteClosedInFeed vote={vote} />;
+                    }
+                  })}
+                </Slider>
+              </ClosedArea>
+            )}
             <AreaTitle className="pd--16">우리아파트 투표</AreaTitle>
             {state.pinned && (
               <PinnedArea className="pd--16 pd-bottom--0">
-                {state.pinned._t === "vote" && (
-                  <VotePinnedInFeed vote={state.pinned.article} />
-                )}
-                {state.pinned._t === "question" && (
-                  <QuestionPinnedInFeed question={state.pinned.article} />
-                )}
+                <VotePinnedInFeed vote={state.pinned.article} />
               </PinnedArea>
             )}
             <ArticleArea>
@@ -302,6 +302,12 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
 };
 
 export default PageFeed;
+
+const ClosedArea = styled.div`
+  width: 100%;
+
+  border-bottom: 12px solid #f5f5f5;
+`;
 
 const PinnedArea = styled.div`
   width: 100%;

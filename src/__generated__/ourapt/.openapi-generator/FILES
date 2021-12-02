@@ -3,7 +3,7 @@ apis/Class1APIApi.ts
 apis/Class2Api.ts
 apis/Class3Api.ts
 apis/Class41Api.ts
-apis/Class42Api.ts
+apis/Class4Api.ts
 apis/Class5Api.ts
 apis/Class6Api.ts
 apis/Class7Api.ts
@@ -16,7 +16,6 @@ models/ChangeMyCheckedInDto.ts
 models/CommentDto.ts
 models/CommonResponseBodyGetAvailableApartmentsDto.ts
 models/CommonResponseBodyGetCommentsOfQuestionDto.ts
-models/CommonResponseBodyGetQuestionsDto.ts
 models/CommonResponseBodyKarrotAccessTokenDto.ts
 models/CommonResponseBodyOneApartmentDto.ts
 models/CommonResponseBodyOneCommentDto.ts
@@ -24,9 +23,9 @@ models/CommonResponseBodyOneQuestionDto.ts
 models/CommonResponseBodyOneUserDto.ts
 models/CommonResponseBodyOneVoteDto.ts
 models/CommonResponseBodyVoid.ts
+models/CommonResponseBodyVoteListDto.ts
 models/GetAvailableApartmentsDto.ts
 models/GetCommentsOfQuestionDto.ts
-models/GetQuestionsDto.ts
 models/KarrotAccessTokenDto.ts
 models/KarrotLoginDto.ts
 models/KarrotProfile.ts
@@ -45,6 +44,7 @@ models/VoteContentDto.ts
 models/VoteDto.ts
 models/VoteItemContentDto.ts
 models/VoteItemDto.ts
+models/VoteListDto.ts
 models/WriteNewCommentDto.ts
 models/index.ts
 runtime.ts

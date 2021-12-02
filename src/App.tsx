@@ -16,6 +16,7 @@ import PageLanding from "./_components/_pages/PageLanding";
 import PageApartmentRequestForm from "./_components/_pages/request/PageApartmentRequestForm";
 import PageFeed from "./_components/_pages/PageFeed";
 import PageQuestionPinnedDetail from "./_components/_pages/article/PageQuestionPinnedDetail";
+import PageVoteDetail from "./_components/_pages/article/PageVoteDetail";
 import PageQuestionDetail from "./_components/_pages/article/PageQuestionDetail";
 import PageQuestionUpdate from "./_components/_pages/article/PageQuestionUpdate";
 import PageQuestionCreate from "./_components/_pages/article/PageQuestionCreate";
@@ -66,6 +67,9 @@ const App: React.FC = () => {
                   </Screen>
                   <Screen path="/article/create">
                     <PageQuestionCreate />
+                  </Screen>
+                  <Screen path="/vote/:articleId">
+                    <PageVoteDetail />
                   </Screen>
                   <Screen path="/article/:articleId">
                     <PageQuestionDetail />

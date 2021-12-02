@@ -21,6 +21,9 @@ import {
     CommonResponseBodyVoid,
     CommonResponseBodyVoidFromJSON,
     CommonResponseBodyVoidToJSON,
+    CommonResponseBodyVoteListDto,
+    CommonResponseBodyVoteListDtoFromJSON,
+    CommonResponseBodyVoteListDtoToJSON,
     VoteContentDto,
     VoteContentDtoFromJSON,
     VoteContentDtoToJSON,
@@ -38,6 +41,12 @@ export interface GetVoteByIdUsingGETRequest {
     voteId: string;
 }
 
+export interface GetVoteByIdUsingGET1Request {
+    apartmentId: string;
+    cursor: number;
+    perPage: number;
+}
+
 export interface SubmitVotingUsingPOSTRequest {
     itemId: string;
 }
@@ -49,7 +58,7 @@ export interface WriteNewVoteUsingPOSTRequest {
 /**
  * 
  */
-export class Class42Api extends runtime.BaseAPI {
+export class Class4Api extends runtime.BaseAPI {
 
     /**
      * 투표 취소하기
@@ -86,7 +95,7 @@ export class Class42Api extends runtime.BaseAPI {
     }
 
     /**
-     * 사용자에게 보여질 핀 질문 랜덤 조회
+     * 아파트의 핀 투표 조회
      */
     async getRandomPinnedVoteOfApartmentUsingGETRaw(requestParameters: GetRandomPinnedVoteOfApartmentUsingGETRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyOneVoteDto>> {
         if (requestParameters.apartmentId === null || requestParameters.apartmentId === undefined) {
@@ -112,7 +121,7 @@ export class Class42Api extends runtime.BaseAPI {
     }
 
     /**
-     * 사용자에게 보여질 핀 질문 랜덤 조회
+     * 아파트의 핀 투표 조회
      */
     async getRandomPinnedVoteOfApartmentUsingGET(requestParameters: GetRandomPinnedVoteOfApartmentUsingGETRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyOneVoteDto> {
         const response = await this.getRandomPinnedVoteOfApartmentUsingGETRaw(requestParameters, initOverrides);
@@ -150,6 +159,56 @@ export class Class42Api extends runtime.BaseAPI {
      */
     async getVoteByIdUsingGET(requestParameters: GetVoteByIdUsingGETRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyOneVoteDto> {
         const response = await this.getVoteByIdUsingGETRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 아파트의 투표들 Date 커서로 페이징 조회
+     */
+    async getVoteByIdUsingGET1Raw(requestParameters: GetVoteByIdUsingGET1Request, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyVoteListDto>> {
+        if (requestParameters.apartmentId === null || requestParameters.apartmentId === undefined) {
+            throw new runtime.RequiredError('apartmentId','Required parameter requestParameters.apartmentId was null or undefined when calling getVoteByIdUsingGET1.');
+        }
+
+        if (requestParameters.cursor === null || requestParameters.cursor === undefined) {
+            throw new runtime.RequiredError('cursor','Required parameter requestParameters.cursor was null or undefined when calling getVoteByIdUsingGET1.');
+        }
+
+        if (requestParameters.perPage === null || requestParameters.perPage === undefined) {
+            throw new runtime.RequiredError('perPage','Required parameter requestParameters.perPage was null or undefined when calling getVoteByIdUsingGET1.');
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.cursor !== undefined) {
+            queryParameters['cursor'] = requestParameters.cursor;
+        }
+
+        if (requestParameters.perPage !== undefined) {
+            queryParameters['perPage'] = requestParameters.perPage;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // KarrotAccessToken authentication
+        }
+
+        const response = await this.request({
+            path: `/api/v1/apartment/{apartmentId}/votes`.replace(`{${"apartmentId"}}`, encodeURIComponent(String(requestParameters.apartmentId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyVoteListDtoFromJSON(jsonValue));
+    }
+
+    /**
+     * 아파트의 투표들 Date 커서로 페이징 조회
+     */
+    async getVoteByIdUsingGET1(requestParameters: GetVoteByIdUsingGET1Request, initOverrides?: RequestInit): Promise<CommonResponseBodyVoteListDto> {
+        const response = await this.getVoteByIdUsingGET1Raw(requestParameters, initOverrides);
         return await response.value();
     }
 

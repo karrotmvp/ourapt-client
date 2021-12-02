@@ -77,37 +77,36 @@ const PageArticleCreate: React.FC = () => {
       });
     }
   }
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (state._t === "typed") {
-      const response = await api.questionController.writeNewQuestionUsingPOST({
-        questionContent: {
-          mainText: state.mainText,
-        },
-      });
 
-      const safeBody = examineResBody({
-        resBody: response,
-        validator: (data) => data.question != null,
-        onFailure: () => {
-          push(`/error?cause=writeNewQuestionAtPageQuestionCreate`);
-        },
-      });
+  // async function handleSubmit(e: React.FormEvent) {
+  //   e.preventDefault();
+  //   if (state._t === "typed") {
+  //     const response = await api.questionController.writeNewQuestionUsingPOST({
+  //       questionContent: {
+  //         mainText: state.mainText,
+  //       },
+  //     });
 
-      const question = safeBody.data.question;
-      replace(`/article/${question.id}`);
-    }
-  }
+  //     const safeBody = examineResBody({
+  //       resBody: response,
+  //       validator: (data) => data.question != null,
+  //       onFailure: () => {
+  //         push(`/error?cause=writeNewQuestionAtPageQuestionCreate`);
+  //       },
+  //     });
+
+  //     const question = safeBody.data.question;
+  //     replace(`/article/${question.id}`);
+  //   }
+  // }
 
   return (
     <div className="Page">
-      <ScreenHelmet
-        title="게시글 작성"
-        // onTopClick={() => {
-        //   alert("얏호!");
-        // }}
-      />
-      <form className="QuestionCreateUpdateForm pd--16" onSubmit={handleSubmit}>
+      <ScreenHelmet title="게시글 작성" />
+      <form
+        className="QuestionCreateUpdateForm pd--16"
+        // onSubmit={handleSubmit}
+      >
         <textarea
           className="QuestionCreateUpdateForm-input mg-bottom--16"
           // autoFocus

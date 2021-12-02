@@ -14,41 +14,41 @@
 
 import { exists, mapValues } from '../runtime';
 import {
-    QuestionDto,
-    QuestionDtoFromJSON,
-    QuestionDtoFromJSONTyped,
-    QuestionDtoToJSON,
+    VoteDto,
+    VoteDtoFromJSON,
+    VoteDtoFromJSONTyped,
+    VoteDtoToJSON,
 } from './';
 
 /**
  * 
  * @export
- * @interface GetQuestionsDto
+ * @interface VoteListDto
  */
-export interface GetQuestionsDto {
+export interface VoteListDto {
     /**
      * 
-     * @type {Array<QuestionDto>}
-     * @memberof GetQuestionsDto
+     * @type {Array<VoteDto>}
+     * @memberof VoteListDto
      */
-    questions: Array<QuestionDto>;
+    votes?: Array<VoteDto>;
 }
 
-export function GetQuestionsDtoFromJSON(json: any): GetQuestionsDto {
-    return GetQuestionsDtoFromJSONTyped(json, false);
+export function VoteListDtoFromJSON(json: any): VoteListDto {
+    return VoteListDtoFromJSONTyped(json, false);
 }
 
-export function GetQuestionsDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): GetQuestionsDto {
+export function VoteListDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): VoteListDto {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'questions': ((json['questions'] as Array<any>).map(QuestionDtoFromJSON)),
+        'votes': !exists(json, 'votes') ? undefined : ((json['votes'] as Array<any>).map(VoteDtoFromJSON)),
     };
 }
 
-export function GetQuestionsDtoToJSON(value?: GetQuestionsDto | null): any {
+export function VoteListDtoToJSON(value?: VoteListDto | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -57,7 +57,7 @@ export function GetQuestionsDtoToJSON(value?: GetQuestionsDto | null): any {
     }
     return {
         
-        'questions': ((value.questions as Array<any>).map(QuestionDtoToJSON)),
+        'votes': value.votes === undefined ? undefined : ((value.votes as Array<any>).map(VoteDtoToJSON)),
     };
 }
 
