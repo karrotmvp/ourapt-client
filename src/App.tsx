@@ -65,11 +65,11 @@ const App: React.FC = () => {
                   <Screen path="/article/:articleId/pinned">
                     <PageQuestionPinnedDetail />
                   </Screen>
-                  <Screen path="/article/create">
-                    <PageQuestionCreate />
-                  </Screen>
                   <Screen path="/vote/:articleId">
                     <PageVoteDetail />
+                  </Screen>
+                  <Screen path="/vote/:articleId/create">
+                    <PageQuestionCreate />
                   </Screen>
                   <Screen path="/article/:articleId">
                     <PageQuestionDetail />

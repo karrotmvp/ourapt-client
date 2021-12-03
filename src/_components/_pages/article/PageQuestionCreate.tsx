@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, useState } from "react";
 
 import { useApi } from "../../../api";
 
-import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
+import { ScreenHelmet, useNavigator, useParams } from "@karrotframe/navigator";
 
 import examineResBody from "../../../_modules/examineResBody";
 
@@ -49,12 +49,14 @@ const PageArticleCreate: React.FC = () => {
     textLength: 0,
   });
 
-  const { push, replace } = useNavigator();
+  const { push, pop } = useNavigator();
 
   const [submitBtnActiveState, setSubmitBtnActiveState] = useState({
     disabled: true,
     className: "btn--inactive",
   });
+
+  const voteId = useParams<{ articleId?: string }>().articleId || "no-params";
 
   useEffect(() => {
     if (state._t === "blank") {
@@ -78,35 +80,31 @@ const PageArticleCreate: React.FC = () => {
     }
   }
 
-  // async function handleSubmit(e: React.FormEvent) {
-  //   e.preventDefault();
-  //   if (state._t === "typed") {
-  //     const response = await api.questionController.writeNewQuestionUsingPOST({
-  //       questionContent: {
-  //         mainText: state.mainText,
-  //       },
-  //     });
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (state._t === "typed") {
+      const response = await api.questionController.writeNewQuestionUsingPOST({
+        voteId: voteId,
+        questionContent: {
+          mainText: state.mainText,
+        },
+      });
 
-  //     const safeBody = examineResBody({
-  //       resBody: response,
-  //       validator: (data) => data.question != null,
-  //       onFailure: () => {
-  //         push(`/error?cause=writeNewQuestionAtPageQuestionCreate`);
-  //       },
-  //     });
-
-  //     const question = safeBody.data.question;
-  //     replace(`/article/${question.id}`);
-  //   }
-  // }
+      const safeBody = examineResBody({
+        resBody: response,
+        validator: (data) => data.question != null,
+        onFailure: () => {
+          push(`/error?cause=writeNewQuestionAtPageQuestionCreate`);
+        },
+      });
+      pop();
+    }
+  }
 
   return (
     <div className="Page">
       <ScreenHelmet title="게시글 작성" />
-      <form
-        className="QuestionCreateUpdateForm pd--16"
-        // onSubmit={handleSubmit}
-      >
+      <form className="QuestionCreateUpdateForm pd--16" onSubmit={handleSubmit}>
         <textarea
           className="QuestionCreateUpdateForm-input mg-bottom--16"
           // autoFocus

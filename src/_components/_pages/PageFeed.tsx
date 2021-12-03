@@ -97,7 +97,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
 
   const onArticleCreateBtnClick = (context: number) => {
     Event("clickCreateArticleBtn", { at: params, when: `${context}` });
-    push("article/create");
+    push(`/vote/${state.pinned?.article.id}/create`);
   };
 
   const getClosedVotesByCursorPerPage = useCallback(
@@ -155,7 +155,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
 
   useEffect(() => {
     getPinnedVote();
-  }, []);
+  }, [getPinnedVote]);
 
   useEffect(() => {
     getClosedVotesByCursorPerPage(params, Date.now(), 100);
@@ -231,7 +231,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
               </PinnedArea>
             )}
             <ArticleArea>
-              <AreaTitle className="pd--16">투표 자유게시판</AreaTitle>
+              {/* <AreaTitle className="pd--16">투표 자유게시판</AreaTitle> */}
               {state.articles.length === 0 ? (
                 <div>
                   <ArticleVacantViewTitle>
@@ -241,7 +241,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
                     투표 주제에 대해 이야기를 나눠보세요.
                   </ArticleVacantViewInfo>
                   <button
-                    className="btn-160 btn btn--active mg-top--48"
+                    className="btn-160 btn btn--active mg-top--48 mg-bottom--64"
                     onClick={() => onArticleCreateBtnClick(0)}
                   >
                     게시글 작성
@@ -249,6 +249,13 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
                 </div>
               ) : (
                 <div>
+                  <InputArea
+                    onClick={() =>
+                      onArticleCreateBtnClick(state.articles?.length || 0)
+                    }
+                  >
+                    진행 중인 투표에 대해 어떻게 생각하세요?
+                  </InputArea>
                   {state.articles.map((question) => {
                     return (
                       <ArticleWrapper
@@ -283,7 +290,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
             </ArticleArea>
           </PullToRefresh>
         </div>
-        {state.articles.length !== 0 && (
+        {/* {state.articles.length !== 0 && (
           <div className="btn--floating">
             <ArticleCreateBtnFloating
               onClick={() =>
@@ -296,7 +303,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
               />
             </ArticleCreateBtnFloating>
           </div>
-        )}
+        )} */}
       </div>
     );
   }
@@ -315,7 +322,7 @@ const ClosedArea = styled.div`
 const PinnedArea = styled.div`
   width: 100%;
 
-  border-bottom: 12px solid #f5f5f5;
+  /* border-bottom: 12px solid #f5f5f5; */
 `;
 
 const OpenedInfo = styled.p`
@@ -328,6 +335,20 @@ const OpenedInfo = styled.p`
 
   border: 1px solid #f4aaaa;
   border-radius: 8px;
+`;
+
+const InputArea = styled.div`
+  height: 80px;
+
+  margin: 16px;
+  padding: 12px;
+
+  color: #aaaaaa;
+  font-size: 17px;
+  font-weight: 500;
+  text-align: left;
+
+  background-color: #f7f7f7;
 `;
 
 const AreaTitle = styled.div`
