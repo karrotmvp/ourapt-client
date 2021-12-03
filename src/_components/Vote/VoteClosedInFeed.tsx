@@ -60,8 +60,9 @@ const VoteMainText = styled.p`
 
 const ArrowIcon = styled.div`
   height: auto;
+  padding: auto 24px auto 0;
 
   position: absolute;
-  top: 38px;
+  top: calc(50% - 7px);
   right: 24px;
 `;
