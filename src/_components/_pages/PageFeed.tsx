@@ -226,7 +226,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
               <OpenedInfo>진행 중</OpenedInfo>
             </AreaTitle>
             {state.pinned && (
-              <PinnedArea className="pd--16 pd-bottom--0">
+              <PinnedArea className="pd--16 pd-top--8">
                 <VotePinnedInFeed vote={state.pinned.article} />
               </PinnedArea>
             )}
