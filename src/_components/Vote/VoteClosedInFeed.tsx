@@ -54,7 +54,7 @@ const VoteTotalCount = styled.div`
 `;
 
 const VoteMainText = styled.p`
-  width: 80%;
+  width: 90%;
   text-align: left;
 `;
 
