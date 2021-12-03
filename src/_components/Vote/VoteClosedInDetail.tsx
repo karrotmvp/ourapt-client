@@ -25,7 +25,7 @@ const VoteClosedInDetail: React.FC<VoteClosedInDetailProps> = ({ vote }) => {
   const viewerId = viewer?.id || "";
 
   let myVoteIndex: number = -1;
-  let mostVoteCount: number = -1;
+  let mostVoteCount: number = 1;
 
   for (let voteItem of vote.items) {
     if (voteItem.voterIds.indexOf(viewerId) !== -1) {

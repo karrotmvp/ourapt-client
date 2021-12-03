@@ -32,7 +32,7 @@ const VoteItemAsClosedArticle: React.FC<VoteItemAsClosedArticleProps> = ({
         className="VoteItem-poll"
         style={{
           backgroundColor: isMostVoted ? "#96C5C5" : "#F0F0F0",
-          width: `${(itemCount / totalCount) * 100}%`,
+          width: `${totalCount !== 0 ? (itemCount / totalCount) * 100 : 0}%`,
         }}
       ></div>
       <div className="VoteItem-label">
@@ -50,7 +50,7 @@ const VoteItemAsClosedArticle: React.FC<VoteItemAsClosedArticleProps> = ({
             fontWeight: isMostVoted ? 700 : 400,
           }}
         >
-          {Math.floor((itemCount / totalCount) * 100)}%
+          {totalCount !== 0 ? Math.floor((itemCount / totalCount) * 100) : 0}%
         </p>
       </div>
     </li>
