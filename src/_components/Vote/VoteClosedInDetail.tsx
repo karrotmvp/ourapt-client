@@ -13,8 +13,7 @@ import VoteItemAsClosedArticle from "./VoteItemAsClosedArticle";
 
 import styled from "@emotion/styled";
 
-import { ReactComponent as VoteCountIcon } from "./../../_assets/VoteCountIcon.svg";
-import { getInstalledFromURLParams } from "../../_modules/getQueryFromURLParams";
+import { ReactComponent as ClosedVoteCountIcon } from "./../../_assets/ClosedVoteCountIcon.svg";
 
 type VoteClosedInDetailProps = {
   vote: Vote;
@@ -45,7 +44,7 @@ const VoteClosedInDetail: React.FC<VoteClosedInDetailProps> = ({ vote }) => {
     <div className="ArticleCard pd--16">
       <form className="VoteForm">
         <VoteTotalCount className="VoteTotalCount horizontal-centered mg-top--4 mg-bottom--8">
-          <VoteCountIcon className="mg-right--8" />
+          <ClosedVoteCountIcon className="mg-right--8" />
           {totalCount}명 이웃이 함께 투표했어요
         </VoteTotalCount>
         <p className="ArticleCard-Content ArticleCardInList-Content mg-bottom--16">
