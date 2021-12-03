@@ -108,7 +108,7 @@ const PageArticleCreate: React.FC = () => {
         <textarea
           className="QuestionCreateUpdateForm-input mg-bottom--16"
           // autoFocus
-          placeholder="우리 아파트 이웃들과 이야기를 나눠보세요!"
+          placeholder="진행 중인 투표에 대해 어떻게 생각하시나요?"
           value={state.mainText}
           onChange={handleChange}
         />

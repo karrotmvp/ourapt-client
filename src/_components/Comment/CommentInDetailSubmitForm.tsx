@@ -147,7 +147,7 @@ const CommentInDetailSubmitForm: React.FC<CommentInDetailSubmitFormProps> = ({
               setShowCounter(false);
             }
           }}
-          placeholder="알고 있는 내용을 공유해 보세요!"
+          placeholder="댓글을 입력해 주세요."
         />
         {showCounter && (
           <div className="CommentSubmitForm-textCounter">
@@ -157,7 +157,9 @@ const CommentInDetailSubmitForm: React.FC<CommentInDetailSubmitFormProps> = ({
       </div>
       <button
         disabled={submitBtnActiveState.disabled}
-        className={"CommentSubmitForm-btn " + submitBtnActiveState.className}
+        className={
+          "centered CommentSubmitForm-btn " + submitBtnActiveState.className
+        }
       >
         <img
           src={require("../../_assets/CommentSubmitBtnIcon.svg").default}

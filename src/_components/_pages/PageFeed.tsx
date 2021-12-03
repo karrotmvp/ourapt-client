@@ -231,7 +231,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
               </PinnedArea>
             )}
             <ArticleArea>
-              {/* <AreaTitle className="pd--16">투표 자유게시판</AreaTitle> */}
+              <AreaTitle className="pd--16">투표 자유게시판</AreaTitle>
               {state.articles.length === 0 ? (
                 <div>
                   <ArticleVacantViewTitle>
@@ -322,7 +322,7 @@ const ClosedArea = styled.div`
 const PinnedArea = styled.div`
   width: 100%;
 
-  /* border-bottom: 12px solid #f5f5f5; */
+  border-bottom: 12px solid #f5f5f5;
 `;
 
 const OpenedInfo = styled.p`
