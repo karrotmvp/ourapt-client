@@ -24,9 +24,8 @@ const VoteClosedInFeed: React.FC<VoteClosedInFeedProps> = ({ vote }) => {
         <VoteCountIcon className="mg-right--8" />
         {closedVoteTotalCount}명 이웃이 함께 투표했어요
       </VoteTotalCount>
-      {vote.mainText}
+      <VoteMainText>{vote.mainText}</VoteMainText>
       <ArrowIcon>
-        {" "}
         <img src={require("../../_assets/ClosedVoteArrowIcon.svg").default} />
       </ArrowIcon>
     </VoteContainer>
@@ -52,6 +51,11 @@ const VoteContainer = styled.div`
 const VoteTotalCount = styled.div`
   color: #777777;
   font-size: 13px;
+`;
+
+const VoteMainText = styled.p`
+  width: 80%;
+  text-align: left;
 `;
 
 const ArrowIcon = styled.div`
