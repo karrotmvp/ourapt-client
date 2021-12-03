@@ -20,7 +20,7 @@ const VoteClosedInFeed: React.FC<VoteClosedInFeedProps> = ({ vote }) => {
 
   return (
     <VoteContainer onClick={() => push(`/vote/${vote.id}`)}>
-      <VoteTotalCount className="VoteTotalCount horizontal-centered mg-top--4 mg-bottom--12">
+      <VoteTotalCount className="VoteTotalCount horizontal-centered mg-top--4 mg-bottom--8">
         <ClosedVoteCountIcon className="mg-right--8" />
         {closedVoteTotalCount}명 이웃이 함께 투표했어요
       </VoteTotalCount>
