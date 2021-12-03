@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 
 import { VoteDto as Vote } from "../../__generated__/ourapt";
 
-import { ReactComponent as ClosedVoteCountIcon } from "../../_assets/ClosedVoteCountIcon.svg";
+import { ReactComponent as VoteCountIcon } from "../../_assets/VoteCountIcon.svg";
 import { useNavigator } from "@karrotframe/navigator";
 
 type VoteClosedInFeedProps = {
@@ -21,7 +21,7 @@ const VoteClosedInFeed: React.FC<VoteClosedInFeedProps> = ({ vote }) => {
   return (
     <VoteContainer onClick={() => push(`/vote/${vote.id}`)}>
       <VoteTotalCount className="VoteTotalCount horizontal-centered mg-top--4 mg-bottom--8">
-        <ClosedVoteCountIcon className="mg-right--8" />
+        <VoteCountIcon className="mg-right--8" />
         {closedVoteTotalCount}명 이웃이 함께 투표했어요
       </VoteTotalCount>
       {vote.mainText}
