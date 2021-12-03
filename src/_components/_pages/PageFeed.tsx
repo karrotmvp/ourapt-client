@@ -249,13 +249,13 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
                 </div>
               ) : (
                 <div>
-                  <InputArea
+                  {/* <InputArea
                     onClick={() =>
                       onArticleCreateBtnClick(state.articles?.length || 0)
                     }
                   >
                     진행 중인 투표에 대해 어떻게 생각하세요?
-                  </InputArea>
+                  </InputArea> */}
                   {state.articles.map((question) => {
                     return (
                       <ArticleWrapper
@@ -290,7 +290,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
             </ArticleArea>
           </PullToRefresh>
         </div>
-        {/* {state.articles.length !== 0 && (
+        {state.articles.length !== 0 && (
           <div className="btn--floating">
             <ArticleCreateBtnFloating
               onClick={() =>
@@ -303,7 +303,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
               />
             </ArticleCreateBtnFloating>
           </div>
-        )} */}
+        )}
       </div>
     );
   }

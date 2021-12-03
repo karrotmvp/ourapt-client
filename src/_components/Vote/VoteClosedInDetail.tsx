@@ -44,7 +44,7 @@ const VoteClosedInDetail: React.FC<VoteClosedInDetailProps> = ({ vote }) => {
   return (
     <div className="ArticleCard pd--16">
       <form className="VoteForm">
-        <VoteTotalCount className="VoteTotalCount horizontal-centered mg-top--4 mg-bottom--12">
+        <VoteTotalCount className="VoteTotalCount horizontal-centered mg-top--4 mg-bottom--8">
           <VoteCountIcon className="mg-right--8" />
           {totalCount}명 이웃이 함께 투표했어요
         </VoteTotalCount>
