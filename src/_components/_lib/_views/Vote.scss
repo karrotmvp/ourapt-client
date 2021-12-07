@@ -133,6 +133,10 @@
   background-color: #fafafb;
 }
 
+.VoteSubmitForm-option--inputbox:focus {
+  background-color: #f1f1f6;
+}
+
 .VoteSubmitForm-option--placeholder {
   display: flex;
   flex-direction: row;
