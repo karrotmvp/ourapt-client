@@ -2,24 +2,54 @@ import React, { useState, useEffect } from "react";
 
 import styled from "@emotion/styled";
 
-import { ScreenHelmet } from "@karrotframe/navigator";
+import { useApi } from "../../../api";
+
+import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
 import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 
 const PageVoteCreate: React.FC = () => {
   const { register, control, handleSubmit, watch } = useForm({
     defaultValues: {
       mainText: "",
-      options: [{ field: "" }, { field: "" }],
+      items: [{ mainText: "" }, { mainText: "" }],
     },
   });
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "options",
+    name: "items",
   });
 
+  const api = useApi();
+  const { pop } = useNavigator();
+
   const onSubmit = (data: any) => {
-    alert(JSON.stringify(data, null, 2));
+    const response = api.voteController.writeNewVoteUsingPOST({
+      voteContent: {
+        mainText: data.mainText,
+        items: data.items.filter((item: any) => item.mainText.length > 0),
+      },
+    });
+    response.then((res) => {
+      if (res.status === "SUCCESS") {
+        pop();
+      }
+    });
   };
+
+  const [validSubmit, setValidSubmit] = useState(false);
+
+  useEffect(() => {
+    let validOptions = 0;
+    for (let item of watch(`items`)) {
+      console.log(item.mainText.length);
+      if (item.mainText.length > 0) {
+        validOptions++;
+      }
+    }
+    setValidSubmit(
+      Boolean(validOptions >= 2) && Boolean(watch("mainText").length)
+    );
+  }, [watch()]);
 
   return (
     <div className="page">
@@ -29,6 +59,9 @@ const PageVoteCreate: React.FC = () => {
             type="submit"
             form="VoteSubmitForm"
             className="VoteSubmitForm-btn"
+            style={{
+              color: validSubmit ? "#E95454" : "#CCCCCC",
+            }}
           >
             완료
           </button>
@@ -56,13 +89,19 @@ const PageVoteCreate: React.FC = () => {
                 <DeleteButton
                   type="button"
                   className="VoteSubmitForm-option--icon"
+                  style={{
+                    color: watch(`items`).length > 2 ? "#555555" : "#cccccc",
+                    borderColor:
+                      watch(`items`).length > 2 ? "#555555" : "#cccccc",
+                  }}
                   onClick={() => remove(index)}
+                  disabled={Boolean(watch(`items`).length < 3)}
                 >
                   -
                 </DeleteButton>
-                {watch(`options.${index}.field`).length === 0 && (
+                {watch(`items.${index}.mainText`).length === 0 && (
                   <label
-                    htmlFor={`options${index}`}
+                    htmlFor={`items${index}`}
                     className="VoteSubmitForm-option--placeholder"
                   >
                     <OptionInputPlaceholderText className="VoteSubmitForm-option--placeholderText">
@@ -74,10 +113,10 @@ const PageVoteCreate: React.FC = () => {
                   </label>
                 )}
                 <OptionInput
-                  id={`options${index}`}
+                  id={`items${index}`}
                   className="VoteSubmitForm-option--inputbox"
-                  value={watch(`options.${index}.field`).substring(0, 16)}
-                  {...register(`options.${index}.field`)}
+                  value={watch(`items.${index}.mainText`).substring(0, 16)}
+                  {...register(`items.${index}.mainText`)}
                 />
               </Option>
             );
@@ -86,7 +125,7 @@ const PageVoteCreate: React.FC = () => {
             <AppendField
               className="VoteSubmitForm-option"
               onClick={() => {
-                append({ field: "" });
+                append({ mainText: "" });
               }}
             >
               <AppendIcon className="VoteSubmitForm-option--icon">+</AppendIcon>
