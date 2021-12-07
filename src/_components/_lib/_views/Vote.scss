@@ -75,3 +75,87 @@
   position: absolute;
   right: 16px;
 }
+
+.VoteCarouselLayout {
+  margin-left: -28px;
+}
+
+.VoteSubmitForm-btn {
+  padding: 4px;
+
+  color: #cccccc;
+  font-size: 17px;
+
+  border: none;
+  background-color: transparent;
+}
+
+#VoteSubmitForm-textarea::placeholder {
+  color: #aaaaaa;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.VoteSubmitForm-option {
+  width: 100%;
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 8px;
+}
+
+.VoteSubmitForm-option--icon {
+  width: 24px;
+  height: 24px;
+
+  margin-right: 16px;
+
+  color: #cccccc;
+
+  border: 1px solid #cccccc;
+  border-radius: 50%;
+
+  background-color: transparent;
+}
+
+.VoteSubmitForm-option--inputbox {
+  width: calc(100% - 40px);
+  height: 44px;
+
+  padding-left: 16px;
+
+  font-size: 15px;
+  font-weight: 500;
+
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  background-color: #fafafb;
+}
+
+.VoteSubmitForm-option--placeholder {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  position: absolute;
+  top: 10px;
+  left: 56px;
+}
+.VoteSubmitForm-option--placeholderText {
+  margin-right: 4px;
+
+  color: #999999;
+  font-size: 15px;
+  line-height: 24px;
+  vertical-align: middle;
+}
+
+.VoteSubmitForm-option--placeholderCounter {
+  color: #cccccc;
+  font-size: 14px;
+  line-height: 24px;
+  vertical-align: middle;
+}

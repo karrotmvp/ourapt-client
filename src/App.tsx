@@ -27,6 +27,7 @@ import { ApiProvider } from "./api";
 import { AccessTokenProvider } from "./_providers/useAccessToken";
 import { ViewerProvider } from "./_providers/useViewer";
 import { ModalProvider } from "./_providers/useModal";
+import PageVoteCreate from "./_components/_pages/article/PageVoteCreate";
 
 if (process.env.REACT_APP_ENV === "MSW") {
   const { worker } = require("./mocks/browser");
@@ -79,6 +80,9 @@ const App: React.FC = () => {
                   </Screen>
                   <Screen path="/error">
                     <PageError />
+                  </Screen>
+                  <Screen path="/create">
+                    <PageVoteCreate />
                   </Screen>
                   <WithModal />
                 </Navigator>

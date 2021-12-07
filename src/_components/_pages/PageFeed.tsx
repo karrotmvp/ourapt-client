@@ -178,11 +178,10 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
   const closedVotesSettings = {
     centerMode: true,
     infinite: false,
-    centerPadding: "0px",
+    centerPadding: "34px",
     slidesToShow: 1,
   };
 
-  console.log(state);
   if (state.articles) {
     return (
       <div className="Page">
@@ -212,13 +211,15 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
             {state.closed && (
               <ClosedArea>
                 <AreaTitle className="pd--16">종료된 투표</AreaTitle>
-                <Slider {...closedVotesSettings}>
-                  {state.closed.map((vote, idx) => {
-                    if (idx === 0) {
-                      return <VoteClosedInFeed vote={vote} />;
-                    }
-                  })}
-                </Slider>
+                <div className="VoteCarouselLayout">
+                  <Slider {...closedVotesSettings}>
+                    {state.closed.map((vote, idx) => {
+                      if (idx === 0) {
+                        return <VoteClosedInFeed vote={vote} />;
+                      }
+                    })}
+                  </Slider>
+                </div>
               </ClosedArea>
             )}
             <AreaTitle className="pd--16">
@@ -292,6 +293,12 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
         </div>
         {state.articles.length !== 0 && (
           <div className="btn--floating">
+            <TempArticleCreateBtnFloating onClick={() => push(`/create`)}>
+              <img
+                src={require("../../_assets/ArticleCreateBtnIcon.svg").default}
+                alt="게시글 쓰기"
+              />
+            </TempArticleCreateBtnFloating>
             <ArticleCreateBtnFloating
               onClick={() =>
                 onArticleCreateBtnClick(state.articles?.length || 0)
@@ -394,6 +401,24 @@ const FeedInfoText = styled.div`
   line-height: 32px;
 
   border-radius: 20px;
+`;
+
+const TempArticleCreateBtnFloating = styled.div`
+  width: 64px;
+  height: 64px;
+
+  margin-right: 96px;
+  margin-left: auto;
+
+  background-color: paleturquoise;
+
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.2);
 `;
 
 const ArticleCreateBtnFloating = styled.div`
