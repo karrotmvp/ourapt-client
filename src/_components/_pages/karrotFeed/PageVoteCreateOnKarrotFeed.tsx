@@ -38,12 +38,14 @@ const PageVoteCreate: React.FC = () => {
   const code: string = getCodeFromURLParams();
   function handleCheckIn() {
     alert(regionId);
+    alert(submitData);
   }
 
   const { issueAccessTokenFromAuthorizationCode } = useAccessToken();
   const { viewer, refreshViewer } = useViewer();
 
   const handleRegister = () => {
+    alert(code);
     if (code !== "NOT_AGREED") {
       issueAccessTokenFromAuthorizationCode(code);
       refreshViewer();
@@ -65,18 +67,21 @@ const PageVoteCreate: React.FC = () => {
     }
   };
 
+  const [submitData, setSubmitData] = useState(watch());
   const onSubmit = (data: any) => {
-    const response = api.voteController.writeNewVoteUsingPOST({
-      voteContent: {
-        mainText: data.mainText,
-        items: data.items.filter((item: any) => item.mainText.length > 0),
-      },
-    });
-    response.then((res) => {
-      if (res.status === "SUCCESS") {
-        pop();
-      }
-    });
+    setSubmitData(data);
+    handleRegister();
+    // const response = api.voteController.writeNewVoteUsingPOST({
+    //   voteContent: {
+    //     mainText: data.mainText,
+    //     items: data.items.filter((item: any) => item.mainText.length > 0),
+    //   },
+    // });
+    // response.then((res) => {
+    //   if (res.status === "SUCCESS") {
+    //     pop();
+    //   }
+    // });
   };
 
   const [validSubmit, setValidSubmit] = useState(false);
@@ -128,7 +133,7 @@ const PageVoteCreate: React.FC = () => {
           <option value="1516">상계 주공 15, 16 단지</option>
         </select>
       </form>
-      <form id="VoteSubmitForm" onSubmit={handleSubmit(handleRegister)}>
+      <form id="VoteSubmitForm" onSubmit={handleSubmit(onSubmit)}>
         <MainTextContainer>
           <MainTextWrapper>
             <MainTextTextarea
