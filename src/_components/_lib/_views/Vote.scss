@@ -89,6 +89,15 @@
   margin-left: -28px;
 }
 
+.VoteCarouselLayout .slick-next {
+  width: 0px;
+  height: 0px;
+}
+
+.VoteCarouselLayout .slick-next::before {
+  display: none;
+}
+
 .VoteSubmitForm-btn {
   padding: 4px;
 

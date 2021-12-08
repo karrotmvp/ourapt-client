@@ -189,8 +189,6 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
     infinite: false,
     centerPadding: "34px",
     slidesToShow: 1,
-    nextArrow: <div></div>,
-    prevArrow: <div></div>,
   };
 
   if (state.pinned) {
@@ -429,7 +427,7 @@ const CommentThumbnail = styled.div`
 
 const FeedInfoWrapper = styled.div`
   width: 100%;
-  height: 64px;
+  height: 136px;
 
   padding-top: 4px;
 
