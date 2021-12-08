@@ -20,6 +20,8 @@ import PageVoteDetail from "./_components/_pages/article/PageVoteDetail";
 import PageQuestionDetail from "./_components/_pages/article/PageQuestionDetail";
 import PageQuestionUpdate from "./_components/_pages/article/PageQuestionUpdate";
 import PageQuestionCreate from "./_components/_pages/article/PageQuestionCreate";
+import PageVoteCreate from "./_components/_pages/article/PageVoteCreate";
+import PageVoteCreateOnKarrotFeed from "./_components/_pages/karrotFeed/PageVoteCreateOnKarrotFeed";
 import PageError from "./_components/_pages/PageError";
 
 import { FirebaseAnalyticsProvider } from "./_analytics/firebase";
@@ -27,7 +29,6 @@ import { ApiProvider } from "./api";
 import { AccessTokenProvider } from "./_providers/useAccessToken";
 import { ViewerProvider } from "./_providers/useViewer";
 import { ModalProvider } from "./_providers/useModal";
-import PageVoteCreate from "./_components/_pages/article/PageVoteCreate";
 
 if (process.env.REACT_APP_ENV === "MSW") {
   const { worker } = require("./mocks/browser");
@@ -83,6 +84,9 @@ const App: React.FC = () => {
                   </Screen>
                   <Screen path="/create">
                     <PageVoteCreate />
+                  </Screen>
+                  <Screen path="/sanggye">
+                    <PageVoteCreateOnKarrotFeed />
                   </Screen>
                   <WithModal />
                 </Navigator>
