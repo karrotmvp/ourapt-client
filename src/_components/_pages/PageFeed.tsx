@@ -297,10 +297,11 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
               //   onArticleCreateBtnClick(state.articles?.length || 0)
               // }
             >
-              <img
+              {/* <img
                 src={require("../../_assets/ArticleCreateBtnIcon.svg").default}
                 alt="투표 쓰기"
-              />
+              /> */}
+              + 투표 만들기
             </ArticleCreateBtnFloating>
           </div>
         )}
@@ -397,15 +398,22 @@ const FeedInfoText = styled.div`
 `;
 
 const ArticleCreateBtnFloating = styled.div`
-  width: 64px;
-  height: 64px;
+  /* width: 64px;
+  height: 64px; */
+
+  width: 120px;
+  height: 40px;
 
   margin-right: 16px;
   margin-left: auto;
 
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+
   background-color: #e95454;
 
-  border-radius: 50%;
+  border-radius: 100px;
 
   display: flex;
   justify-content: center;
