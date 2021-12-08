@@ -54,6 +54,18 @@ const PageVoteCreate: React.FC = () => {
     );
   }, [watch()]);
 
+  useEffect(() => {
+    if (validSubmit) {
+      document
+        .getElementById("VoteSubmitFormSubmitBtn")
+        ?.removeAttribute("disabled");
+    } else {
+      document
+        .getElementById("VoteSubmitFormSubmitBtn")
+        ?.setAttribute("disabled", "disabled");
+    }
+  }, [validSubmit]);
+
   return (
     <div className="page">
       <ScreenHelmet
@@ -64,7 +76,7 @@ const PageVoteCreate: React.FC = () => {
             type="submit"
             form="VoteSubmitForm"
             className="VoteSubmitForm-btn mg-right--8"
-            disabled={validSubmit ? undefined : true}
+            disabled
             style={{
               width: "48px",
               height: "32px",
