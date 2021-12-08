@@ -63,7 +63,7 @@ const PageVoteCreate: React.FC = () => {
             type="submit"
             form="VoteSubmitForm"
             className="VoteSubmitForm-btn mg-right--8"
-            disabled={validSubmit ? "" : "disabled"}
+            disabled={true}
             style={{
               width: "48px",
               height: "32px",
