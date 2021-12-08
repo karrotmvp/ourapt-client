@@ -21,6 +21,7 @@ import QuestionInFeed from "../Question/QuestionInFeed";
 import examineResBody from "../../_modules/examineResBody";
 
 import { ReactComponent as OuraptLogo } from "../../_assets/ouraptLogo.svg";
+import { ReactComponent as IconPlus } from "../../_assets/iconPlus.svg";
 import LoadPageFeed from "../_loaders/LoadPageFeed";
 import VotePinnedInFeed from "../Vote/VotePinnedInFeed";
 import VoteClosedInFeed from "../Vote/VoteClosedInFeed";
@@ -301,7 +302,8 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
                 src={require("../../_assets/ArticleCreateBtnIcon.svg").default}
                 alt="투표 쓰기"
               /> */}
-              + 투표 만들기
+              <IconPlus className="mg-right--8" />
+              투표 만들기
             </ArticleCreateBtnFloating>
           </div>
         )}
@@ -401,8 +403,8 @@ const ArticleCreateBtnFloating = styled.div`
   /* width: 64px;
   height: 64px; */
 
-  width: 120px;
-  height: 40px;
+  width: 128px;
+  height: 44px;
 
   margin-right: 16px;
   margin-left: auto;
