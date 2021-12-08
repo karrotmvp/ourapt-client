@@ -63,6 +63,8 @@ const PageVoteCreate: React.FC = () => {
             form="VoteSubmitForm"
             className="VoteSubmitForm-btn"
             style={{
+              width: "32px",
+              height: "48px",
               color: validSubmit ? "#E95454" : "#CCCCCC",
             }}
           >
@@ -91,7 +93,7 @@ const PageVoteCreate: React.FC = () => {
               <Option key={item.id} className="VoteSubmitForm-option">
                 <DeleteButton
                   type="button"
-                  className="VoteSubmitForm-option--icon"
+                  className="VoteSubmitForm-option--icon centered"
                   style={{
                     color: watch(`items`).length > 2 ? "#555555" : "#cccccc",
                     borderColor:
