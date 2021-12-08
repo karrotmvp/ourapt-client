@@ -1,6 +1,12 @@
 .VoteForm {
 }
 
+.VoteTotalCount {
+  color: #515b83;
+  font-size: 14px;
+  font-weight: 500;
+}
+
 .VoteQuestionIcon {
   color: $prime-color;
   font-size: 18px;
@@ -46,6 +52,8 @@
 
   position: absolute;
   z-index: 1;
+
+  font-size: 15px;
 
   display: flex;
   flex-direction: row;

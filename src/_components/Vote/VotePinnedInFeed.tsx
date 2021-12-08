@@ -228,10 +228,10 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
     <div className="ArticleCard pd-16">
       <form className="VoteForm">
         <VoteTotalCount className="VoteTotalCount horizontal-centered mg-top--4 mg-bottom--8">
-          <VoteCountIcon className="mg-right--8" />
+          <VoteCountIcon className="VoteTotalCount mg-right--8" />
           {state.totalCount}명 이웃 참여
         </VoteTotalCount>
-        <p className="ArticleCard-Content ArticleCardInList-Content mg-bottom--12">
+        <p className="ArticleCard-Title mg-bottom--12">
           <span className="VoteQuestionIcon mg-right--8">Q.</span>
           {vote.mainText}
         </p>
@@ -266,7 +266,4 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
 
 export default VotePinnedInFeed;
 
-const VoteTotalCount = styled.div`
-  color: #777777;
-  font-size: 13px;
-`;
+const VoteTotalCount = styled.div``;

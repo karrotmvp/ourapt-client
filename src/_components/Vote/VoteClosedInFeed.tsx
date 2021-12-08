@@ -25,9 +25,9 @@ const VoteClosedInFeed: React.FC<VoteClosedInFeedProps> = ({ vote }) => {
         {closedVoteTotalCount}명 이웃이 함께 투표했어요
       </VoteTotalCount>
       <VoteMainText>{vote.mainText}</VoteMainText>
-      <ArrowIcon>
+      {/* <ArrowIcon>
         <img src={require("../../_assets/ClosedVoteArrowIcon.svg").default} />
-      </ArrowIcon>
+      </ArrowIcon> */}
     </VoteContainer>
   );
 };
@@ -35,8 +35,8 @@ const VoteClosedInFeed: React.FC<VoteClosedInFeedProps> = ({ vote }) => {
 export default VoteClosedInFeed;
 
 const VoteContainer = styled.div`
-  margin: 8px 8px 22px;
-  padding: 16px;
+  margin: 8px;
+  padding: 20px;
 
   position: relative;
 
@@ -48,13 +48,10 @@ const VoteContainer = styled.div`
   border-radius: 8px;
 `;
 
-const VoteTotalCount = styled.div`
-  color: #777777;
-  font-size: 13px;
-`;
+const VoteTotalCount = styled.div``;
 
 const VoteMainText = styled.p`
-  width: 90%;
+  width: 100%;
   text-align: left;
 `;
 

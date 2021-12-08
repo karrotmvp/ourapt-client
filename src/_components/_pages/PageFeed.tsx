@@ -25,6 +25,7 @@ import { ReactComponent as IconPlus } from "../../_assets/iconPlus.svg";
 import LoadPageFeed from "../_loaders/LoadPageFeed";
 import VotePinnedInFeed from "../Vote/VotePinnedInFeed";
 import VoteClosedInFeed from "../Vote/VoteClosedInFeed";
+import { NONAME } from "dns";
 
 type State = {
   _t: "loading";
@@ -181,6 +182,8 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
     infinite: false,
     centerPadding: "34px",
     slidesToShow: 1,
+    nextArrow: <div></div>,
+    prevArrow: <div></div>,
   };
 
   if (state.articles) {
@@ -200,6 +203,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
             className={css`
               width: 100%;
               position: absolute;
+              --kf_pulltorefresh_backgroundColor: #f2f3f6;
               /* background: url("./../../_assets/tempPRT.png") repeat !important; */
               /* --kf_pulltorefresh_fallbackSpinner-color: transparent; */
             `}
@@ -211,7 +215,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
           >
             {state.closed && (
               <ClosedArea>
-                <AreaTitle className="pd--16">종료된 투표</AreaTitle>
+                <AreaTitle>종료된 투표</AreaTitle>
                 <div className="VoteCarouselLayout">
                   <Slider {...closedVotesSettings}>
                     {state.closed.map((vote, idx) => {
@@ -222,7 +226,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
               </ClosedArea>
             )}
             <AreaDivider />
-            <AreaTitle className="pd--16 horizontal--centered">
+            <AreaTitle className="horizontal--centered">
               우리아파트 투표
               <OpenedInfo className="centered">진행 중</OpenedInfo>
             </AreaTitle>
@@ -231,7 +235,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
                 <VotePinnedInFeed vote={state.pinned.article} />
               </PinnedArea>
             )}
-            <ArticleArea>
+            {/* <ArticleArea>
               <AreaTitle className="pd--16">투표 자유게시판</AreaTitle>
               {state.articles.length === 0 ? (
                 <div>
@@ -250,13 +254,13 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
                 </div>
               ) : (
                 <div>
-                  {/* <InputArea
+                  <InputArea
                     onClick={() =>
                       onArticleCreateBtnClick(state.articles?.length || 0)
                     }
                   >
                     진행 중인 투표에 대해 어떻게 생각하세요?
-                  </InputArea> */}
+                  </InputArea>
                   {state.articles.map((question) => {
                     return (
                       <ArticleWrapper
@@ -281,14 +285,14 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
                       </ArticleWrapper>
                     );
                   })}
-                  <FeedInfoWrapper>
-                    <FeedInfoText>
-                      이웃과 나누고 싶은 이야기를 등록해 보세요!
-                    </FeedInfoText>
-                  </FeedInfoWrapper>
-                </div>
-              )}
-            </ArticleArea>
+                  </div>
+                  )}
+                </ArticleArea> */}
+            <FeedInfoWrapper>
+              <FeedInfoText>
+                이웃과 나누고 싶은 이야기를 등록해 보세요!
+              </FeedInfoText>
+            </FeedInfoWrapper>
           </PullToRefresh>
         </div>
         {state.articles.length !== 0 && (
@@ -328,12 +332,17 @@ const AreaDivider = styled.div`
 
 const ClosedArea = styled.div`
   width: 100%;
+  margin-bottom: 16px;
+
+  background-color: #ffffff;
 `;
 
 const PinnedArea = styled.div`
   width: 100%;
 
-  border-bottom: 12px solid #f5f5f5;
+  border-bottom: 12px solid #f2f3f6;
+
+  background-color: #ffffff;
 `;
 
 const OpenedInfo = styled.p`
@@ -368,7 +377,7 @@ const InputArea = styled.div`
 `;
 
 const AreaTitle = styled.div`
-  padding-bottom: 8px;
+  padding: 24px 16px 8px;
   text-align: left;
 
   font-size: 18px;
@@ -376,6 +385,8 @@ const AreaTitle = styled.div`
 
   display: flex;
   flex-direction: row;
+
+  background-color: #ffffff;
 `;
 
 const ArticleArea = styled.div`
@@ -399,8 +410,11 @@ const FeedInfoWrapper = styled.div`
   width: 100%;
   height: 64px;
 
-  padding: 16px 48px;
+  padding-top: 4px;
+
+  background-color: #f2f3f6;
 `;
+
 const FeedInfoText = styled.div`
   width: 100%;
   height: 100%;
