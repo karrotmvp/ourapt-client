@@ -2,13 +2,18 @@ import React, { useState, useEffect } from "react";
 
 import styled from "@emotion/styled";
 
+import { useAccessToken } from "../../../_providers/useAccessToken";
+import { useViewer } from "../../../_providers/useViewer";
 import { useApi } from "../../../api";
 
+import { mini } from "../../../_Karrotmarket/KarrotmarketMini";
 import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
+
 import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 
 import { ReactComponent as IconPlus } from "../../../_assets/iconPlus.svg";
 import { ReactComponent as IconMinus } from "../../../_assets/iconMinus.svg";
+import { getCodeFromURLParams } from "../../../_modules/getQueryFromURLParams";
 
 const PageVoteCreate: React.FC = () => {
   const { register, control, handleSubmit, watch } = useForm({
@@ -24,6 +29,41 @@ const PageVoteCreate: React.FC = () => {
 
   const api = useApi();
   const { pop } = useNavigator();
+
+  const [regionId, setRegionId] = useState("default_region");
+  const handleSelect = (e: any) => {
+    setRegionId(e.target.value);
+  };
+
+  const code: string = getCodeFromURLParams();
+  function handleCheckIn() {
+    alert(regionId);
+  }
+
+  const { issueAccessTokenFromAuthorizationCode } = useAccessToken();
+  const { viewer, refreshViewer } = useViewer();
+
+  const handleRegister = () => {
+    if (code !== "NOT_AGREED") {
+      issueAccessTokenFromAuthorizationCode(code);
+      refreshViewer();
+      handleCheckIn();
+    } else {
+      mini.startPreset({
+        preset: `${process.env.REACT_APP_PRESET_URL}`,
+        params: {
+          appId: `${process.env.REACT_APP_ID}`,
+        },
+        onSuccess: function (result) {
+          if (result && result.code) {
+            issueAccessTokenFromAuthorizationCode(result.code);
+            refreshViewer();
+            handleCheckIn();
+          }
+        },
+      });
+    }
+  };
 
   const onSubmit = (data: any) => {
     const response = api.voteController.writeNewVoteUsingPOST({
@@ -44,7 +84,6 @@ const PageVoteCreate: React.FC = () => {
   useEffect(() => {
     let validOptions = 0;
     for (let item of watch(`items`)) {
-      console.log(item.mainText.length);
       if (item.mainText.length > 0) {
         validOptions++;
       }
@@ -60,7 +99,6 @@ const PageVoteCreate: React.FC = () => {
         title="상계주공 풍성피드 투표 만들기"
         appendRight={
           <button
-            id="VoteSubmitFormSubmitBtn"
             type="submit"
             form="VoteSubmitForm"
             className="VoteSubmitForm-btn mg-right--8"
@@ -81,7 +119,7 @@ const PageVoteCreate: React.FC = () => {
       />
       <form id="SanggyeRegion">
         <label>투표를 작성할 아파트를 골라주세요</label>
-        <select>
+        <select onChange={handleSelect}>
           <option value="123">상계 주공 1, 2, 3 단지</option>
           <option value="456">상계 주공 4, 5, 6 단지</option>
           <option value="7">상계 주공 7 단지</option>
@@ -90,7 +128,7 @@ const PageVoteCreate: React.FC = () => {
           <option value="1516">상계 주공 15, 16 단지</option>
         </select>
       </form>
-      <form id="VoteSubmitForm" onSubmit={handleSubmit(onSubmit)}>
+      <form id="VoteSubmitForm" onSubmit={handleSubmit(handleRegister)}>
         <MainTextContainer>
           <MainTextWrapper>
             <MainTextTextarea
