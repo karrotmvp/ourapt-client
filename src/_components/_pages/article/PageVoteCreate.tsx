@@ -57,15 +57,20 @@ const PageVoteCreate: React.FC = () => {
   return (
     <div className="page">
       <ScreenHelmet
+        title="투표 만들기"
         appendRight={
           <button
             type="submit"
             form="VoteSubmitForm"
-            className="VoteSubmitForm-btn"
+            className="VoteSubmitForm-btn mg-right--8"
             style={{
-              width: "32px",
-              height: "48px",
-              color: validSubmit ? "#E95454" : "#CCCCCC",
+              width: "48px",
+              height: "32px",
+              color: validSubmit ? "#ffffff" : "#CCCCCC",
+              fontSize: "16px",
+              fontWeight: 400,
+              backgroundColor: validSubmit ? "#E95454" : "transparent",
+              borderRadius: "8px",
             }}
           >
             완료
@@ -210,8 +215,11 @@ const AppendIcon = styled.div`
   border-color: #555555;
 `;
 
-const AppendInput = styled.div``;
+const AppendInput = styled.div`
+  background-color: #ffffff;
+`;
 
 const AppendInputPlaceholderText = styled.div`
   color: #333333;
+  border-color: #dbdbdb;
 `;
