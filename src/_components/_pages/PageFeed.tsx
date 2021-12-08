@@ -317,7 +317,12 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
                 src={require("../../_assets/ArticleCreateBtnIcon.svg").default}
                 alt="투표 쓰기"
               /> */}
-            <IconPlus className="mg-right--8" />
+            <IconPlus
+              className="mg-right--8"
+              width="10"
+              height="10"
+              stroke="white"
+            />
             투표 만들기
           </ArticleCreateBtnFloating>
         </div>

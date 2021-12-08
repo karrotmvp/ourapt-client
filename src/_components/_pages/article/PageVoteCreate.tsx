@@ -7,6 +7,9 @@ import { useApi } from "../../../api";
 import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
 import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 
+import { ReactComponent as IconPlus } from "../../../_assets/iconPlus.svg";
+import { ReactComponent as IconMinus } from "../../../_assets/iconMinus.svg";
+
 const PageVoteCreate: React.FC = () => {
   const { register, control, handleSubmit, watch } = useForm({
     defaultValues: {
@@ -97,7 +100,7 @@ const PageVoteCreate: React.FC = () => {
                   onClick={() => remove(index)}
                   disabled={Boolean(watch(`items`).length < 3)}
                 >
-                  -
+                  <IconMinus width="10" height="10" stroke="currentColor" />
                 </DeleteButton>
                 {watch(`items.${index}.mainText`).length === 0 && (
                   <label
@@ -128,7 +131,9 @@ const PageVoteCreate: React.FC = () => {
                 append({ mainText: "" });
               }}
             >
-              <AppendIcon className="VoteSubmitForm-option--icon">+</AppendIcon>
+              <AppendIcon className="VoteSubmitForm-option--icon centered">
+                <IconPlus width="10" height="10" stroke="#555555" />
+              </AppendIcon>
               <AppendInput className="VoteSubmitForm-option--inputbox">
                 <AppendInputPlaceholderText className="VoteSubmitForm-option--placeholder VoteSubmitForm-option--placeholderText">
                   항목 추가
