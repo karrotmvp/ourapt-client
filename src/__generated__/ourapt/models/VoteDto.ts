@@ -59,7 +59,7 @@ export interface VoteDto {
      * @type {boolean}
      * @memberof VoteDto
      */
-    isPinned: boolean;
+    isInProgress: boolean;
     /**
      * 
      * @type {Array<VoteItemDto>}
@@ -100,7 +100,7 @@ export function VoteDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): V
         'countOfComments': json['countOfComments'],
         'createdAt': (new Date(json['createdAt'])),
         'id': json['id'],
-        'isPinned': json['isPinned'],
+        'isInProgress': json['isInProgress'],
         'items': ((json['items'] as Array<any>).map(VoteItemDtoFromJSON)),
         'mainText': json['mainText'],
         'updatedAt': (new Date(json['updatedAt'])),
@@ -121,7 +121,7 @@ export function VoteDtoToJSON(value?: VoteDto | null): any {
         'countOfComments': value.countOfComments,
         'createdAt': (value.createdAt.toISOString()),
         'id': value.id,
-        'isPinned': value.isPinned,
+        'isInProgress': value.isInProgress,
         'items': ((value.items as Array<any>).map(VoteItemDtoToJSON)),
         'mainText': value.mainText,
         'updatedAt': (value.updatedAt.toISOString()),

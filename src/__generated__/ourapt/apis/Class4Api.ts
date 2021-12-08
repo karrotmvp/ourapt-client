@@ -33,18 +33,15 @@ export interface CancelVotingUsingDELETERequest {
     itemId: string;
 }
 
-export interface GetRandomPinnedVoteOfApartmentUsingGETRequest {
-    apartmentId: string;
-}
-
 export interface GetVoteByIdUsingGETRequest {
     voteId: string;
 }
 
-export interface GetVoteByIdUsingGET1Request {
+export interface GetVotesUsingGETRequest {
     apartmentId: string;
     cursor: number;
     perPage: number;
+    terminated: boolean;
 }
 
 export interface SubmitVotingUsingPOSTRequest {
@@ -95,40 +92,6 @@ export class Class4Api extends runtime.BaseAPI {
     }
 
     /**
-     * 아파트의 핀 투표 조회
-     */
-    async getRandomPinnedVoteOfApartmentUsingGETRaw(requestParameters: GetRandomPinnedVoteOfApartmentUsingGETRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyOneVoteDto>> {
-        if (requestParameters.apartmentId === null || requestParameters.apartmentId === undefined) {
-            throw new runtime.RequiredError('apartmentId','Required parameter requestParameters.apartmentId was null or undefined when calling getRandomPinnedVoteOfApartmentUsingGET.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // KarrotAccessToken authentication
-        }
-
-        const response = await this.request({
-            path: `/api/v1/apartment/{apartmentId}/vote/pinned`.replace(`{${"apartmentId"}}`, encodeURIComponent(String(requestParameters.apartmentId))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyOneVoteDtoFromJSON(jsonValue));
-    }
-
-    /**
-     * 아파트의 핀 투표 조회
-     */
-    async getRandomPinnedVoteOfApartmentUsingGET(requestParameters: GetRandomPinnedVoteOfApartmentUsingGETRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyOneVoteDto> {
-        const response = await this.getRandomPinnedVoteOfApartmentUsingGETRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
      * ID로 투표 게시글 조회
      */
     async getVoteByIdUsingGETRaw(requestParameters: GetVoteByIdUsingGETRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyOneVoteDto>> {
@@ -163,19 +126,23 @@ export class Class4Api extends runtime.BaseAPI {
     }
 
     /**
-     * 아파트의 투표들 Date 커서로 페이징 조회
+     * 아파트의 진행중/종료된 투표 조회
      */
-    async getVoteByIdUsingGET1Raw(requestParameters: GetVoteByIdUsingGET1Request, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyVoteListDto>> {
+    async getVotesUsingGETRaw(requestParameters: GetVotesUsingGETRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyVoteListDto>> {
         if (requestParameters.apartmentId === null || requestParameters.apartmentId === undefined) {
-            throw new runtime.RequiredError('apartmentId','Required parameter requestParameters.apartmentId was null or undefined when calling getVoteByIdUsingGET1.');
+            throw new runtime.RequiredError('apartmentId','Required parameter requestParameters.apartmentId was null or undefined when calling getVotesUsingGET.');
         }
 
         if (requestParameters.cursor === null || requestParameters.cursor === undefined) {
-            throw new runtime.RequiredError('cursor','Required parameter requestParameters.cursor was null or undefined when calling getVoteByIdUsingGET1.');
+            throw new runtime.RequiredError('cursor','Required parameter requestParameters.cursor was null or undefined when calling getVotesUsingGET.');
         }
 
         if (requestParameters.perPage === null || requestParameters.perPage === undefined) {
-            throw new runtime.RequiredError('perPage','Required parameter requestParameters.perPage was null or undefined when calling getVoteByIdUsingGET1.');
+            throw new runtime.RequiredError('perPage','Required parameter requestParameters.perPage was null or undefined when calling getVotesUsingGET.');
+        }
+
+        if (requestParameters.terminated === null || requestParameters.terminated === undefined) {
+            throw new runtime.RequiredError('terminated','Required parameter requestParameters.terminated was null or undefined when calling getVotesUsingGET.');
         }
 
         const queryParameters: any = {};
@@ -186,6 +153,10 @@ export class Class4Api extends runtime.BaseAPI {
 
         if (requestParameters.perPage !== undefined) {
             queryParameters['perPage'] = requestParameters.perPage;
+        }
+
+        if (requestParameters.terminated !== undefined) {
+            queryParameters['terminated'] = requestParameters.terminated;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -205,10 +176,10 @@ export class Class4Api extends runtime.BaseAPI {
     }
 
     /**
-     * 아파트의 투표들 Date 커서로 페이징 조회
+     * 아파트의 진행중/종료된 투표 조회
      */
-    async getVoteByIdUsingGET1(requestParameters: GetVoteByIdUsingGET1Request, initOverrides?: RequestInit): Promise<CommonResponseBodyVoteListDto> {
-        const response = await this.getVoteByIdUsingGET1Raw(requestParameters, initOverrides);
+    async getVotesUsingGET(requestParameters: GetVotesUsingGETRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyVoteListDto> {
+        const response = await this.getVotesUsingGETRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

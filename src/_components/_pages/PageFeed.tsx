@@ -30,7 +30,7 @@ import { NONAME } from "dns";
 type State = {
   _t: "loading";
   closed: Array<Vote> | null;
-  pinned: { _t: "vote"; article: Vote } | null;
+  pinned: Array<Vote> | null;
   articles: Array<Question> | null;
 };
 
@@ -41,12 +41,12 @@ type Action =
     }
   | {
       _t: "PATCH_PINNED_ARTICLE";
-      pinned: { _t: "vote"; article: Vote };
-    }
-  | {
-      _t: "PATCH_ARTICLES";
-      articles: Array<Question>;
+      pinned: Array<Vote>;
     };
+// | {
+//     _t: "PATCH_ARTICLES";
+//     articles: Array<Question>;
+//   };
 
 const reducer: React.Reducer<State, Action> = (prevState, action) => {
   switch (action._t) {
@@ -62,12 +62,12 @@ const reducer: React.Reducer<State, Action> = (prevState, action) => {
         _t: "loading",
         pinned: action.pinned,
       };
-    case "PATCH_ARTICLES":
-      return {
-        ...prevState,
-        _t: "loading",
-        articles: action.articles,
-      };
+    // case "PATCH_ARTICLES":
+    //   return {
+    //     ...prevState,
+    //     _t: "loading",
+    //     articles: action.articles,
+    //   };
   }
 };
 
@@ -92,23 +92,25 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
   const Event = useAnalytics();
 
   const { push } = useNavigator();
-  const goArticleDetail = (articleId: string) => {
-    Event("clickArticleDetail", { at: params, article: articleId });
-    push(`/article/${articleId}`);
-  };
 
-  const onArticleCreateBtnClick = (context: number) => {
-    Event("clickCreateArticleBtn", { at: params, when: `${context}` });
-    push(`/vote/${state.pinned?.article.id}/create`);
-  };
+  // const goArticleDetail = (articleId: string) => {
+  //   Event("clickArticleDetail", { at: params, article: articleId });
+  //   push(`/article/${articleId}`);
+  // };
+
+  // const onArticleCreateBtnClick = (context: number) => {
+  //   Event("clickCreateArticleBtn", { at: params, when: `${context}` });
+  //   push(`/vote/${state.pinned?.article.id}/create`);
+  // };
 
   const getClosedVotesByCursorPerPage = useCallback(
     (params: string, cursor: number, perPage: number) => {
       (async () => {
-        const resBody = await api.voteController.getVoteByIdUsingGET1({
+        const resBody = await api.voteController.getVotesUsingGET({
           apartmentId: params,
           cursor,
           perPage,
+          terminated: true,
         });
         const safeBody = examineResBody({
           resBody,
@@ -123,32 +125,37 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
     [api.questionController, push]
   );
 
-  const getPinnedVote = useCallback(() => {
-    (async () => {
-      const response =
-        await api.voteController.getRandomPinnedVoteOfApartmentUsingGET({
+  const getPinnedVotesByCursorPerPage = useCallback(
+    (params: string, cursor: number, perPage: number) => {
+      (async () => {
+        const response = await api.voteController.getVotesUsingGET({
           apartmentId: params,
+          cursor,
+          perPage,
+          terminated: false,
         });
-      if (response && response.status === "DATA_NOT_FOUND_FROM_DB") {
-      } else {
-        const safeBody = examineResBody({
-          resBody: response,
-          validator: (data) => data.vote != null && data.questions != null,
-          onFailure: () => {
-            push(`/error?cause=getPinnedVoteAtPageFeed`);
-          },
-        });
-        dispatch({
-          _t: "PATCH_PINNED_ARTICLE",
-          pinned: { _t: "vote", article: safeBody.data.vote },
-        });
-        dispatch({
-          _t: "PATCH_ARTICLES",
-          articles: safeBody.data.questions,
-        });
-      }
-    })();
-  }, [api.voteController, params, push]);
+        if (response && response.status === "DATA_NOT_FOUND_FROM_DB") {
+        } else {
+          const safeBody = examineResBody({
+            resBody: response,
+            validator: (data) => data.votes != null,
+            onFailure: () => {
+              push(`/error?cause=getPinnedVoteAtPageFeed`);
+            },
+          });
+          dispatch({
+            _t: "PATCH_PINNED_ARTICLE",
+            pinned: safeBody.data.votes,
+          });
+          // dispatch({
+          //   _t: "PATCH_ARTICLES",
+          //   articles: safeBody.data.questions,
+          // });
+        }
+      })();
+    },
+    [api.voteController, params, push]
+  );
 
   function onApartmentInNavigatorClick() {
     Event("clickApartmentBanner", { at: params });
@@ -156,15 +163,15 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
   }
 
   useEffect(() => {
-    getPinnedVote();
-  }, [getPinnedVote]);
+    getPinnedVotesByCursorPerPage(params, Date.now(), 100);
+  }, [getPinnedVotesByCursorPerPage]);
 
   useEffect(() => {
     getClosedVotesByCursorPerPage(params, Date.now(), 100);
   }, [getClosedVotesByCursorPerPage, params]);
 
   async function handleDispose() {
-    getPinnedVote();
+    getPinnedVotesByCursorPerPage(params, Date.now(), 100);
     getClosedVotesByCursorPerPage(params, Date.now(), 100);
   }
 
@@ -186,7 +193,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
     prevArrow: <div></div>,
   };
 
-  if (state.articles) {
+  if (state.pinned) {
     return (
       <div className="Page">
         <div className="PageFeed-inner">
@@ -225,16 +232,21 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
                 </div>
               </ClosedArea>
             )}
-            <AreaDivider />
+            <AreaDivider>
+              <Horizon />
+            </AreaDivider>
             <AreaTitle className="horizontal--centered">
               우리아파트 투표
               <OpenedInfo className="centered">진행 중</OpenedInfo>
             </AreaTitle>
-            {state.pinned && (
-              <PinnedArea className="pd--16 pd-top--8">
-                <VotePinnedInFeed vote={state.pinned.article} />
-              </PinnedArea>
-            )}
+            {state.pinned &&
+              state.pinned.map((vote, idx) => {
+                return (
+                  <PinnedArea className="pd--16 pd-top--8">
+                    <VotePinnedInFeed vote={vote} />
+                  </PinnedArea>
+                );
+              })}
             {/* <ArticleArea>
               <AreaTitle className="pd--16">투표 자유게시판</AreaTitle>
               {state.articles.length === 0 ? (
@@ -295,23 +307,23 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
             </FeedInfoWrapper>
           </PullToRefresh>
         </div>
-        {state.articles.length !== 0 && (
-          <div className="btn--floating">
-            <ArticleCreateBtnFloating
-              onClick={() => push(`/create`)}
-              // onClick={() =>
-              //   onArticleCreateBtnClick(state.articles?.length || 0)
-              // }
-            >
-              {/* <img
+        {/* {state.articles.length !== 0 && ( */}
+        <div className="btn--floating">
+          <ArticleCreateBtnFloating
+            onClick={() => push(`/create`)}
+            // onClick={() =>
+            //   onArticleCreateBtnClick(state.articles?.length || 0)
+            // }
+          >
+            {/* <img
                 src={require("../../_assets/ArticleCreateBtnIcon.svg").default}
                 alt="투표 쓰기"
               /> */}
-              <IconPlus className="mg-right--8" />
-              투표 만들기
-            </ArticleCreateBtnFloating>
-          </div>
-        )}
+            <IconPlus className="mg-right--8" />
+            투표 만들기
+          </ArticleCreateBtnFloating>
+        </div>
+        {/* )} */}
       </div>
     );
   }
@@ -322,17 +334,26 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
 export default PageFeed;
 
 const AreaDivider = styled.div`
-  width: calc(100% - 32px);
+  width: 100%;
+  padding: 0 16px;
+
+  background-color: #ffffff;
+`;
+
+const Horizon = styled.hr`
+  width: 100%;
   height: 1px;
 
-  margin-left: 16px;
+  margin: 0px;
 
   background-color: #f2f3f6;
+
+  border: none;
 `;
 
 const ClosedArea = styled.div`
   width: 100%;
-  margin-bottom: 16px;
+  padding-bottom: 16px;
 
   background-color: #ffffff;
 `;

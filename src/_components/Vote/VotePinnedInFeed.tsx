@@ -231,7 +231,7 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
           <VoteCountIcon className="VoteTotalCount mg-right--8" />
           {state.totalCount}명 이웃 참여
         </VoteTotalCount>
-        <p className="ArticleCard-Title mg-bottom--12">
+        <p className="ArticleCard-Title mg-bottom--16">
           <span className="VoteQuestionIcon mg-right--8">Q.</span>
           {vote.mainText}
         </p>

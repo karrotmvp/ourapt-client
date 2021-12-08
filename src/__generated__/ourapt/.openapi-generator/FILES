@@ -9,6 +9,7 @@ apis/Class6Api.ts
 apis/Class7Api.ts
 apis/Class99Api.ts
 apis/ControllerApi.ts
+apis/PreopenControllerApi.ts
 apis/index.ts
 index.ts
 models/ApartmentDto.ts
