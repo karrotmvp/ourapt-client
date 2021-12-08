@@ -221,9 +221,10 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
                 </div>
               </ClosedArea>
             )}
-            <AreaTitle className="pd--16">
+            <AreaDivider />
+            <AreaTitle className="pd--16 horizontal--centered">
               우리아파트 투표
-              <OpenedInfo>진행 중</OpenedInfo>
+              <OpenedInfo className="centered">진행 중</OpenedInfo>
             </AreaTitle>
             {state.pinned && (
               <PinnedArea className="pd--16 pd-top--8">
@@ -316,10 +317,17 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
 
 export default PageFeed;
 
+const AreaDivider = styled.div`
+  width: calc(100% - 32px);
+  height: 1px;
+
+  margin-left: 16px;
+
+  background-color: #f2f3f6;
+`;
+
 const ClosedArea = styled.div`
   width: 100%;
-
-  border-bottom: 12px solid #f5f5f5;
 `;
 
 const PinnedArea = styled.div`
@@ -329,15 +337,20 @@ const PinnedArea = styled.div`
 `;
 
 const OpenedInfo = styled.p`
+  width: 48px;
+  height: 22px;
+
   margin-left: 8px;
-  padding: 3px 5px;
+  /* padding: 3px 5px; */
 
   color: #e95454;
   font-size: 12px;
   font-weight: 500;
 
-  border: 1px solid #f4aaaa;
-  border-radius: 8px;
+  background-color: #fdeeee;
+
+  /* border: 1px solid #f4aaaa; */
+  border-radius: 4px;
 `;
 
 const InputArea = styled.div`

@@ -9,6 +9,7 @@ import { useApi } from "../../api";
 import { VoteDto as Vote, VoteItemDtoToJSON } from "../../__generated__/ourapt";
 import { VoteItemDto as VoteItem } from "../../__generated__/ourapt";
 
+import UserAsAuthorV3 from "../User/UserAsAuthorV3";
 import VoteItemAsArticle from "./VoteItemAsArticle";
 
 import styled from "@emotion/styled";
@@ -234,7 +235,12 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
           <span className="VoteQuestionIcon mg-right--8">Q.</span>
           {vote.mainText}
         </p>
-        <ul className="VoteItemList">
+        <UserAsAuthorV3
+          writer={vote.writer}
+          createdAt={vote.createdAt}
+          updatedAt={vote.updatedAt}
+        />
+        <ul className="VoteItemList mg-top--16">
           {state.voteStatus.map((voteItem, idx) => {
             return (
               <VoteItemAsArticle
