@@ -398,7 +398,7 @@ const InputArea = styled.div`
 `;
 
 const AreaTitle = styled.div`
-  padding: 24px 16px 8px;
+  padding: 24px 16px 0px;
   text-align: left;
 
   font-size: 18px;

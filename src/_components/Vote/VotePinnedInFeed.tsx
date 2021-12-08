@@ -227,7 +227,7 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
   return (
     <div className="ArticleCard pd-16">
       <form className="VoteForm">
-        <VoteTotalCount className="VoteTotalCount horizontal-centered mg-top--4 mg-bottom--8">
+        <VoteTotalCount className="VoteTotalCount horizontal-centered mg-top--16 mg-bottom--8">
           <VoteCountIcon className="VoteTotalCount mg-right--8" />
           {state.totalCount}명 이웃 참여
         </VoteTotalCount>
