@@ -232,7 +232,7 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
           {state.totalCount}명 이웃 참여
         </VoteTotalCount>
         <VoteTitle className="ArticleCard-Title mg-bottom--16">
-          <div className="VoteQuestionIcon mg-right--8">Q.</div>
+          <span className="VoteQuestionIcon mg-right--8">Q.</span>
           {vote.mainText}
         </VoteTitle>
         <UserAsAuthorV3
@@ -268,7 +268,4 @@ export default VotePinnedInFeed;
 
 const VoteTotalCount = styled.div``;
 
-const VoteTitle = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
+const VoteTitle = styled.div``;
