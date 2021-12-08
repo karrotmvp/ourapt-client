@@ -60,9 +60,11 @@ const PageVoteCreate: React.FC = () => {
         title="상계주공 풍성피드 투표 만들기"
         appendRight={
           <button
+            id="VoteSubmitFormSubmitBtn"
             type="submit"
             form="VoteSubmitForm"
             className="VoteSubmitForm-btn mg-right--8"
+            disabled={!validSubmit}
             style={{
               width: "48px",
               height: "32px",
