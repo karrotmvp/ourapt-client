@@ -256,9 +256,9 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
             );
           })}
         </ul>
-        <p className="ArticleCard-Info mg-top--12 mg-bottom--8">
+        {/* <p className="ArticleCard-Info mg-top--12 mg-bottom--8">
           이웃들의 의견이 모이면 알림을 보내드려요
-        </p>
+        </p> */}
       </form>
     </div>
   );
