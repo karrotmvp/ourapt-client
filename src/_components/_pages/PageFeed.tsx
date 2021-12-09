@@ -237,6 +237,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
               우리아파트 투표
               <OpenedInfo className="centered">진행 중</OpenedInfo>
             </AreaTitle>
+            <AreaInfo>이웃들의 의견이 모이면 알림을 보내드려요.</AreaInfo>
             {state.pinned &&
               state.pinned.map((vote, idx) => {
                 return (
@@ -404,11 +405,20 @@ const AreaTitle = styled.div`
   padding: 24px 16px 0px;
   text-align: left;
 
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
 
   display: flex;
   flex-direction: row;
+
+  background-color: #ffffff;
+`;
+
+const AreaInfo = styled.p`
+  padding: 8px 0 0 16px;
+  color: #777777;
+  font-size: 14px;
+  text-align: left;
 
   background-color: #ffffff;
 `;
