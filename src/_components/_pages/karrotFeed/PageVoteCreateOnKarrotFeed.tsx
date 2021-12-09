@@ -45,7 +45,6 @@ const PageVoteCreate: React.FC = () => {
   const { viewer, refreshViewer } = useViewer();
 
   const handleRegister = () => {
-    alert(code);
     if (code !== "NOT_AGREED") {
       issueAccessTokenFromAuthorizationCode(code);
       refreshViewer();
