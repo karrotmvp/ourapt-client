@@ -35,6 +35,8 @@ const VoteClosedInFeed: React.FC<VoteClosedInFeedProps> = ({ vote }) => {
 export default VoteClosedInFeed;
 
 const VoteContainer = styled.div`
+  height: 116px;
+
   margin: 8px;
   padding: 20px;
 

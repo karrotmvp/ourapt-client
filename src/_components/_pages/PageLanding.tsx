@@ -88,6 +88,11 @@ const PageLanding: React.FC = () => {
     aptH.forEach((value, key, mapObject) =>
       result.push({ brand: key, apartments: value })
     );
+    for (let group of result) {
+      group.apartments.sort(function (a, b) {
+        return a.name < b.name ? -1 : 1;
+      });
+    }
     return result;
   }
 
