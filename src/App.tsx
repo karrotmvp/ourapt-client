@@ -15,13 +15,8 @@ import WithModal from "./_hoc/withModal";
 import PageLanding from "./_components/_pages/PageLanding";
 import PageApartmentRequestForm from "./_components/_pages/request/PageApartmentRequestForm";
 import PageFeed from "./_components/_pages/PageFeed";
-import PageQuestionPinnedDetail from "./_components/_pages/article/PageQuestionPinnedDetail";
 import PageVoteDetail from "./_components/_pages/article/PageVoteDetail";
-import PageQuestionDetail from "./_components/_pages/article/PageQuestionDetail";
-import PageQuestionUpdate from "./_components/_pages/article/PageQuestionUpdate";
-import PageQuestionCreate from "./_components/_pages/article/PageQuestionCreate";
 import PageVoteCreate from "./_components/_pages/article/PageVoteCreate";
-import PageVoteCreateOnKarrotFeed from "./_components/_pages/karrotFeed/PageVoteCreateOnKarrotFeed";
 import PageError from "./_components/_pages/PageError";
 
 import { FirebaseAnalyticsProvider } from "./_analytics/firebase";
@@ -64,29 +59,14 @@ const App: React.FC = () => {
                   <Screen path="/feed/:apartmentId">
                     <PageFeed apartmentId={""} />
                   </Screen>
-                  <Screen path="/article/:articleId/pinned">
-                    <PageQuestionPinnedDetail />
-                  </Screen>
                   <Screen path="/vote/:articleId">
                     <PageVoteDetail />
-                  </Screen>
-                  <Screen path="/vote/:articleId/create">
-                    <PageQuestionCreate />
-                  </Screen>
-                  <Screen path="/article/:articleId">
-                    <PageQuestionDetail />
-                  </Screen>
-                  <Screen path="/article/:articleId/update">
-                    <PageQuestionUpdate />
                   </Screen>
                   <Screen path="/error">
                     <PageError />
                   </Screen>
                   <Screen path="/create">
                     <PageVoteCreate />
-                  </Screen>
-                  <Screen path="/sanggye">
-                    <PageVoteCreateOnKarrotFeed />
                   </Screen>
                   <WithModal />
                 </Navigator>

@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useReducer, useState } from "react";
 
-import { QuestionDto as Question } from "../../__generated__/ourapt";
-import { VoteDto as Vote } from "../../__generated__/ourapt";
+import {
+  FeedItemDto as FeedItem,
+  VoteDto as Vote,
+} from "../../__generated__/ourapt";
 import { useApi } from "../../api";
 import { useViewer } from "../../_providers/useViewer";
 
@@ -16,7 +18,6 @@ import { PullToRefresh } from "@karrotframe/pulltorefresh";
 import Slider from "react-slick";
 
 import ApartmentInNavigator from "../Apartment/ApartmentInNavigator";
-import QuestionInFeed from "../Question/QuestionInFeed";
 
 import examineResBody from "../../_modules/examineResBody";
 
@@ -25,28 +26,22 @@ import { ReactComponent as IconPlus } from "../../_assets/iconPlus.svg";
 import LoadPageFeed from "../_loaders/LoadPageFeed";
 import VotePinnedInFeed from "../Vote/VotePinnedInFeed";
 import VoteClosedInFeed from "../Vote/VoteClosedInFeed";
-import { NONAME } from "dns";
 
 type State = {
   _t: "loading";
-  closed: Array<Vote> | null;
-  pinned: Array<Vote> | null;
-  articles: Array<Question> | null;
+  closed: Array<FeedItem> | null;
+  pinned: Array<FeedItem> | null;
 };
 
 type Action =
   | {
       _t: "PATCH_CLOSED_VOTES";
-      closed: Array<Vote>;
+      closed: Array<FeedItem>;
     }
   | {
       _t: "PATCH_PINNED_ARTICLE";
-      pinned: Array<Vote>;
+      pinned: Array<FeedItem>;
     };
-// | {
-//     _t: "PATCH_ARTICLES";
-//     articles: Array<Question>;
-//   };
 
 const reducer: React.Reducer<State, Action> = (prevState, action) => {
   switch (action._t) {
@@ -62,12 +57,6 @@ const reducer: React.Reducer<State, Action> = (prevState, action) => {
         _t: "loading",
         pinned: action.pinned,
       };
-    // case "PATCH_ARTICLES":
-    //   return {
-    //     ...prevState,
-    //     _t: "loading",
-    //     articles: action.articles,
-    //   };
   }
 };
 
@@ -80,7 +69,6 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
     _t: "loading",
     closed: null,
     pinned: null,
-    articles: null,
   });
 
   const params =
@@ -98,33 +86,6 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
   //   push(`/article/${articleId}`);
   // };
 
-  // const onArticleCreateBtnClick = (context: number) => {
-  //   Event("clickCreateArticleBtn", { at: params, when: `${context}` });
-  //   push(`/vote/${state.pinned?.article.id}/create`);
-  // };
-
-  const getClosedVotesByCursorPerPage = useCallback(
-    (params: string, cursor: number, perPage: number) => {
-      (async () => {
-        const resBody = await api.voteController.getVotesUsingGET({
-          apartmentId: params,
-          cursor,
-          perPage,
-          terminated: true,
-        });
-        const safeBody = examineResBody({
-          resBody,
-          validator: (data) => data.votes != null,
-          onFailure: () => {
-            push(`/error?cause=getClosedVotesByCursorPerPageAtPageFeed`);
-          },
-        });
-        dispatch({ _t: "PATCH_CLOSED_VOTES", closed: safeBody.data.votes });
-      })();
-    },
-    [api.questionController, push]
-  );
-
   const getPinnedVotesByCursorPerPage = useCallback(
     (params: string, cursor: number, perPage: number) => {
       (async () => {
@@ -138,19 +99,27 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
         } else {
           const safeBody = examineResBody({
             resBody: response,
-            validator: (data) => data.votes != null,
+            validator: (data) => data.items != null,
             onFailure: () => {
               push(`/error?cause=getPinnedVoteAtPageFeed`);
             },
           });
+          const feedItems: Array<FeedItem> = safeBody.data.items;
+          const votesInProgress = feedItems.filter(
+            (feedItem) => feedItem.vote.isInProgress === true
+          );
+          const votesClosed = feedItems.filter(
+            (feedItem) => feedItem.vote.isInProgress === false
+          );
+
+          dispatch({
+            _t: "PATCH_CLOSED_VOTES",
+            closed: votesClosed,
+          });
           dispatch({
             _t: "PATCH_PINNED_ARTICLE",
-            pinned: safeBody.data.votes,
+            pinned: votesInProgress,
           });
-          // dispatch({
-          //   _t: "PATCH_ARTICLES",
-          //   articles: safeBody.data.questions,
-          // });
         }
       })();
     },
@@ -166,13 +135,8 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
     getPinnedVotesByCursorPerPage(params, Date.now(), 100);
   }, [getPinnedVotesByCursorPerPage]);
 
-  useEffect(() => {
-    getClosedVotesByCursorPerPage(params, Date.now(), 100);
-  }, [getClosedVotesByCursorPerPage, params]);
-
   async function handleDispose() {
     getPinnedVotesByCursorPerPage(params, Date.now(), 100);
-    getClosedVotesByCursorPerPage(params, Date.now(), 100);
   }
 
   useEffect(() => {
@@ -209,8 +173,6 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
               width: 100%;
               position: absolute;
               --kf_pulltorefresh_backgroundColor: #f2f3f6;
-              /* background: url("./../../_assets/tempPRT.png") repeat !important; */
-              /* --kf_pulltorefresh_fallbackSpinner-color: transparent; */
             `}
             onPull={(dispose) => {
               handleDispose().then(() => {
@@ -223,8 +185,8 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
                 <AreaTitle>종료된 투표</AreaTitle>
                 <div className="VoteCarouselLayout">
                   <Slider {...closedVotesSettings}>
-                    {state.closed.map((vote, idx) => {
-                      return <VoteClosedInFeed vote={vote} />;
+                    {state.closed.map((feedItem, idx) => {
+                      return <VoteClosedInFeed vote={feedItem.vote} />;
                     })}
                   </Slider>
                 </div>
@@ -239,66 +201,14 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
             </AreaTitle>
             <AreaInfo>이웃들의 의견이 모이면 알림을 보내드려요.</AreaInfo>
             {state.pinned &&
-              state.pinned.map((vote, idx) => {
+              state.pinned.map((feedItem, idx) => {
                 return (
                   <PinnedArea className="pd--16 pd-top--8">
-                    <VotePinnedInFeed vote={vote} />
+                    <VotePinnedInFeed feedItem={feedItem} />
                   </PinnedArea>
                 );
               })}
-            {/* <ArticleArea>
-              <AreaTitle className="pd--16">투표 자유게시판</AreaTitle>
-              {state.articles.length === 0 ? (
-                <div>
-                  <ArticleVacantViewTitle>
-                    우리아파트에 오신 것을 환영해요!
-                  </ArticleVacantViewTitle>
-                  <ArticleVacantViewInfo>
-                    투표 주제에 대해 이야기를 나눠보세요.
-                  </ArticleVacantViewInfo>
-                  <button
-                    className="btn-160 btn btn--active mg-top--48 mg-bottom--64"
-                    onClick={() => onArticleCreateBtnClick(0)}
-                  >
-                    게시글 작성
-                  </button>
-                </div>
-              ) : (
-                <div>
-                  <InputArea
-                    onClick={() =>
-                      onArticleCreateBtnClick(state.articles?.length || 0)
-                    }
-                  >
-                    진행 중인 투표에 대해 어떻게 생각하세요?
-                  </InputArea>
-                  {state.articles.map((question) => {
-                    return (
-                      <ArticleWrapper
-                        key={question.id}
-                        className="pd--16"
-                        onClick={() => goArticleDetail(question.id)}
-                      >
-                        <QuestionInFeed question={question} />
-                        <CommentThumbnail>
-                          <img
-                            className="mg-right--6"
-                            src={
-                              require("../../_assets/CommentInFeedIcon.svg")
-                                .default
-                            }
-                            alt="댓글 수"
-                          />
-                          <div className="font-size--15 font-weight--400 font-color--11">
-                            {question.countOfComments}
-                          </div>
-                        </CommentThumbnail>
-                      </ArticleWrapper>
-                    );
-                  })}
-                  </div>
-                  )}
-                </ArticleArea> */}
+
             <FeedInfoWrapper>
               <FeedInfoText>
                 이웃과 나누고 싶은 이야기를 등록해 보세요!
@@ -306,18 +216,8 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
             </FeedInfoWrapper>
           </PullToRefresh>
         </div>
-        {/* {state.articles.length !== 0 && ( */}
         <div className="btn--floating">
-          <ArticleCreateBtnFloating
-            onClick={() => push(`/create`)}
-            // onClick={() =>
-            //   onArticleCreateBtnClick(state.articles?.length || 0)
-            // }
-          >
-            {/* <img
-                src={require("../../_assets/ArticleCreateBtnIcon.svg").default}
-                alt="투표 쓰기"
-              /> */}
+          <ArticleCreateBtnFloating onClick={() => push(`/create`)}>
             <IconPlus
               className="mg-right--8"
               width="10"

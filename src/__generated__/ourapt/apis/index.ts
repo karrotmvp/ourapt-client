@@ -4,7 +4,6 @@ export * from './Class1APIApi';
 export * from './Class2Api';
 export * from './Class3Api';
 export * from './Class4Api';
-export * from './Class41Api';
 export * from './Class5Api';
 export * from './Class6Api';
 export * from './Class7Api';

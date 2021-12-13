@@ -15,9 +15,9 @@
 
 import * as runtime from '../runtime';
 import {
-    CommonResponseBodyGetCommentsOfQuestionDto,
-    CommonResponseBodyGetCommentsOfQuestionDtoFromJSON,
-    CommonResponseBodyGetCommentsOfQuestionDtoToJSON,
+    CommonResponseBodyCommentListDto,
+    CommonResponseBodyCommentListDtoFromJSON,
+    CommonResponseBodyCommentListDtoToJSON,
     CommonResponseBodyOneCommentDto,
     CommonResponseBodyOneCommentDtoFromJSON,
     CommonResponseBodyOneCommentDtoToJSON,
@@ -82,9 +82,9 @@ export class Class5Api extends runtime.BaseAPI {
     }
 
     /**
-     * 질문에 달린 게시글 보기
+     * 게시글에 달린 게시글 보기
      */
-    async getCommentsOfQuestionUsingGETRaw(requestParameters: GetCommentsOfQuestionUsingGETRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyGetCommentsOfQuestionDto>> {
+    async getCommentsOfQuestionUsingGETRaw(requestParameters: GetCommentsOfQuestionUsingGETRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyCommentListDto>> {
         if (requestParameters.articleId === null || requestParameters.articleId === undefined) {
             throw new runtime.RequiredError('articleId','Required parameter requestParameters.articleId was null or undefined when calling getCommentsOfQuestionUsingGET.');
         }
@@ -104,13 +104,13 @@ export class Class5Api extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyGetCommentsOfQuestionDtoFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyCommentListDtoFromJSON(jsonValue));
     }
 
     /**
-     * 질문에 달린 게시글 보기
+     * 게시글에 달린 게시글 보기
      */
-    async getCommentsOfQuestionUsingGET(requestParameters: GetCommentsOfQuestionUsingGETRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyGetCommentsOfQuestionDto> {
+    async getCommentsOfQuestionUsingGET(requestParameters: GetCommentsOfQuestionUsingGETRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyCommentListDto> {
         const response = await this.getCommentsOfQuestionUsingGETRaw(requestParameters, initOverrides);
         return await response.value();
     }

@@ -14,41 +14,41 @@
 
 import { exists, mapValues } from '../runtime';
 import {
-    QuestionDto,
-    QuestionDtoFromJSON,
-    QuestionDtoFromJSONTyped,
-    QuestionDtoToJSON,
+    FeedItemDto,
+    FeedItemDtoFromJSON,
+    FeedItemDtoFromJSONTyped,
+    FeedItemDtoToJSON,
 } from './';
 
 /**
  * 
  * @export
- * @interface OneQuestionDto
+ * @interface FeedDto
  */
-export interface OneQuestionDto {
+export interface FeedDto {
     /**
      * 
-     * @type {QuestionDto}
-     * @memberof OneQuestionDto
+     * @type {Array<FeedItemDto>}
+     * @memberof FeedDto
      */
-    question?: QuestionDto;
+    items: Array<FeedItemDto>;
 }
 
-export function OneQuestionDtoFromJSON(json: any): OneQuestionDto {
-    return OneQuestionDtoFromJSONTyped(json, false);
+export function FeedDtoFromJSON(json: any): FeedDto {
+    return FeedDtoFromJSONTyped(json, false);
 }
 
-export function OneQuestionDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): OneQuestionDto {
+export function FeedDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): FeedDto {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'question': !exists(json, 'question') ? undefined : QuestionDtoFromJSON(json['question']),
+        'items': ((json['items'] as Array<any>).map(FeedItemDtoFromJSON)),
     };
 }
 
-export function OneQuestionDtoToJSON(value?: OneQuestionDto | null): any {
+export function FeedDtoToJSON(value?: FeedDto | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -57,7 +57,7 @@ export function OneQuestionDtoToJSON(value?: OneQuestionDto | null): any {
     }
     return {
         
-        'question': QuestionDtoToJSON(value.question),
+        'items': ((value.items as Array<any>).map(FeedItemDtoToJSON)),
     };
 }
 

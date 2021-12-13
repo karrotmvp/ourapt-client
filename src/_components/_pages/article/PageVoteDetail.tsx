@@ -36,7 +36,7 @@ const PageVoteDetail: React.FC = () => {
       });
       setVote(safeBody.data.vote);
     })();
-  }, [api.questionController, articleId, push]);
+  }, [api.voteController, articleId, push]);
 
   return (
     <div className="page">

@@ -6,7 +6,10 @@ import { useAnalytics } from "../../_analytics/firebase";
 import { useViewer } from "../../_providers/useViewer";
 import { useApi } from "../../api";
 
-import { VoteDto as Vote, VoteItemDtoToJSON } from "../../__generated__/ourapt";
+import {
+  FeedItemDto as FeedItem,
+  VoteDto as Vote,
+} from "../../__generated__/ourapt";
 import { VoteItemDto as VoteItem } from "../../__generated__/ourapt";
 
 import UserAsAuthorV3 from "../User/UserAsAuthorV3";
@@ -18,7 +21,7 @@ import { ReactComponent as VoteCountIcon } from "./../../_assets/VoteCountIcon.s
 import { getInstalledFromURLParams } from "../../_modules/getQueryFromURLParams";
 
 type VotePinnedInFeedProps = {
-  vote: Vote;
+  feedItem: FeedItem;
 };
 
 type State =
@@ -115,14 +118,14 @@ const reducer: React.Reducer<State, Action> = (prevState, action) => {
   }
 };
 
-const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
+const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ feedItem }) => {
   const { viewer } = useViewer();
   const viewerId = viewer?.id || "";
 
   const api = useApi();
   const isInstalled = getInstalledFromURLParams();
 
-  let voteStatus = vote.items.map((item, idx) => {
+  let voteStatus = feedItem.vote.items.map((item, idx) => {
     return {
       index: idx,
       item,
@@ -168,7 +171,7 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
         totalCount,
       });
     }
-  }, [vote]);
+  }, [feedItem]);
 
   const Event = useAnalytics();
 
@@ -233,12 +236,12 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
         </VoteTotalCount>
         <VoteTitle className="ArticleCard-Title mg-bottom--16">
           <span className="VoteQuestionIcon mg-right--8">Q.</span>
-          {vote.mainText}
+          {feedItem.vote.mainText}
         </VoteTitle>
         <UserAsAuthorV3
-          writer={vote.writer}
-          createdAt={vote.createdAt}
-          updatedAt={vote.updatedAt}
+          writer={feedItem.vote.writer}
+          createdAt={feedItem.vote.createdAt}
+          updatedAt={feedItem.vote.updatedAt}
         />
         <ul className="VoteItemList mg-top--16">
           {state.voteStatus.map((voteItem, idx) => {
@@ -256,9 +259,6 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ vote }) => {
             );
           })}
         </ul>
-        {/* <p className="ArticleCard-Info mg-top--12 mg-bottom--8">
-          이웃들의 의견이 모이면 알림을 보내드려요
-        </p> */}
       </form>
     </div>
   );

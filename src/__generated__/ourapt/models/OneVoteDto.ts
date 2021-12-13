@@ -14,10 +14,6 @@
 
 import { exists, mapValues } from '../runtime';
 import {
-    QuestionDto,
-    QuestionDtoFromJSON,
-    QuestionDtoFromJSONTyped,
-    QuestionDtoToJSON,
     VoteDto,
     VoteDtoFromJSON,
     VoteDtoFromJSONTyped,
@@ -30,12 +26,6 @@ import {
  * @interface OneVoteDto
  */
 export interface OneVoteDto {
-    /**
-     * 
-     * @type {Array<QuestionDto>}
-     * @memberof OneVoteDto
-     */
-    questions: Array<QuestionDto>;
     /**
      * 
      * @type {VoteDto}
@@ -54,7 +44,6 @@ export function OneVoteDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'questions': ((json['questions'] as Array<any>).map(QuestionDtoFromJSON)),
         'vote': VoteDtoFromJSON(json['vote']),
     };
 }
@@ -68,7 +57,6 @@ export function OneVoteDtoToJSON(value?: OneVoteDto | null): any {
     }
     return {
         
-        'questions': ((value.questions as Array<any>).map(QuestionDtoToJSON)),
         'vote': VoteDtoToJSON(value.vote),
     };
 }

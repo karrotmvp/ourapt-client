@@ -14,6 +14,10 @@
 
 import { exists, mapValues } from '../runtime';
 import {
+    CommentDto,
+    CommentDtoFromJSON,
+    CommentDtoFromJSONTyped,
+    CommentDtoToJSON,
     VoteDto,
     VoteDtoFromJSON,
     VoteDtoFromJSONTyped,
@@ -23,32 +27,39 @@ import {
 /**
  * 
  * @export
- * @interface VoteListDto
+ * @interface FeedItemDto
  */
-export interface VoteListDto {
+export interface FeedItemDto {
     /**
      * 
-     * @type {Array<VoteDto>}
-     * @memberof VoteListDto
+     * @type {CommentDto}
+     * @memberof FeedItemDto
      */
-    votes?: Array<VoteDto>;
+    lastComment?: CommentDto;
+    /**
+     * 
+     * @type {VoteDto}
+     * @memberof FeedItemDto
+     */
+    vote: VoteDto;
 }
 
-export function VoteListDtoFromJSON(json: any): VoteListDto {
-    return VoteListDtoFromJSONTyped(json, false);
+export function FeedItemDtoFromJSON(json: any): FeedItemDto {
+    return FeedItemDtoFromJSONTyped(json, false);
 }
 
-export function VoteListDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): VoteListDto {
+export function FeedItemDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): FeedItemDto {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'votes': !exists(json, 'votes') ? undefined : ((json['votes'] as Array<any>).map(VoteDtoFromJSON)),
+        'lastComment': !exists(json, 'lastComment') ? undefined : CommentDtoFromJSON(json['lastComment']),
+        'vote': VoteDtoFromJSON(json['vote']),
     };
 }
 
-export function VoteListDtoToJSON(value?: VoteListDto | null): any {
+export function FeedItemDtoToJSON(value?: FeedItemDto | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -57,7 +68,8 @@ export function VoteListDtoToJSON(value?: VoteListDto | null): any {
     }
     return {
         
-        'votes': value.votes === undefined ? undefined : ((value.votes as Array<any>).map(VoteDtoToJSON)),
+        'lastComment': CommentDtoToJSON(value.lastComment),
+        'vote': VoteDtoToJSON(value.vote),
     };
 }
 

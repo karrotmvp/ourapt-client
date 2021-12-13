@@ -23,22 +23,22 @@ import {
 /**
  * 
  * @export
- * @interface GetCommentsOfQuestionDto
+ * @interface CommentListDto
  */
-export interface GetCommentsOfQuestionDto {
+export interface CommentListDto {
     /**
      * 
      * @type {Array<CommentDto>}
-     * @memberof GetCommentsOfQuestionDto
+     * @memberof CommentListDto
      */
     comments?: Array<CommentDto>;
 }
 
-export function GetCommentsOfQuestionDtoFromJSON(json: any): GetCommentsOfQuestionDto {
-    return GetCommentsOfQuestionDtoFromJSONTyped(json, false);
+export function CommentListDtoFromJSON(json: any): CommentListDto {
+    return CommentListDtoFromJSONTyped(json, false);
 }
 
-export function GetCommentsOfQuestionDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): GetCommentsOfQuestionDto {
+export function CommentListDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): CommentListDto {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -48,7 +48,7 @@ export function GetCommentsOfQuestionDtoFromJSONTyped(json: any, ignoreDiscrimin
     };
 }
 
-export function GetCommentsOfQuestionDtoToJSON(value?: GetCommentsOfQuestionDto | null): any {
+export function CommentListDtoToJSON(value?: CommentListDto | null): any {
     if (value === undefined) {
         return undefined;
     }

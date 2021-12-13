@@ -15,15 +15,15 @@
 
 import * as runtime from '../runtime';
 import {
+    CommonResponseBodyFeedDto,
+    CommonResponseBodyFeedDtoFromJSON,
+    CommonResponseBodyFeedDtoToJSON,
     CommonResponseBodyOneVoteDto,
     CommonResponseBodyOneVoteDtoFromJSON,
     CommonResponseBodyOneVoteDtoToJSON,
     CommonResponseBodyVoid,
     CommonResponseBodyVoidFromJSON,
     CommonResponseBodyVoidToJSON,
-    CommonResponseBodyVoteListDto,
-    CommonResponseBodyVoteListDtoFromJSON,
-    CommonResponseBodyVoteListDtoToJSON,
     VoteContentDto,
     VoteContentDtoFromJSON,
     VoteContentDtoToJSON,
@@ -128,7 +128,7 @@ export class Class4Api extends runtime.BaseAPI {
     /**
      * 아파트의 진행중/종료된 투표 조회
      */
-    async getVotesUsingGETRaw(requestParameters: GetVotesUsingGETRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyVoteListDto>> {
+    async getVotesUsingGETRaw(requestParameters: GetVotesUsingGETRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyFeedDto>> {
         if (requestParameters.apartmentId === null || requestParameters.apartmentId === undefined) {
             throw new runtime.RequiredError('apartmentId','Required parameter requestParameters.apartmentId was null or undefined when calling getVotesUsingGET.');
         }
@@ -172,13 +172,13 @@ export class Class4Api extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyVoteListDtoFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyFeedDtoFromJSON(jsonValue));
     }
 
     /**
      * 아파트의 진행중/종료된 투표 조회
      */
-    async getVotesUsingGET(requestParameters: GetVotesUsingGETRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyVoteListDto> {
+    async getVotesUsingGET(requestParameters: GetVotesUsingGETRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyFeedDto> {
         const response = await this.getVotesUsingGETRaw(requestParameters, initOverrides);
         return await response.value();
     }

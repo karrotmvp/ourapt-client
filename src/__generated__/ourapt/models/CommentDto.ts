@@ -46,6 +46,12 @@ export interface CommentDto {
     mainText: string;
     /**
      * 
+     * @type {Array<CommentDto>}
+     * @memberof CommentDto
+     */
+    subComments: Array<CommentDto>;
+    /**
+     * 
      * @type {Date}
      * @memberof CommentDto
      */
@@ -71,6 +77,7 @@ export function CommentDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'createdAt': (new Date(json['createdAt'])),
         'id': json['id'],
         'mainText': json['mainText'],
+        'subComments': ((json['subComments'] as Array<any>).map(CommentDtoFromJSON)),
         'updatedAt': (new Date(json['updatedAt'])),
         'writer': KarrotProfileFromJSON(json['writer']),
     };
@@ -88,6 +95,7 @@ export function CommentDtoToJSON(value?: CommentDto | null): any {
         'createdAt': (value.createdAt.toISOString()),
         'id': value.id,
         'mainText': value.mainText,
+        'subComments': ((value.subComments as Array<any>).map(CommentDtoToJSON)),
         'updatedAt': (value.updatedAt.toISOString()),
         'writer': KarrotProfileToJSON(value.writer),
     };
