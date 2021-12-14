@@ -15,8 +15,6 @@ import { css } from "@emotion/css";
 import { ScreenHelmet, useNavigator, useParams } from "@karrotframe/navigator";
 import { PullToRefresh } from "@karrotframe/pulltorefresh";
 
-import Slider from "react-slick";
-
 import ApartmentInNavigator from "../Apartment/ApartmentInNavigator";
 
 import examineResBody from "../../_modules/examineResBody";
@@ -25,37 +23,24 @@ import { ReactComponent as OuraptLogo } from "../../_assets/ouraptLogo.svg";
 import { ReactComponent as IconPlus } from "../../_assets/iconPlus.svg";
 import LoadPageFeed from "../_loaders/LoadPageFeed";
 import VotePinnedInFeed from "../Vote/VotePinnedInFeed";
-import VoteClosedInFeed from "../Vote/VoteClosedInFeed";
 
 type State = {
   _t: "loading";
-  closed: Array<FeedItem> | null;
-  pinned: Array<FeedItem> | null;
+  feedItems: Array<FeedItem> | null;
 };
 
-type Action =
-  | {
-      _t: "PATCH_CLOSED_VOTES";
-      closed: Array<FeedItem>;
-    }
-  | {
-      _t: "PATCH_PINNED_ARTICLE";
-      pinned: Array<FeedItem>;
-    };
+type Action = {
+  _t: "PATCH_FEED_ITEMS";
+  feedItems: Array<FeedItem>;
+};
 
 const reducer: React.Reducer<State, Action> = (prevState, action) => {
   switch (action._t) {
-    case "PATCH_CLOSED_VOTES":
+    case "PATCH_FEED_ITEMS":
       return {
         ...prevState,
         _t: "loading",
-        closed: action.closed,
-      };
-    case "PATCH_PINNED_ARTICLE":
-      return {
-        ...prevState,
-        _t: "loading",
-        pinned: action.pinned,
+        feedItems: action.feedItems,
       };
   }
 };
@@ -67,8 +52,7 @@ type PageFeedProps = {
 const PageFeed: React.FC<PageFeedProps> = (props) => {
   const [state, dispatch] = useReducer(reducer, {
     _t: "loading",
-    closed: null,
-    pinned: null,
+    feedItems: null,
   });
 
   const params =
@@ -93,7 +77,6 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
           apartmentId: params,
           cursor,
           perPage,
-          terminated: false,
         });
         if (response && response.status === "DATA_NOT_FOUND_FROM_DB") {
         } else {
@@ -104,21 +87,9 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
               push(`/error?cause=getPinnedVoteAtPageFeed`);
             },
           });
-          const feedItems: Array<FeedItem> = safeBody.data.items;
-          const votesInProgress = feedItems.filter(
-            (feedItem) => feedItem.vote.isInProgress === true
-          );
-          const votesClosed = feedItems.filter(
-            (feedItem) => feedItem.vote.isInProgress === false
-          );
-
           dispatch({
-            _t: "PATCH_CLOSED_VOTES",
-            closed: votesClosed,
-          });
-          dispatch({
-            _t: "PATCH_PINNED_ARTICLE",
-            pinned: votesInProgress,
+            _t: "PATCH_FEED_ITEMS",
+            feedItems: safeBody.data.items,
           });
         }
       })();
@@ -155,7 +126,7 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
     slidesToShow: 1,
   };
 
-  if (state.pinned) {
+  if (state.feedItems) {
     return (
       <div className="Page">
         <div className="PageFeed-inner">
@@ -180,28 +151,13 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
               });
             }}
           >
-            {state.closed && (
-              <ClosedArea>
-                <AreaTitle>종료된 투표</AreaTitle>
-                <div className="VoteCarouselLayout">
-                  <Slider {...closedVotesSettings}>
-                    {state.closed.map((feedItem, idx) => {
-                      return <VoteClosedInFeed vote={feedItem.vote} />;
-                    })}
-                  </Slider>
-                </div>
-              </ClosedArea>
-            )}
-            <AreaDivider>
-              <Horizon />
-            </AreaDivider>
             <AreaTitle className="horizontal--centered">
               우리아파트 투표
-              <OpenedInfo className="centered">진행 중</OpenedInfo>
             </AreaTitle>
             <AreaInfo>이웃들의 의견이 모이면 알림을 보내드려요.</AreaInfo>
-            {state.pinned &&
-              state.pinned.map((feedItem, idx) => {
+
+            {state.feedItems &&
+              state.feedItems.map((feedItem, idx) => {
                 return (
                   <PinnedArea className="pd--16 pd-top--8">
                     <VotePinnedInFeed feedItem={feedItem} />
@@ -269,23 +225,6 @@ const PinnedArea = styled.div`
   background-color: #ffffff;
 `;
 
-const OpenedInfo = styled.p`
-  width: 48px;
-  height: 22px;
-
-  margin-left: 8px;
-  /* padding: 3px 5px; */
-
-  color: #e95454;
-  font-size: 12px;
-  font-weight: 500;
-
-  background-color: #fdeeee;
-
-  /* border: 1px solid #f4aaaa; */
-  border-radius: 4px;
-`;
-
 const InputArea = styled.div`
   height: 80px;
 
@@ -314,12 +253,14 @@ const AreaTitle = styled.div`
 `;
 
 const AreaInfo = styled.p`
-  padding: 8px 0 0 16px;
+  padding: 8px 0 20px 16px;
   color: #777777;
   font-size: 14px;
   text-align: left;
 
   background-color: #ffffff;
+
+  border-bottom: 12px solid #f2f3f6;
 `;
 
 const ArticleArea = styled.div`

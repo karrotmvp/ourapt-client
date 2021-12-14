@@ -100,6 +100,7 @@ const PageVoteDetail: React.FC = () => {
                   <CommentInDetail
                     key={comment.id}
                     comment={comment}
+                    onPage={"PageVoteDetail"}
                     setIsCommentUpdate={setIsCommentUpdate}
                   />
                 );
@@ -110,7 +111,9 @@ const PageVoteDetail: React.FC = () => {
       {vote && (
         <CommentInDetailSubmitForm
           articleId={articleId}
-          isInProgress={vote.isInProgress}
+          placeholderText={
+            vote.isInProgress ? "투표 의견 달기..." : "종료된 투표 의견 달기..."
+          }
           setIsCommentUpdate={setIsCommentUpdate}
         />
       )}

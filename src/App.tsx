@@ -16,6 +16,7 @@ import PageLanding from "./_components/_pages/PageLanding";
 import PageApartmentRequestForm from "./_components/_pages/request/PageApartmentRequestForm";
 import PageFeed from "./_components/_pages/PageFeed";
 import PageVoteDetail from "./_components/_pages/article/PageVoteDetail";
+import PageCommentDetail from "./_components/_pages/article/PageCommentDetail";
 import PageVoteCreate from "./_components/_pages/article/PageVoteCreate";
 import PageError from "./_components/_pages/PageError";
 
@@ -61,6 +62,9 @@ const App: React.FC = () => {
                   </Screen>
                   <Screen path="/vote/:articleId">
                     <PageVoteDetail />
+                  </Screen>
+                  <Screen path="/comment/:articleId">
+                    <PageCommentDetail />
                   </Screen>
                   <Screen path="/error">
                     <PageError />

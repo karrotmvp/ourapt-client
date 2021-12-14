@@ -33,6 +33,10 @@ export interface DeleteCommentUsingDELETERequest {
     commentId: string;
 }
 
+export interface GetCommentUsingGETRequest {
+    commentId: string;
+}
+
 export interface GetCommentsOfQuestionUsingGETRequest {
     articleId: string;
 }
@@ -82,7 +86,41 @@ export class Class5Api extends runtime.BaseAPI {
     }
 
     /**
-     * 게시글에 달린 게시글 보기
+     * 댓글 조회하기
+     */
+    async getCommentUsingGETRaw(requestParameters: GetCommentUsingGETRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyOneCommentDto>> {
+        if (requestParameters.commentId === null || requestParameters.commentId === undefined) {
+            throw new runtime.RequiredError('commentId','Required parameter requestParameters.commentId was null or undefined when calling getCommentUsingGET.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // KarrotAccessToken authentication
+        }
+
+        const response = await this.request({
+            path: `/api/v1/comment/{commentId}`.replace(`{${"commentId"}}`, encodeURIComponent(String(requestParameters.commentId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseBodyOneCommentDtoFromJSON(jsonValue));
+    }
+
+    /**
+     * 댓글 조회하기
+     */
+    async getCommentUsingGET(requestParameters: GetCommentUsingGETRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyOneCommentDto> {
+        const response = await this.getCommentUsingGETRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 게시글에 달린 댓글(대댓글) 보기
      */
     async getCommentsOfQuestionUsingGETRaw(requestParameters: GetCommentsOfQuestionUsingGETRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyCommentListDto>> {
         if (requestParameters.articleId === null || requestParameters.articleId === undefined) {
@@ -108,7 +146,7 @@ export class Class5Api extends runtime.BaseAPI {
     }
 
     /**
-     * 게시글에 달린 게시글 보기
+     * 게시글에 달린 댓글(대댓글) 보기
      */
     async getCommentsOfQuestionUsingGET(requestParameters: GetCommentsOfQuestionUsingGETRequest, initOverrides?: RequestInit): Promise<CommonResponseBodyCommentListDto> {
         const response = await this.getCommentsOfQuestionUsingGETRaw(requestParameters, initOverrides);

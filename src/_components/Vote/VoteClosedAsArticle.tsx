@@ -3,6 +3,7 @@ import { useViewer } from "../../_providers/useViewer";
 
 import { VoteDto as Vote, VoteItemDtoToJSON } from "../../__generated__/ourapt";
 
+import UserAsAuthorV3 from "../User/UserAsAuthorV3";
 import VoteItemAsClosedArticle from "./VoteItemAsClosedArticle";
 
 import styled from "@emotion/styled";
@@ -36,14 +37,20 @@ const VoteClosedAsArticle: React.FC<VoteClosedAsArticleProps> = ({ vote }) => {
 
   return (
     <form className="VoteForm">
-      <VoteTotalCount className="VoteTotalCount horizontal-centered mg-top--4 mg-bottom--8">
-        <VoteCountIcon className="mg-right--8" />
-        {totalCount}명 이웃이 함께 투표했어요
+      <VoteTotalCount className="VoteTotalCount horizontal-centered mg-top--16 mg-bottom--8">
+        <VoteCountIcon className="VoteTotalCount mg-right--8" />
+        {totalCount}명 이웃 참여 완료
       </VoteTotalCount>
-      <p className="ArticleCard-Content ArticleCardInList-Content mg-bottom--16">
+      <VoteTitle className="ArticleCard-Title mg-bottom--16">
+        <ClosedIcon>종료</ClosedIcon>
         {vote.mainText}
-      </p>
-      <ul className="VoteItemList">
+      </VoteTitle>
+      <UserAsAuthorV3
+        writer={vote.writer}
+        createdAt={vote.createdAt}
+        updatedAt={vote.updatedAt}
+      />
+      <ul className="VoteItemList mg-top--16">
         {vote.items.map((voteItem, idx) => {
           return (
             <VoteItemAsClosedArticle
@@ -62,7 +69,18 @@ const VoteClosedAsArticle: React.FC<VoteClosedAsArticleProps> = ({ vote }) => {
 
 export default VoteClosedAsArticle;
 
-const VoteTotalCount = styled.div`
-  color: #777777;
-  font-size: 13px;
+const VoteTotalCount = styled.div``;
+
+const VoteTitle = styled.div``;
+
+const ClosedIcon = styled.span`
+  margin-right: 8px;
+  padding: 6px 10px;
+
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 500;
+
+  border-radius: 10px;
+  background: #333333;
 `;

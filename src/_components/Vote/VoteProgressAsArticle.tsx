@@ -16,7 +16,6 @@ import styled from "@emotion/styled";
 
 import { ReactComponent as VoteCountIcon } from "./../../_assets/VoteCountIcon.svg";
 import { getInstalledFromURLParams } from "../../_modules/getQueryFromURLParams";
-import CommentPreviewInFeed from "../Comment/CommentPreviewInFeed";
 
 type VoteProgressAsArticleProps = {
   vote: Vote;

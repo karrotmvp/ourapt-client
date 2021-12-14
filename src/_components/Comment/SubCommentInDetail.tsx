@@ -1,9 +1,6 @@
 import React from "react";
 
-import {
-  CommentDto as Comment,
-  OneCommentDtoFromJSONTyped,
-} from "../../__generated__/ourapt";
+import { CommentDto as Comment } from "../../__generated__/ourapt";
 
 import { useAnalytics } from "../../_analytics/firebase";
 import { useApi } from "../../api";
@@ -11,21 +8,17 @@ import { useViewer } from "../../_providers/useViewer";
 import { useModal } from "../../_providers/useModal";
 
 import UserAsAuthor from "../User/UserAsAuthor";
-import SubCommentInDetail from "./SubCommentInDetail";
 
 import { ReactComponent as KebabIcon } from "../../_assets/kebabIcon.svg";
 import styled from "@emotion/styled";
-import { useNavigator } from "@karrotframe/navigator";
 
-type CommentInDetailProps = {
+type SubCommentInDetailProps = {
   comment: Comment;
-  onPage: "PageVoteDetail" | "PageCommentDetail";
   setIsCommentUpdate: React.Dispatch<React.SetStateAction<Boolean>>;
 };
 
-const CommentInDetail: React.FC<CommentInDetailProps> = ({
+const SubCommentInDetail: React.FC<SubCommentInDetailProps> = ({
   comment,
-  onPage,
   setIsCommentUpdate,
 }) => {
   const { viewer } = useViewer();
@@ -34,8 +27,6 @@ const CommentInDetail: React.FC<CommentInDetailProps> = ({
 
   const api = useApi();
   const { setModal } = useModal();
-
-  const { push } = useNavigator();
 
   const Event = useAnalytics();
 
@@ -87,18 +78,12 @@ const CommentInDetail: React.FC<CommentInDetailProps> = ({
     });
   }
 
-  function onCommentInfoClick() {
-    if (onPage === "PageVoteDetail") {
-      push(`/comment/${comment.id}`);
-    }
-  }
-
   return (
-    <div>
-      <div
-        className="ArticleCard ArticleCardInList pd--16"
-        style={{ backgroundColor: articleBackgroundColor }}
-      >
+    <div
+      className="ArticleCard ArticleCardInList pd--16"
+      style={{ backgroundColor: articleBackgroundColor }}
+    >
+      <div className="SubComment-Container">
         <div
           className="ArticleCardInlist-Author"
           onClick={() => onUserCardClick()}
@@ -122,40 +107,17 @@ const CommentInDetail: React.FC<CommentInDetailProps> = ({
             </KebabWrapper>
           )}
         </div>
-        <div className="Comment-Content">
-          <p className="ArticleCard-Content ArticleCardInList-CommentContent mg-top--10">
-            {comment.mainText}
-          </p>
-          <CommentInfo onClick={() => onCommentInfoClick()}>
-            댓글달기
-          </CommentInfo>
-        </div>
+        <p className="ArticleCard-Content ArticleCardInList-CommentContent mg-top--10">
+          {comment.mainText}
+        </p>
       </div>
-      {comment.subComments &&
-        comment.subComments.map((subComment, idx) => {
-          return (
-            <SubCommentInDetail
-              key={subComment.id}
-              comment={subComment}
-              setIsCommentUpdate={setIsCommentUpdate}
-            />
-          );
-        })}
     </div>
   );
 };
 
-export default CommentInDetail;
+export default SubCommentInDetail;
 
 const KebabWrapper = styled.div`
   padding-left: 14px;
   padding-right: 10px;
-`;
-
-const CommentInfo = styled.p`
-  margin-top: 4px;
-
-  color: #878b93;
-  font-size: 12px;
-  font-weight: 700;
 `;

@@ -41,7 +41,6 @@ export interface GetVotesUsingGETRequest {
     apartmentId: string;
     cursor: number;
     perPage: number;
-    terminated: boolean;
 }
 
 export interface SubmitVotingUsingPOSTRequest {
@@ -141,10 +140,6 @@ export class Class4Api extends runtime.BaseAPI {
             throw new runtime.RequiredError('perPage','Required parameter requestParameters.perPage was null or undefined when calling getVotesUsingGET.');
         }
 
-        if (requestParameters.terminated === null || requestParameters.terminated === undefined) {
-            throw new runtime.RequiredError('terminated','Required parameter requestParameters.terminated was null or undefined when calling getVotesUsingGET.');
-        }
-
         const queryParameters: any = {};
 
         if (requestParameters.cursor !== undefined) {
@@ -153,10 +148,6 @@ export class Class4Api extends runtime.BaseAPI {
 
         if (requestParameters.perPage !== undefined) {
             queryParameters['perPage'] = requestParameters.perPage;
-        }
-
-        if (requestParameters.terminated !== undefined) {
-            queryParameters['terminated'] = requestParameters.terminated;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
