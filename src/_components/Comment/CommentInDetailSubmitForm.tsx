@@ -37,11 +37,13 @@ const reducer: React.Reducer<State, Action> = (prevState, action) => {
 
 type CommentInDetailSubmitFormProps = {
   articleId: string;
+  isInProgress: boolean;
   setIsCommentUpdate: React.Dispatch<React.SetStateAction<Boolean>>;
 };
 
 const CommentInDetailSubmitForm: React.FC<CommentInDetailSubmitFormProps> = ({
   articleId,
+  isInProgress,
   setIsCommentUpdate,
 }) => {
   const [state, dispatch] = useReducer(reducer, { _t: "blank", mainText: "" });
@@ -147,7 +149,9 @@ const CommentInDetailSubmitForm: React.FC<CommentInDetailSubmitFormProps> = ({
               setShowCounter(false);
             }
           }}
-          placeholder="댓글을 입력해 주세요."
+          placeholder={
+            isInProgress ? "투표 의견 쓰기" : "종료된 투표 의견 쓰기"
+          }
         />
         {showCounter && (
           <div className="CommentSubmitForm-textCounter">

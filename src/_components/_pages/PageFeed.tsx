@@ -227,7 +227,6 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
             투표 만들기
           </ArticleCreateBtnFloating>
         </div>
-        {/* )} */}
       </div>
     );
   }
