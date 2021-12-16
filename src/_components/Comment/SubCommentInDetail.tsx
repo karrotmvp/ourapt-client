@@ -7,7 +7,7 @@ import { useApi } from "../../api";
 import { useViewer } from "../../_providers/useViewer";
 import { useModal } from "../../_providers/useModal";
 
-import UserAsAuthor from "../User/UserAsAuthor";
+import UserAsSubAuthor from "../User/UserAsSubAuthor";
 
 import { ReactComponent as KebabIcon } from "../../_assets/kebabIcon.svg";
 import styled from "@emotion/styled";
@@ -88,7 +88,7 @@ const SubCommentInDetail: React.FC<SubCommentInDetailProps> = ({
           className="ArticleCardInlist-Author"
           onClick={() => onUserCardClick()}
         >
-          <UserAsAuthor
+          <UserAsSubAuthor
             writer={comment.writer}
             createdAt={comment.createdAt}
             updatedAt={comment.updatedAt}

@@ -60,7 +60,7 @@ const PageCommentDetail: React.FC = () => {
       {comment && (
         <CommentInDetailSubmitForm
           articleId={comment.id}
-          placeholderText={"답글 의견 달기..."}
+          placeholderText={"답글 달기..."}
           setIsCommentUpdate={setIsCommentUpdate}
         />
       )}

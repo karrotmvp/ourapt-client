@@ -48,6 +48,7 @@ export interface SubmitVotingUsingPOSTRequest {
 }
 
 export interface WriteNewVoteUsingPOSTRequest {
+    apartmentId: string;
     voteContent: VoteContentDto;
 }
 
@@ -212,6 +213,10 @@ export class Class4Api extends runtime.BaseAPI {
      * 새 투표 게시글 작성
      */
     async writeNewVoteUsingPOSTRaw(requestParameters: WriteNewVoteUsingPOSTRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CommonResponseBodyOneVoteDto>> {
+        if (requestParameters.apartmentId === null || requestParameters.apartmentId === undefined) {
+            throw new runtime.RequiredError('apartmentId','Required parameter requestParameters.apartmentId was null or undefined when calling writeNewVoteUsingPOST.');
+        }
+
         if (requestParameters.voteContent === null || requestParameters.voteContent === undefined) {
             throw new runtime.RequiredError('voteContent','Required parameter requestParameters.voteContent was null or undefined when calling writeNewVoteUsingPOST.');
         }
@@ -227,7 +232,7 @@ export class Class4Api extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/api/v1/vote`,
+            path: `/api/v1/apartment/{apartmentId}/vote`.replace(`{${"apartmentId"}}`, encodeURIComponent(String(requestParameters.apartmentId))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,

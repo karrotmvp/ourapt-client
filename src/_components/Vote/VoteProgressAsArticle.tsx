@@ -140,9 +140,6 @@ const VoteProgressAsArticle: React.FC<VoteProgressAsArticleProps> = ({
       votedIndex = voteItem.index;
       continue;
     }
-    if (voteItem.itemCount >= mostVoteCount) {
-      mostVoteCount = voteItem.itemCount;
-    }
   }
 
   const totalCount = voteStatus.reduce((acc, cur) => {
@@ -155,6 +152,12 @@ const VoteProgressAsArticle: React.FC<VoteProgressAsArticleProps> = ({
       ? { _t: "voted", voteStatus, votedIndex, totalCount }
       : { _t: "not-voted", voteStatus, votedIndex, totalCount }
   );
+
+  for (let voteItem of state.voteStatus) {
+    if (voteItem.itemCount >= mostVoteCount) {
+      mostVoteCount = voteItem.itemCount;
+    }
+  }
 
   useEffect(() => {
     if (votedIndex === -1) {
@@ -252,7 +255,7 @@ const VoteProgressAsArticle: React.FC<VoteProgressAsArticleProps> = ({
               displayed={state._t === "not-voted" ? false : true}
               voteItem={voteItem.item}
               isSelected={Boolean(state.votedIndex === voteItem.index)}
-              isMostvoted={Boolean(mostVoteCount === voteItem.itemCount)}
+              isMostVoted={Boolean(mostVoteCount === voteItem.itemCount)}
               action={() => {
                 onItemClick(voteItem);
               }}

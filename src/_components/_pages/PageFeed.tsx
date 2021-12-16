@@ -167,13 +167,15 @@ const PageFeed: React.FC<PageFeedProps> = (props) => {
 
             <FeedInfoWrapper>
               <FeedInfoText>
-                이웃과 나누고 싶은 이야기를 등록해 보세요!
+                이웃과 나누고 싶은 투표를 등록해 보세요!
               </FeedInfoText>
             </FeedInfoWrapper>
           </PullToRefresh>
         </div>
         <div className="btn--floating">
-          <ArticleCreateBtnFloating onClick={() => push(`/create`)}>
+          <ArticleCreateBtnFloating
+            onClick={() => push(`/feed/${params}/create`)}
+          >
             <IconPlus
               className="mg-right--8"
               width="10"

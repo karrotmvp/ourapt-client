@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 
 import { useApi } from "../../../api";
 
-import { ScreenHelmet, useNavigator } from "@karrotframe/navigator";
+import { ScreenHelmet, useNavigator, useParams } from "@karrotframe/navigator";
 import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 
 import { ReactComponent as IconPlus } from "../../../_assets/iconPlus.svg";
@@ -25,8 +25,11 @@ const PageVoteCreate: React.FC = () => {
   const api = useApi();
   const { pop } = useNavigator();
 
+  const params = useParams<{ apartmentId?: string }>().apartmentId || "";
+
   const onSubmit = (data: any) => {
     const response = api.voteController.writeNewVoteUsingPOST({
+      apartmentId: params,
       voteContent: {
         mainText: data.mainText,
         items: data.items.filter((item: any) => item.mainText.length > 0),

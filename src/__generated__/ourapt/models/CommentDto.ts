@@ -28,6 +28,12 @@ import {
 export interface CommentDto {
     /**
      * 
+     * @type {boolean}
+     * @memberof CommentDto
+     */
+    byAdmin: boolean;
+    /**
+     * 
      * @type {Date}
      * @memberof CommentDto
      */
@@ -74,6 +80,7 @@ export function CommentDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
+        'byAdmin': json['byAdmin'],
         'createdAt': (new Date(json['createdAt'])),
         'id': json['id'],
         'mainText': json['mainText'],
@@ -92,6 +99,7 @@ export function CommentDtoToJSON(value?: CommentDto | null): any {
     }
     return {
         
+        'byAdmin': value.byAdmin,
         'createdAt': (value.createdAt.toISOString()),
         'id': value.id,
         'mainText': value.mainText,

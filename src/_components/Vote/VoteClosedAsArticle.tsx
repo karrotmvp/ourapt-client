@@ -26,6 +26,9 @@ const VoteClosedAsArticle: React.FC<VoteClosedAsArticleProps> = ({ vote }) => {
       myVoteIndex = vote.items.indexOf(voteItem);
       continue;
     }
+  }
+
+  for (let voteItem of vote.items) {
     if (voteItem.voterIds.length >= mostVoteCount) {
       mostVoteCount = voteItem.voterIds.length;
     }

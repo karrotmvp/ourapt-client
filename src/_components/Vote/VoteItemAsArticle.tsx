@@ -11,7 +11,7 @@ type VoteItemAsArticleProps = {
   displayed: boolean;
   voteItem: VoteItem;
   isSelected: boolean;
-  isMostvoted: boolean;
+  isMostVoted: boolean;
   action: () => void;
   itemCount: number;
   totalCount: number;
@@ -33,7 +33,7 @@ const VoteItemAsArticle: React.FC<VoteItemAsArticleProps> = ({
   voteItem,
   itemCount,
   isSelected,
-  isMostvoted,
+  isMostVoted,
   action,
   totalCount,
 }) => {
@@ -61,7 +61,7 @@ const VoteItemAsArticle: React.FC<VoteItemAsArticleProps> = ({
         <div
           className="VoteItem-poll"
           style={{
-            backgroundColor: isMostvoted ? "#AAE1D4" : "#E1F6F2",
+            backgroundColor: isMostVoted ? "#AAE1D4" : "#E1F6F2",
             // borderColor:
             //   state._t === "displayed-selected" ? "#398287" : "#DBDBDB",
             width: `${(itemCount / totalCount) * 100}%`,
@@ -72,13 +72,19 @@ const VoteItemAsArticle: React.FC<VoteItemAsArticleProps> = ({
         {state._t === "displayed-selected" && (
           <VoteSelectedIcon className="mg-right--8" stroke="#459a84" />
         )}
-        {voteItem.mainText}
+        <p
+          style={{
+            fontWeight: isMostVoted ? 700 : 400,
+          }}
+        >
+          {voteItem.mainText}
+        </p>
         {state._t !== "not-displayed" && (
           <p
             className="VoteItem-count"
             style={{
-              color: state._t === "displayed-selected" ? "#459A84" : "#000000",
-              fontWeight: state._t === "displayed-selected" ? 700 : 400,
+              color: isMostVoted ? "#459A84" : "#000000",
+              fontWeight: isMostVoted ? 700 : 400,
             }}
           >
             {Math.floor((itemCount / totalCount) * 100)}%

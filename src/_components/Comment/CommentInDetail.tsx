@@ -127,7 +127,7 @@ const CommentInDetail: React.FC<CommentInDetailProps> = ({
             {comment.mainText}
           </p>
           <CommentInfo onClick={() => onCommentInfoClick()}>
-            댓글달기
+            답글쓰기
           </CommentInfo>
         </div>
       </div>

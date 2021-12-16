@@ -69,7 +69,7 @@ const App: React.FC = () => {
                   <Screen path="/error">
                     <PageError />
                   </Screen>
-                  <Screen path="/create">
+                  <Screen path="/feed/:apartmentId/create">
                     <PageVoteCreate />
                   </Screen>
                   <WithModal />
