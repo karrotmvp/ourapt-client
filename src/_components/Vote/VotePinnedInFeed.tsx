@@ -40,7 +40,13 @@ const VotePinnedInFeed: React.FC<VotePinnedInFeedProps> = ({ feedItem }) => {
           <CommentPreviewInFeed comment={feedItem.lastComment} />
         )}
       </div>
-      <InputArea onClick={() => onVoteClick()}>투표 의견 달기...</InputArea>
+      {feedItem.vote.isInProgress ? (
+        <InputArea onClick={() => onVoteClick()}>투표 의견 달기...</InputArea>
+      ) : (
+        <InputArea onClick={() => onVoteClick()}>
+          종료된 투표 의견 달기...
+        </InputArea>
+      )}
     </div>
   );
 };

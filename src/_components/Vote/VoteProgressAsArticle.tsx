@@ -133,11 +133,15 @@ const VoteProgressAsArticle: React.FC<VoteProgressAsArticleProps> = ({
   });
 
   let votedIndex: number = -1;
+  let mostVoteCount: number = 1;
 
   for (let voteItem of voteStatus) {
     if (voteItem.item.voterIds.indexOf(viewerId) !== -1) {
       votedIndex = voteItem.index;
       continue;
+    }
+    if (voteItem.itemCount >= mostVoteCount) {
+      mostVoteCount = voteItem.itemCount;
     }
   }
 
@@ -229,11 +233,11 @@ const VoteProgressAsArticle: React.FC<VoteProgressAsArticleProps> = ({
   return (
     <form className="VoteForm">
       <VoteTotalCount className="VoteTotalCount horizontal-centered mg-top--16 mg-bottom--8">
-        <VoteCountIcon className="VoteTotalCount mg-right--8" />
-        {state.totalCount}명 이웃 참여
+        {/* <VoteCountIcon className="VoteTotalCount mg-right--8" /> */}
+        {state.totalCount}명 이웃 참여 중
       </VoteTotalCount>
       <VoteTitle className="ArticleCard-Title mg-bottom--16">
-        <span className="VoteQuestionIcon mg-right--8">Q.</span>
+        {/* <span className="VoteQuestionIcon mg-right--8">Q.</span> */}
         {vote.mainText}
       </VoteTitle>
       <UserAsAuthorV3
@@ -248,6 +252,7 @@ const VoteProgressAsArticle: React.FC<VoteProgressAsArticleProps> = ({
               displayed={state._t === "not-voted" ? false : true}
               voteItem={voteItem.item}
               isSelected={Boolean(state.votedIndex === voteItem.index)}
+              isMostvoted={Boolean(mostVoteCount === voteItem.itemCount)}
               action={() => {
                 onItemClick(voteItem);
               }}
@@ -263,6 +268,10 @@ const VoteProgressAsArticle: React.FC<VoteProgressAsArticleProps> = ({
 
 export default VoteProgressAsArticle;
 
-const VoteTotalCount = styled.div``;
+const VoteTotalCount = styled.div`
+  color: #e95454;
+  font-size: 14px;
+  font-weight: 700;
+`;
 
 const VoteTitle = styled.div``;

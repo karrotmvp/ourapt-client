@@ -5,6 +5,7 @@ import { useViewer } from "../../_providers/useViewer";
 import { VoteItemDto as VoteItem } from "../../__generated__/ourapt";
 
 import { ReactComponent as CheckIcon } from "../../_assets/VoteIcon.svg";
+import { ReactComponent as VoteSelectedIcon } from "../../_assets/VoteSelectedIcon.svg";
 
 type VoteItemAsClosedArticleProps = {
   voteItem: VoteItem;
@@ -31,11 +32,14 @@ const VoteItemAsClosedArticle: React.FC<VoteItemAsClosedArticleProps> = ({
       <div
         className="VoteItem-poll"
         style={{
-          backgroundColor: isMostVoted ? "#96C5C5" : "#F0F0F0",
+          backgroundColor: isMostVoted ? "#d4d6dc" : "#f2f3f6",
           width: `${totalCount !== 0 ? (itemCount / totalCount) * 100 : 0}%`,
         }}
       ></div>
       <div className="VoteItem-label">
+        {isSelected && (
+          <VoteSelectedIcon className="mg-right--8" stroke="#000000" />
+        )}
         <p
           style={{
             fontWeight: isMostVoted ? 700 : 400,
@@ -46,7 +50,6 @@ const VoteItemAsClosedArticle: React.FC<VoteItemAsClosedArticleProps> = ({
         <p
           className="VoteItem-count"
           style={{
-            color: isMostVoted ? "#398287" : "#000000",
             fontWeight: isMostVoted ? 700 : 400,
           }}
         >

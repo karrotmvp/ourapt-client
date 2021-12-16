@@ -38,11 +38,11 @@ const VoteClosedAsArticle: React.FC<VoteClosedAsArticleProps> = ({ vote }) => {
   return (
     <form className="VoteForm">
       <VoteTotalCount className="VoteTotalCount horizontal-centered mg-top--16 mg-bottom--8">
-        <VoteCountIcon className="VoteTotalCount mg-right--8" />
+        {/* <VoteCountIcon className="VoteTotalCount mg-right--8" /> */}
         {totalCount}명 이웃 참여 완료
       </VoteTotalCount>
       <VoteTitle className="ArticleCard-Title mg-bottom--16">
-        <ClosedIcon>종료</ClosedIcon>
+        {/* <ClosedIcon>종료</ClosedIcon> */}
         {vote.mainText}
       </VoteTitle>
       <UserAsAuthorV3

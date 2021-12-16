@@ -5,6 +5,7 @@ import { useViewer } from "../../_providers/useViewer";
 import { VoteItemDto as VoteItem } from "../../__generated__/ourapt";
 
 import { ReactComponent as CheckIcon } from "../../_assets/VoteIcon.svg";
+import { ReactComponent as VoteSelectedIcon } from "../../_assets/VoteSelectedIcon.svg";
 
 type VoteItemAsArticleProps = {
   displayed: boolean;
@@ -68,13 +69,9 @@ const VoteItemAsArticle: React.FC<VoteItemAsArticleProps> = ({
         ></div>
       )}
       <div className="VoteItem-label">
-        {/* <CheckIcon
-          className="mg-right--8"
-          style={{
-            fill: state._t === "displayed-selected" ? "#398287" : "",
-            stroke: state._t === "displayed-selected" ? "white" : "#AAAAAA",
-          }}
-        /> */}
+        {state._t === "displayed-selected" && (
+          <VoteSelectedIcon className="mg-right--8" stroke="459a84" />
+        )}
         {voteItem.mainText}
         {state._t !== "not-displayed" && (
           <p
