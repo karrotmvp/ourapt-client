@@ -61,7 +61,7 @@ const VoteItemAsArticle: React.FC<VoteItemAsArticleProps> = ({
         <div
           className="VoteItem-poll"
           style={{
-            backgroundColor: isMostvoted ? "#76CEB9" : "#E1F6F2",
+            backgroundColor: isMostvoted ? "#AAE1D4" : "#E1F6F2",
             // borderColor:
             //   state._t === "displayed-selected" ? "#398287" : "#DBDBDB",
             width: `${(itemCount / totalCount) * 100}%`,
@@ -70,7 +70,7 @@ const VoteItemAsArticle: React.FC<VoteItemAsArticleProps> = ({
       )}
       <div className="VoteItem-label">
         {state._t === "displayed-selected" && (
-          <VoteSelectedIcon className="mg-right--8" stroke="459a84" />
+          <VoteSelectedIcon className="mg-right--8" stroke="#459a84" />
         )}
         {voteItem.mainText}
         {state._t !== "not-displayed" && (
