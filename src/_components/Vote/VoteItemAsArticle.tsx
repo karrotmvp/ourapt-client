@@ -10,6 +10,7 @@ type VoteItemAsArticleProps = {
   displayed: boolean;
   voteItem: VoteItem;
   isSelected: boolean;
+  isMostvoted: boolean;
   action: () => void;
   itemCount: number;
   totalCount: number;
@@ -31,6 +32,7 @@ const VoteItemAsArticle: React.FC<VoteItemAsArticleProps> = ({
   voteItem,
   itemCount,
   isSelected,
+  isMostvoted,
   action,
   totalCount,
 }) => {
@@ -50,7 +52,7 @@ const VoteItemAsArticle: React.FC<VoteItemAsArticleProps> = ({
       style={{
         border:
           state._t === "displayed-selected"
-            ? "1.5px solid #398287"
+            ? "1.5px solid #459a84"
             : "1px solid #DBDBDB",
       }}
     >
@@ -58,8 +60,9 @@ const VoteItemAsArticle: React.FC<VoteItemAsArticleProps> = ({
         <div
           className="VoteItem-poll"
           style={{
-            borderColor:
-              state._t === "displayed-selected" ? "#398287" : "#DBDBDB",
+            backgroundColor: isMostvoted ? "#76CEB9" : "#E1F6F2",
+            // borderColor:
+            //   state._t === "displayed-selected" ? "#398287" : "#DBDBDB",
             width: `${(itemCount / totalCount) * 100}%`,
           }}
         ></div>
@@ -77,7 +80,7 @@ const VoteItemAsArticle: React.FC<VoteItemAsArticleProps> = ({
           <p
             className="VoteItem-count"
             style={{
-              color: state._t === "displayed-selected" ? "#398287" : "#000000",
+              color: state._t === "displayed-selected" ? "#459A84" : "#000000",
               fontWeight: state._t === "displayed-selected" ? 700 : 400,
             }}
           >
