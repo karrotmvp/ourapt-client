@@ -74,7 +74,8 @@ const VoteItemAsArticle: React.FC<VoteItemAsArticleProps> = ({
         )}
         <p
           style={{
-            fontWeight: isMostVoted ? 700 : 400,
+            fontWeight:
+              state._t === "displayed-selected" && isMostVoted ? 700 : 400,
           }}
         >
           {voteItem.mainText}
