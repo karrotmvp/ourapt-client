@@ -84,6 +84,8 @@ const InputArea = styled.div`
   padding: 8px 16px;
   color: #999999;
   font-size: 14px;
+  line-height: 24px;
   text-align: left;
+  border-radius: 8px;
   background-color: #fbfbfb;
 `;
