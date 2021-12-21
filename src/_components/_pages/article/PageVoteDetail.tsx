@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from "react";
-import styled from "@emotion/styled";
+import React, { useEffect, useState } from 'react';
+import styled from '@emotion/styled';
 
 import {
   VoteDto as Vote,
   CommentDto as Comment,
-} from "../../../__generated__/ourapt";
+} from '../../../__generated__/ourapt';
 
-import { useApi } from "../../../api";
+import { useApi } from '../../../api';
 
-import { ScreenHelmet, useNavigator, useParams } from "@karrotframe/navigator";
+import { ScreenHelmet, useNavigator, useParams } from '@karrotframe/navigator';
 
-import examineResBody from "../../../_modules/examineResBody";
+import examineResBody from '../../../_modules/examineResBody';
 
-import VoteProgressAsArticle from "../../Vote/VoteProgressAsArticle";
-import VoteClosedAsArticle from "../../Vote/VoteClosedAsArticle";
-import CommentInDetail from "../../Comment/CommentInDetail";
-import CommentInDetailSubmitForm from "../../Comment/CommentInDetailSubmitForm";
+import VoteProgressAsArticle from '../../Vote/VoteProgressAsArticle';
+import VoteClosedAsArticle from '../../Vote/VoteClosedAsArticle';
+import CommentInDetail from '../../Comment/CommentInDetail';
+import CommentInDetailSubmitForm from '../../Comment/CommentInDetailSubmitForm';
 
 const PageVoteDetail: React.FC = () => {
   const params = useParams<{ articleId?: string }>();
-  const articleId = params.articleId || "";
+  const articleId = params.articleId || '';
 
   const api = useApi();
 
@@ -70,7 +70,7 @@ const PageVoteDetail: React.FC = () => {
     <div className="page">
       <div className="PageVoteDetail-inner">
         <ScreenHelmet
-          title={vote?.isInProgress ? "진행 중인 투표" : "종료된 투표"}
+          title={vote?.isInProgress ? '진행 중인 투표' : '종료된 투표'}
         />
         {vote && (
           <ArticleArea>
@@ -87,10 +87,10 @@ const PageVoteDetail: React.FC = () => {
           (comments.length === 0 ? (
             <div>
               <CommentVacantViewTitle>
-                아직 댓글이 없어요.
+                아직 의견이 없어요.
               </CommentVacantViewTitle>
               <CommentVacantViewInfo>
-                첫 댓글을 남겨보세요.
+                첫 의견을 남겨보세요.
               </CommentVacantViewInfo>
             </div>
           ) : (
@@ -100,7 +100,7 @@ const PageVoteDetail: React.FC = () => {
                   <CommentInDetail
                     key={comment.id}
                     comment={comment}
-                    onPage={"PageVoteDetail"}
+                    onPage={'PageVoteDetail'}
                     setIsCommentUpdate={setIsCommentUpdate}
                   />
                 );
@@ -112,7 +112,7 @@ const PageVoteDetail: React.FC = () => {
         <CommentInDetailSubmitForm
           articleId={articleId}
           placeholderText={
-            vote.isInProgress ? "투표 의견 달기..." : "종료된 투표 의견 달기..."
+            vote.isInProgress ? '투표 의견 달기...' : '종료된 투표 의견 달기...'
           }
           setIsCommentUpdate={setIsCommentUpdate}
         />
