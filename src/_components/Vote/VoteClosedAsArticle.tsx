@@ -1,14 +1,13 @@
 import React, { useCallback, useEffect, useReducer } from "react";
 import { useViewer } from "../../_providers/useViewer";
 
-import { VoteDto as Vote, VoteItemDtoToJSON } from "../../__generated__/ourapt";
+import { VoteDto as Vote } from "../../__generated__/ourapt";
 
 import UserAsAuthorV3 from "../User/UserAsAuthorV3";
 import VoteItemAsClosedArticle from "./VoteItemAsClosedArticle";
 
 import styled from "@emotion/styled";
-
-import { ReactComponent as VoteCountIcon } from "./../../_assets/VoteCountIcon.svg";
+import { useNavigator } from "@karrotframe/navigator";
 
 type VoteClosedAsArticleProps = {
   vote: Vote;
@@ -17,6 +16,12 @@ type VoteClosedAsArticleProps = {
 const VoteClosedAsArticle: React.FC<VoteClosedAsArticleProps> = ({ vote }) => {
   const { viewer } = useViewer();
   const viewerId = viewer?.id || "";
+
+  const { push } = useNavigator();
+
+  function onVoteClick() {
+    push(`/vote/${vote.id}`);
+  }
 
   let myVoteIndex: number = -1;
   let mostVoteCount: number = 1;
@@ -40,19 +45,21 @@ const VoteClosedAsArticle: React.FC<VoteClosedAsArticleProps> = ({ vote }) => {
 
   return (
     <form className="VoteForm">
-      <VoteTotalCount className="VoteTotalCount horizontal-centered mg-top--16 mg-bottom--8">
-        {/* <VoteCountIcon className="VoteTotalCount mg-right--8" /> */}
-        {totalCount}명 이웃 참여 완료
-      </VoteTotalCount>
-      <VoteTitle className="ArticleCard-Title mg-bottom--16">
-        {/* <ClosedIcon>종료</ClosedIcon> */}
-        {vote.mainText}
-      </VoteTitle>
-      <UserAsAuthorV3
-        writer={vote.writer}
-        createdAt={vote.createdAt}
-        updatedAt={vote.updatedAt}
-      />
+      <div onClick={() => onVoteClick()}>
+        <VoteTotalCount className="VoteTotalCount horizontal-centered mg-top--16 mg-bottom--8">
+          {/* <VoteCountIcon className="VoteTotalCount mg-right--8" /> */}
+          {totalCount}명 이웃 참여 완료
+        </VoteTotalCount>
+        <VoteTitle className="ArticleCard-Title mg-bottom--16">
+          {/* <ClosedIcon>종료</ClosedIcon> */}
+          {vote.mainText}
+        </VoteTitle>
+        <UserAsAuthorV3
+          writer={vote.writer}
+          createdAt={vote.createdAt}
+          updatedAt={vote.updatedAt}
+        />
+      </div>
       <ul className="VoteItemList mg-top--16">
         {vote.items.map((voteItem, idx) => {
           return (

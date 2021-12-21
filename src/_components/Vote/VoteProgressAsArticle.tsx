@@ -16,6 +16,7 @@ import styled from "@emotion/styled";
 
 import { ReactComponent as VoteCountIcon } from "./../../_assets/VoteCountIcon.svg";
 import { getInstalledFromURLParams } from "../../_modules/getQueryFromURLParams";
+import { useNavigator } from "@karrotframe/navigator";
 
 type VoteProgressAsArticleProps = {
   vote: Vote;
@@ -120,6 +121,12 @@ const VoteProgressAsArticle: React.FC<VoteProgressAsArticleProps> = ({
 }) => {
   const { viewer } = useViewer();
   const viewerId = viewer?.id || "";
+
+  const { push } = useNavigator();
+
+  function onVoteClick() {
+    push(`/vote/${vote.id}`);
+  }
 
   const api = useApi();
   const isInstalled = getInstalledFromURLParams();
@@ -235,19 +242,21 @@ const VoteProgressAsArticle: React.FC<VoteProgressAsArticleProps> = ({
 
   return (
     <form className="VoteForm">
-      <VoteTotalCount className="VoteTotalCount horizontal-centered mg-top--16 mg-bottom--8">
-        {/* <VoteCountIcon className="VoteTotalCount mg-right--8" /> */}
-        {state.totalCount}명 이웃 참여 중
-      </VoteTotalCount>
-      <VoteTitle className="ArticleCard-Title mg-bottom--16">
-        {/* <span className="VoteQuestionIcon mg-right--8">Q.</span> */}
-        {vote.mainText}
-      </VoteTitle>
-      <UserAsAuthorV3
-        writer={vote.writer}
-        createdAt={vote.createdAt}
-        updatedAt={vote.updatedAt}
-      />
+      <div onClick={() => onVoteClick()}>
+        <VoteTotalCount className="VoteTotalCount horizontal-centered mg-top--16 mg-bottom--8">
+          {/* <VoteCountIcon className="VoteTotalCount mg-right--8" /> */}
+          {state.totalCount}명 이웃 참여 중
+        </VoteTotalCount>
+        <VoteTitle className="ArticleCard-Title mg-bottom--16">
+          {/* <span className="VoteQuestionIcon mg-right--8">Q.</span> */}
+          {vote.mainText}
+        </VoteTitle>
+        <UserAsAuthorV3
+          writer={vote.writer}
+          createdAt={vote.createdAt}
+          updatedAt={vote.updatedAt}
+        />
+      </div>
       <ul className="VoteItemList mg-top--16">
         {state.voteStatus.map((voteItem, idx) => {
           return (
